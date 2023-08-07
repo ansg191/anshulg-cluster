@@ -1,0 +1,12 @@
+traefik:
+  image:
+    tag: 3.0.0-beta3
+
+  ports:
+    web:
+      redirectTo: websecure
+
+  providers:
+    kubernetesCRD:
+      allowExternalNameServices: true
+      allowCrossNamespace: true
