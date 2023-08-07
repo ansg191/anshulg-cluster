@@ -8,6 +8,8 @@ kind: Application
 metadata:
   name: ddog
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
