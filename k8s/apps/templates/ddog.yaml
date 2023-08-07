@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ddog
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ddog
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: datadog
+    repoURL: https://helm.datadoghq.com
+    targetRevision: 3.33.7
+    helm:
+      values: |
+        datadog:
+          apiKeyExistingSecret: ddog-api-key
+          logs:
+            enabled: true
+            containerCollectAll: true
+          networkMonitoring:
+            enabled: true
+          apm:
+            portEnabled: true
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: ddog
