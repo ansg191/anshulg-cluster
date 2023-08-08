@@ -1,0 +1,45 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`argocd.anshulg.com`)
+      priority: 10
+      services:
+        - name: argocd-server
+          namespace: argocd
+          port: 443
+    - kind: Rule
+      match: Host(`argocd.anshulg.com`) && Header(`Content-Type`, `application/grpc`)
+      priority: 11
+      services:
+        - name: argocd-server
+          namespace: argocd
+          port: 443
+          scheme: h2c
+  tls:
+    secretName: argocd-tls
+    domains:
+      - main: argocd.anshulg.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-cert
+spec:
+  secretName: argocd-tls
+  commonName: argocd.anshulg.com
+  dnsNames:
+    - argocd.anshulg.com
+  duration: 2160h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
