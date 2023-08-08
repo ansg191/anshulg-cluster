@@ -15,6 +15,7 @@ resource "google_privateca_certificate_authority" "default" {
   pool                     = google_privateca_ca_pool.default.name
   location                 = "us-west1"
   certificate_authority_id = "anshulg-ca"
+  deletion_protection      = false
   config {
     subject_config {
       subject {
@@ -49,11 +50,11 @@ resource "google_service_account" "sa-google-cas-issuer" {
   account_id = "sa-google-cas-issuer"
 }
 
-resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
-  ca_pool = google_privateca_ca_pool.default.name
-  role    = "roles/privateca.certificateRequester"
-  members = [
-    google_service_account.sa-google-cas-issuer.email
-  ]
-  location = "us-west1"
-}
+#resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
+#  ca_pool = google_privateca_ca_pool.default.name
+#  role    = "roles/privateca.certificateRequester"
+#  members = [
+#    google_service_account.sa-google-cas-issuer.email
+#  ]
+#  location = "us-west1"
+#}
