@@ -106,11 +106,19 @@ resource "google_service_account" "sa-google-cas-issuer" {
   account_id = "sa-google-cas-issuer"
 }
 
-#resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
-#  ca_pool = google_privateca_ca_pool.default.name
-#  role    = "roles/privateca.certificateRequester"
-#  members = [
-#    google_service_account.sa-google-cas-issuer.email
-#  ]
-#  location = "us-west1"
-#}
+resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
+  ca_pool = google_privateca_ca_pool.default.id
+  role    = "roles/privateca.certificateRequester"
+  members = [
+    "serviceAccount:${google_service_account.sa-google-cas-issuer.email}"
+  ]
+  location = "us-west1"
+}
+
+resource "google_service_account_iam_binding" "sa-google-cas-issuer" {
+  service_account_id = google_service_account.sa-google-cas-issuer.id
+  role               = "roles/iam.workloadIdentityUser"
+  members = [
+    "serviceAccount:${data.google_project.default.project_id}.svc.id.goog[cert-manager/ksa-google-cas-issuer]"
+  ]
+}
