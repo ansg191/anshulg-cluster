@@ -10,3 +10,8 @@ traefik:
     kubernetesCRD:
       allowExternalNameServices: true
       allowCrossNamespace: true
+
+traefik_r53_dns:
+  traefik_url: http://traefik-api:9000
+  zone_id: Z064252037MRVO90AFNY0
+  cluster_domain: cluster.anshulg.com
