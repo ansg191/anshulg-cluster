@@ -1,2 +1,10 @@
 cert-manager:
   installCRDs: true
+
+cert-manager-google-cas-issuer:
+  app:
+    approval:
+      subjects:
+        - kind: ServiceAccount
+          name: certs-cert-manager
+          namespace: cert-manager
