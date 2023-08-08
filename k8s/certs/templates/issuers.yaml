@@ -1,0 +1,8 @@
+apiVersion: cas-issuer.jetstack.io/v1beta1
+kind: GoogleCASClusterIssuer
+metadata:
+  name: anshulg-cert
+spec:
+  project: anshulg-cluster
+  location: us-west1
+  caPoolId: default
