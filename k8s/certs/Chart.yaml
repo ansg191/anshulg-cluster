@@ -27,3 +27,6 @@ dependencies:
   - name: cert-manager
     version: 1.12.3
     repository: https://charts.jetstack.io
+  - name: step-certificates
+    version: 1.24.2
+    repository: https://smallstep.github.io/helm-charts/

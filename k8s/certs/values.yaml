@@ -1,2 +1,22 @@
 cert-manager:
   installCRDs: true
+
+step-certificates:
+  service:
+    targetPort: 443
+
+  existingSecrets:
+    enabled: true
+    ca: true
+    issuer: false
+    configAsSecret: false
+    sshHostCa: false
+    sshUserCa: false
+
+  bootstrap:
+    secrets: false
+    enabled: false
+    configmaps: false
+
+  inject:
+    enabled: false
