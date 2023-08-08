@@ -31,7 +31,7 @@ resource "google_privateca_certificate_authority" "default" {
       key_usage {
         base_key_usage {
           cert_sign = true
-          crl_sign = true
+          crl_sign  = true
         }
         extended_key_usage {
           server_auth = false
@@ -43,4 +43,17 @@ resource "google_privateca_certificate_authority" "default" {
     algorithm = "EC_P384_SHA384"
   }
   lifetime = "315360000s"
+}
+
+resource "google_service_account" "sa-google-cas-issuer" {
+  account_id = "sa-google-cas-issuer"
+}
+
+resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
+  ca_pool = google_privateca_ca_pool.default.name
+  role    = "roles/privateca.certificateRequester"
+  members = [
+    google_service_account.sa-google-cas-issuer.email
+  ]
+  location = "us-west1"
 }

@@ -9,6 +9,10 @@ resource "google_container_cluster" "default" {
 
   remove_default_node_pool = true
   initial_node_count       = 1
+
+  workload_identity_config {
+    workload_pool = "${data.google_project.default.project_id}.svc.id.goog"
+  }
 }
 
 resource "google_container_node_pool" "default_spot_pool" {

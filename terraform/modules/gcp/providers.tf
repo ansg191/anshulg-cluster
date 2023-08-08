@@ -6,3 +6,7 @@ terraform {
     }
   }
 }
+
+data "google_project" "default" {
+  project_id = "anshulg-cluster"
+}
