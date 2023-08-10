@@ -31,6 +31,10 @@ spec:
               key: AWS_SECRET_ACCESS_KEY
         crd:
           create: true
+          apiVersion: externaldns.k8s.io/v1alpha1
+          kind: DNSEndpoint
+        extraArgs:
+          - source=crd
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: external-dns
