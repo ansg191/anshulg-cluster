@@ -9,32 +9,11 @@ metadata:
   name: external-dns
   namespace: argocd
 spec:
-  project: default
-  source:
-    chart: external-dns
-    repoURL: registry-1.docker.io/bitnamicharts
-    targetRevision: 6.23.0
-    helm:
-      values: |
-        txtOwnerId: Z064252037MRVO90AFNY0
-        domainFilters:
-          - anshulg.com
-        provider: aws
-        aws:
-          zoneType: public
-          credentials:
-            accessKeyIDSecretRef:
-              name: route53-creds
-              key: AWS_ACCESS_KEY_ID
-            secretAccessKeySecretRef:
-              name: route53-creds
-              key: AWS_SECRET_ACCESS_KEY
-        crd:
-          create: true
-          apiVersion: externaldns.k8s.io/v1alpha1
-          kind: DNSEndpoint
-        extraArgs:
-          - source=crd
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: external-dns
+  project: default
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: HEAD
+    path: k8s/external-dns

@@ -52,6 +52,6 @@ spec:
   endpoints:
     - dnsName: argocd.anshulg.com
       recordTTL: 300
-      recordType: CNAME
+      recordType: A
       targets:
-          - cluster.anshulg.com.
+        - 35.233.195.129
