@@ -12,14 +12,14 @@ spec:
       services:
         - name: argocd-server
           namespace: argocd
-          port: 443
+          port: 80
     - kind: Rule
       match: Host(`argocd.anshulg.com`) && Header(`Content-Type`, `application/grpc`)
       priority: 11
       services:
         - name: argocd-server
           namespace: argocd
-          port: 443
+          port: 80
           scheme: h2c
   tls:
     secretName: argocd-tls
