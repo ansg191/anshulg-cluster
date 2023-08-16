@@ -9,7 +9,7 @@ spec:
     - kind: Rule
       match: Host(`n8n.anshulg.com`)
       services:
-        - name: n8n
+        - name: n-eight-n
           port: 5678
           kind: Service
   tls:
