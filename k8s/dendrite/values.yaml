@@ -1,0 +1,21 @@
+dendrite:
+  persistence:
+    storageClass: "standard-rwo"
+  dendrite_config:
+    global:
+      server_name: anshulg.com
+      well_known_server_name: matrix.anshulg.com:443
+      well_known_client_name: https://matrix.anshulg.com
+    client_api:
+      registration_disabled: false
+
+      enable_registration_captcha: true
+      recaptcha_public_key: 6LfRiLAnAAAAACXqKvPzbw6oB3roQSTrONAXZZY7
+      recaptcha_private_key: 6LfRiLAnAAAAAF92i3hdW2NiCKgRPNnqAITAktoO
+      recaptcha_siteverify_api: https://www.google.com/recaptcha/api/siteverify
+
+  postgresql:
+    enabled: true
+    primary:
+      persistence:
+        size: 2Gi
