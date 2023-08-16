@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cyber-chef
+  labels:
+    app: cyber-chef
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cyber-chef
+  template:
+    metadata:
+      name: cyber-chef
+      labels:
+        app: cyber-chef
+    spec:
+      containers:
+        - name: cyber-chef
+          image: mpepping/cyberchef:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+      restartPolicy: Always

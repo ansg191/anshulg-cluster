@@ -1,0 +1,18 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: cyber
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`cyber.anshulg.com`)
+      services:
+        - name: cyber
+          port: 8000
+          kind: Service
+  tls:
+    secretName: cyber-cert
+    domains:
+      - main: cyber.anshulg.com
