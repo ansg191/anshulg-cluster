@@ -1,0 +1,14 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: postgres-password
+  namespace: matrix
+spec:
+  encryptedData:
+    pgpass: AgAGfqWhkjSTrSfio1n8FEVUI8zPQ9bnxn0dwPeicvIOR+pKllAPbaR+GBDZzhv0MtbwFyJ8Dcz14G8YTET6N7PRETtsno02NTNCrkzj+S1riQSbJrMa8ZUfnArvCfX6WopYjTMYsutkIhDVyCbL9q97cv41cW4YDlDALICwZbg7fh150bQ3W+HJICTfpjDkdSgzsKf3tP9eVo5jrlQ08nP6m7SJPEpEMFGSY0Fo+MaAGSrx6vGCWiS6Se4WMyEoojkM2EgHiCXcEW6QOw9e6TGpAFR6LLhLeYxadcoiCfOVBSSon2FthxME9a+Yo4KuM8xgwjKehsNEav/23Hsg3UBMS2zka4IgiTxx/Y/sTL61roI60v++pA8NU1DV8Xg/Ewuer9XNpSqMTVB6vVmaFjRBtCDm44eTf5IHj1U4OVPxb1Qc+1grH7DahljMltAxVp5Soq4fZGvGwEhmcZFkwprHfOq6ZJcheI+vPsO0zPQqbmHS6fzx5CiJ+mDverzLiTxBWqT/cOU+83cwshd2GIpj/KUuz1jWwmrqX4wbVomFuIHIsWQ56/V3/w7KIvjmlnRp0UupBimHZVlLP3UcCmI02D+q37EaM1h2gfSxeA0QKfYMcRHOrQy7cK16cd44e1/43JUjs9H8BvxRh1MzAsafzIvDTV56lA4WpgpmuUh2LvwOzv8j/t2TXu6bIvK8QuAa7IYAPXNraw==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: postgres-password
+      namespace: matrix

@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matrix
+  labels:
+    k8s-app: matrix
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: matrix
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        k8s-app: matrix
+      name: matrix
+    spec:
+      containers:
+      - env:
+        - name: SYNAPSE_CONFIG_DIR
+          value: /config
+        - name: SYNAPSE_CONFIG_PATH
+          value: /config/homeserver.yaml
+        image: matrixdotorg/synapse:latest
+        imagePullPolicy: Always
+        name: matrix
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /config/homeserver.yaml
+          name: matrix-cm
+          subPath: homeserver.yaml
+        - mountPath: /config/anshulg.com.log.config
+          name: matrix-cm
+          subPath: anshulg.com.log.config
+        - mountPath: /data
+          name: matrix-pv
+          subPath: matrix
+        - mountPath: /config/anshulg.com.signing.key
+          name: matrix-key
+          subPath: anshulg.com.signing.key
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 991
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: matrix-key
+        secret:
+          defaultMode: 420
+          items:
+          - key: anshulg.com.signing.key
+            path: anshulg.com.signing.key
+          secretName: matrix-key
+      - name: matrix-pv
+        persistentVolumeClaim:
+          claimName: matrix-storage
+      - name: matrix-cm
+        configMap:
+          name: matrix
+          defaultMode: 420
+          items:
+          - key: homeserver.yaml
+            path: homeserver.yaml
+          - key: anshulg.com.log.config
+            path: anshulg.com.log.config
