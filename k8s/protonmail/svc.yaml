@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: smtp-service
+spec:
+  type: ClusterIP
+  selector:
+    app: protonmail-bridge
+  ports:
+    - port: 1025
+      targetPort: 25
