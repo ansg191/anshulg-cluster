@@ -43,15 +43,3 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
----
-apiVersion: externaldns.k8s.io/v1alpha1
-kind: DNSEndpoint
-metadata:
-  name: argocd-dns
-spec:
-  endpoints:
-    - dnsName: argocd.anshulg.com
-      recordTTL: 300
-      recordType: A
-      targets:
-        - 35.233.195.129

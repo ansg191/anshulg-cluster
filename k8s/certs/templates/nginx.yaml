@@ -137,14 +137,3 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
----
-apiVersion: externaldns.k8s.io/v1alpha1
-kind: DNSEndpoint
-metadata:
-  name: ca-anshulg-com
-spec:
-  endpoints:
-    - dnsName: ca.anshulg.com
-      recordType: A
-      targets:
-        - 35.233.195.129
