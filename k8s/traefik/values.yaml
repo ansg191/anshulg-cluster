@@ -9,6 +9,10 @@ traefik:
     web:
       redirectTo: websecure
 
+  service:
+    spec:
+      loadBalancerIP: "35.199.156.70"
+
   providers:
     kubernetesCRD:
       allowExternalNameServices: true
