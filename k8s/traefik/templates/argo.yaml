@@ -41,5 +41,6 @@ spec:
     size: 256
     rotationPolicy: Always
   issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
+    name: anshulg-cert
+    kind: GoogleCASClusterIssuer
+    group: cas-issuer.jetstack.io
