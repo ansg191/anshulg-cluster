@@ -13,5 +13,6 @@ spec:
   dnsNames:
     - cyber.anshulg.com
   issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
+    name: anshulg-cert
+    kind: GoogleCASClusterIssuer
+    group: cas-issuer.jetstack.io

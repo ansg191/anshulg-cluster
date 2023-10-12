@@ -32,8 +32,9 @@ spec:
   dnsNames:
     - anshulg.com
   issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
+    name: anshulg-cert
+    kind: GoogleCASClusterIssuer
+    group: cas-issuer.jetstack.io
 ---
 apiVersion: apps/v1
 kind: Deployment
