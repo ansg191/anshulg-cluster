@@ -5,9 +5,6 @@ traefik:
   deployment:
     kind: DaemonSet
 
-  service:
-    type: ClusterIP
-
   ports:
     web:
       redirectTo: websecure
