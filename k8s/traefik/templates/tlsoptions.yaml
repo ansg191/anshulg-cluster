@@ -11,3 +11,13 @@ spec:
     - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
     - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
     - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+spec:
+  headers:
+    frameDeny: true
+    browserXssFilter: true
+    stsSeconds: 31536000
