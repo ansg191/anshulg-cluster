@@ -6,10 +6,7 @@ traefik:
     kind: DaemonSet
 
   service:
-    type: NodePort
-    annotations:
-      cloud.google.com/app-protocols: '{"websecure":"HTTPS","web":"HTTP"}'
-  #      cloud.google.com/app-protocols: HTTPS
+    type: ClusterIP
 
   ports:
     web:
