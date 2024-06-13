@@ -1,5 +1,5 @@
 spec:
   source:
-    repoURL: https://github.com/ansg191/anshulg-cluster.git
+    repoURL: git@github.com:ansg191/anshulg-cluster.git
   destination:
     server: https://kubernetes.default.svc
