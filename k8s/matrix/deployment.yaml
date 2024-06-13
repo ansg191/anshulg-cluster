@@ -43,6 +43,12 @@ spec:
         - mountPath: /config/anshulg.com.signing.key
           name: matrix-key
           subPath: anshulg.com.signing.key
+        readinessProbe:
+          httpGet:
+            port: 8008
+            path: /health
+          initialDelaySeconds: 30
+          periodSeconds: 10
       restartPolicy: Always
       securityContext:
         fsGroup: 991
