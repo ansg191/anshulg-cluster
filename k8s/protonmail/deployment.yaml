@@ -26,3 +26,8 @@ spec:
           image: shenxn/protonmail-bridge:3.3.2-1
           ports:
             - containerPort: 1025
+          readinessProbe:
+            tcpSocket:
+              port: 1025
+            initialDelaySeconds: 10
+            periodSeconds: 5
