@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-load-balancer-microk8s-conf
+  namespace: ingress
+data:
+  ssl-redirect: "True"
+  hsts: "True"
+  hsts-max-age: "63072000"
+  ssl-protocols: "TLSv1.3"
+  ssl-prefer-server-ciphers: "False"
