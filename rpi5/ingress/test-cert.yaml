@@ -1,10 +1,10 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: test-cert
-  namespace: default
+  name: default-cert
+  namespace: ingress
 spec:
-  secretName: test-cert-tls
+  secretName: default-cert-tls
   commonName: rpi5.local
   ipAddresses:
     - 192.168.1.39
@@ -12,13 +12,17 @@ spec:
     - rpi5.local
   duration: 2160h0m0s
   renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
   subject:
     organizations:
-      - anshulg
+      - Anshul Gupta
     organizationalUnits:
       - rpi5
     provinces:
-      - CA
+      - California
     countries:
       - US
   issuerRef:
