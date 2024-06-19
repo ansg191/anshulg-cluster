@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-server
+  labels:
+    app: test-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-server
+  template:
+    metadata:
+      name: test-server
+      labels:
+        app: test-server
+    spec:
+      containers:
+        - name: test-server
+          image: nginx
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
