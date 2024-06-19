@@ -1,0 +1,27 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: test-cert
+  namespace: default
+spec:
+  secretName: test-cert-tls
+  commonName: rpi5.local
+  ipAddresses:
+    - 192.168.1.39
+  dnsNames:
+    - rpi5.local
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  subject:
+    organizations:
+      - anshulg
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - CA
+    countries:
+      - US
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASClusterIssuer
+    name: anshulg-ca
