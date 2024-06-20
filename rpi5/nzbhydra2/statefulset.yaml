@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nzbhydra2
+spec:
+  selector:
+    matchLabels:
+      app: nzbhydra2
+  serviceName: nzbhydra2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nzbhydra2
+    spec:
+      containers:
+        - name: nzbhydra2
+          image: lscr.io/linuxserver/nzbhydra2:7.2.3
+          ports:
+            - containerPort: 5076
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Los_Angeles"
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: ceph-rbd
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: downloads
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: ceph-rbd
+        resources:
+          requests:
+            storage: 5Gi
