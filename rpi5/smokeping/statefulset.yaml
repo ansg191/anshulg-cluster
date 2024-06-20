@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: smokeping
+  labels:
+    app: smokeping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smokeping
+  serviceName: smokeping
+  template:
+    metadata:
+      name: smokeping
+      labels:
+        app: smokeping
+    spec:
+      containers:
+        - name: smokeping
+          image: lscr.io/linuxserver/smokeping:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Los_Angeles"
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+        labels:
+          app: smokeping
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: mayastor
+    - metadata:
+        name: data
+        labels:
+          app: smokeping
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: mayastor
