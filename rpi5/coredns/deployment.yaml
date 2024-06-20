@@ -84,9 +84,7 @@ spec:
         - mountPath: /etc/coredns
           name: config-volume
           readOnly: true
-#      dnsPolicy: Default
-      dnsPolicy: ClusterFirstWithHostNet
-      hostNetwork: true
+      dnsPolicy: Default
       priorityClassName: system-cluster-critical
       restartPolicy: Always
       schedulerName: default-scheduler
