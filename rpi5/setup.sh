@@ -45,4 +45,8 @@ sudo microk8s start
 sudo microk8s status --wait-ready
 
 sudo microk8s enable core/mayastor --default-pool-size 20G
-sudo microk8s mayastor-pools add --device /dev/nvme0n1
+#sudo microk8s mayastor-pools add --device /dev/nvme0n1
+
+# Export the kubeconfig
+mkdir -p ~/.kube
+sudo microk8s config | tee ~/.kube/config
