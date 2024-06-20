@@ -11,6 +11,10 @@ set -eux
 # Set the hostname
 sudo hostnamectl set-hostname rpi5
 
+# Install avahi
+# It doesn't work with pre-made ubuntu image, so we need to install it manually
+sudo snap install avahi
+
 # Touch avahi config file
 sudo touch /var/snap/avahi/common/etc/avahi/avahi-daemon.conf
 
