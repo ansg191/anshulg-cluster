@@ -1,0 +1,23 @@
+apiVersion: datadoghq.com/v2alpha1
+kind: DatadogAgent
+metadata:
+  name: datadog
+spec:
+  global:
+    clusterName: rpi5
+    registry: gcr.io/datadoghq
+    site: datadoghq.com
+    credentials:
+      apiSecret:
+        secretName: datadog-secret
+        keyName: api-key
+  features:
+    logCollection:
+      enabled: true
+      containerCollectAll: true
+    cws:
+      enabled: true
+    usm:
+      enabled: true
+    npm:
+      enabled: true
