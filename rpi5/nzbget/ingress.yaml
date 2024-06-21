@@ -4,6 +4,7 @@ metadata:
   name: nzbget
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
 spec:
   ingressClassName: public
   rules:
