@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nzbget
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  ingressClassName: public
+  rules:
+    - host: nzbget.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nzbget
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - nzbget.local
+      secretName: nzbget-cert-tls
