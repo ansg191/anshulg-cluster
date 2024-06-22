@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: default-cert
-  namespace: ingress
+  namespace: kube-system
 spec:
   secretName: default-cert-tls
   commonName: rpi5.local

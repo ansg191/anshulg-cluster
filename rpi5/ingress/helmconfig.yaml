@@ -1,0 +1,17 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    ports:
+      web:
+        redirectTo:
+          port: websecure
+          permanent: true
+
+    providers:
+      kubernetesCRD:
+        allowExternalNameServices: true
+        allowCrossNamespace: true
