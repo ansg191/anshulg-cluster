@@ -65,4 +65,3 @@ spec:
         resources:
           requests:
             storage: 32Mi
-        storageClassName: longhorn-ssd
