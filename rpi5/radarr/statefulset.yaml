@@ -49,5 +49,4 @@ spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 64Mi
-        storageClassName: longhorn-ssd
+            storage: 5Gi
