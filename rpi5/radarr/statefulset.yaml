@@ -44,7 +44,7 @@ spec:
           livenessProbe:
             httpGet:
               port: 7878
-              path: /radarr/ping
+              path: /ping
             initialDelaySeconds: 30
             periodSeconds: 30
             timeoutSeconds: 5
@@ -52,7 +52,7 @@ spec:
           readinessProbe:
             httpGet:
               port: 7878
-              path: /radarr/ping
+              path: /ping
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
