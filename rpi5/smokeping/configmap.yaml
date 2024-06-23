@@ -42,6 +42,11 @@ data:
     title = linuxserver.io
     host = linuxserver.io
 
+    ++ anshulg
+    menu = anshulg.com
+    title = anshulg.com
+    host = anshulg.com
+
     + Europe
 
     menu = Europe
