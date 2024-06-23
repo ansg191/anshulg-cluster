@@ -133,6 +133,18 @@ data:
     title = Oregon State University Open Source Lab
     host = osuosl.org
 
+    ++ UCR
+
+    menu = University of California Riverside
+    title = University of California Riverside
+    host = www.ucr.edu
+
+    ++ UCRInternal
+
+    menu = University of California Riverside Bolt
+    title = University of California Riverside BCOE Bolt
+    host = bolt.cs.ucr.edu
+
     + DNS
     menu = DNS
     title = DNS
