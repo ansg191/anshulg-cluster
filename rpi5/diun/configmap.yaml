@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: diun-config
+data:
+  diun.yaml: |
+    db:
+      path: diun.db
+
+    watch:
+      workers: 20 # Default 10
+      schedule: "0 */6 * * *" # Default "0 */6 * * *"
+      jitter: 30s
+      firstCheckNotif: false
+      runOnStartup: true
+
+    defaults:
+      watchRepo: false
+      notifyOn:
+        - new
+        - update
+      sortTags: reverse
+
+    notif:
+      webhook:
+        endpoint: https://n8n.anshulg.com/webhook/601434b3-a096-412f-a27f-a00c35dfe898
+        method: POST
+        headers:
+          content-type: application/json
+        timeout: 10s
+
+    #regopts:
+    #  - name: "docker.io"
+    #    selector: image
+    #    username: foo2
+    #    password: bar2
+
+    #providers:
+    #  kubernetes:
+    #    namespaces:
+    #      - default
+    #      - production

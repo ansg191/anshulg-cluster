@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: diun
+  labels:
+    app: diun
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diun
+  serviceName: diun
+  template:
+    metadata:
+      name: diun
+      labels:
+        app: diun
+      annotations:
+        "diun.enable": "true"
+        "diun.watch_repo": "true"
+    spec:
+      serviceAccountName: diun
+      containers:
+        - name: diun
+          image: ghcr.io/crazy-max/diun:4.28
+          imagePullPolicy: IfNotPresent
+          args: ["serve"]
+          env:
+            - name: TZ
+              value: "America/Los_Angeles"
+            - name: LOG_LEVEL
+              value: "info"
+            - name: LOG_JSON
+              value: "false"
+            - name: DIUN_PROVIDERS_KUBERNETES
+              value: "true"
+          volumeMounts:
+            - mountPath: /data
+              name: data
+            - mountPath: /etc/diun/diun.yaml
+              subPath: diun.yaml
+              name: config
+              readOnly: true
+#          resources:
+#            requests:
+#              cpu: 250m
+#              memory: 500Mi
+#            limits:
+#              memory: 1Gi
+      restartPolicy: Always
+      volumes:
+        - name: config
+          configMap:
+            name: diun-config
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi
