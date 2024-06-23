@@ -57,6 +57,22 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
+      initContainers:
+        - name: copy-config
+          image: busybox:1.36.1
+          command:
+            - cp
+            - /configmap/Targets
+            - /config/Targets
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /configmap
+              name: configmap
+      volumes:
+        - name: configmap
+          configMap:
+            name: smokeping-config
       restartPolicy: Always
   volumeClaimTemplates:
     - metadata:
