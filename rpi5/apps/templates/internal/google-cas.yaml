@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ingress
+  name: google-cas
   namespace: argocd
 spec:
   destination:
     server: {{ .Values.spec.destination.server }}
-    namespace: kube-system
-  project: default
+    namespace: cert-manager
+  project: internal
   source:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
-    path: rpi5/ingress
+    path: rpi5/google-cas

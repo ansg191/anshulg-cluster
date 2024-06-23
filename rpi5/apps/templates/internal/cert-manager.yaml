@@ -9,7 +9,7 @@ metadata:
   name: cert-manager
   namespace: argocd
 spec:
-  project: default
+  project: internal
   source:
     chart: cert-manager
     repoURL: https://charts.jetstack.io

@@ -4,7 +4,7 @@ metadata:
   name: datadog-operator
   namespace: argocd
 spec:
-  project: default
+  project: internal
   source:
     chart: datadog-operator
     repoURL: https://helm.datadoghq.com
