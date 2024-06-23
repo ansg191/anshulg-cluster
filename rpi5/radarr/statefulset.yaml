@@ -35,6 +35,27 @@ spec:
               name: config
             - mountPath: /data
               name: data
+          resources:
+            requests:
+              cpu: 250m
+              memory: 500Mi
+            limits:
+              memory: 1Gi
+          livenessProbe:
+            httpGet:
+              port: 7878
+              path: /radarr/ping
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: 7878
+              path: /radarr/ping
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
       restartPolicy: Always
       volumes:
         - name: data
