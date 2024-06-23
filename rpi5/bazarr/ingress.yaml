@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: bazarr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`bazarr.local`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: bazarr
+          port: 80
+  tls:
+    secretName: bazarr-cert-tls
+    domains:
+      - main: bazarr.local
