@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: smokeping
-          image: lscr.io/linuxserver/smokeping:latest
+          image: lscr.io/linuxserver/smokeping:2.8.2
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
@@ -68,7 +68,6 @@ spec:
         resources:
           requests:
             storage: 50Mi
-        storageClassName: longhorn-ssd
     - metadata:
         name: data
         labels:
@@ -78,4 +77,3 @@ spec:
         resources:
           requests:
             storage: 1Gi
-        storageClassName: longhorn-ssd

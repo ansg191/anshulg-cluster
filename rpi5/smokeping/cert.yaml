@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: test-cert
+  name: smokeping-cert
 spec:
   secretName: smokeping-cert-tls
   commonName: smokeping.local
