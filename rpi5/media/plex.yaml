@@ -42,7 +42,9 @@ spec:
               cpu: 500m
               memory: 1Gi
             limits:
+              cpu: "2"
               memory: 4Gi
+              gpu.intel.com/i915: "1"
           livenessProbe:
             tcpSocket:
               port: 32400
