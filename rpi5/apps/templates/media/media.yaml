@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: plex
+  name: media
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: plex
+  name: media
   namespace: argocd
 spec:
   destination:
     server: {{ .Values.spec.destination.server }}
-    namespace: plex
+    namespace: media
   project: media
   source:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
-    path: rpi5/plex
+    path: rpi5/media
