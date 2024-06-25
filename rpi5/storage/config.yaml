@@ -14,6 +14,10 @@ data:
         {
           "node": "rpi5",
           "paths": ["/mnt/nvme0n1"]
+        },
+        {
+          "node": "beelink",
+          "paths": ["/mnt/data"]
         }
       ]
     }
