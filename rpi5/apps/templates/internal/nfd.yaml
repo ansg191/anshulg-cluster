@@ -17,3 +17,42 @@ spec:
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: node-feature-discovery
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: inteldeviceplugins-system
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dp-operator
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: intel-device-plugins-operator
+    repoURL: https://intel.github.io/helm-charts/
+    targetRevision: 0.30.0
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: inteldeviceplugins-system
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: intel-gpu
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: intel-device-plugins-gpu
+    repoURL: https://intel.github.io/helm-charts/
+    targetRevision: 0.30.0
+    helm:
+      parameters:
+        - name: nodeFeatureRule
+          value: "true"
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: inteldeviceplugins-system
