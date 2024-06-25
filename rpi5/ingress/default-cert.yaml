@@ -8,8 +8,10 @@ spec:
   commonName: rpi5.local
   ipAddresses:
     - 192.168.1.39
+    - 192.168.1.48
   dnsNames:
     - rpi5.local
+    - beelink.local
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
