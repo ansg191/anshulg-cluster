@@ -13,6 +13,7 @@ spec:
     - https://bitnami-labs.github.io/sealed-secrets
     - https://charts.jetstack.io
     - https://helm.datadoghq.com
+    - https://kubernetes-sigs.github.io/node-feature-discovery/charts
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
