@@ -1,6 +1,0 @@
-apiVersion: onepassword.com/v1
-kind: OnePasswordItem
-metadata:
-  name: coder-aws-creds
-spec:
-  itemPath: "vaults/{{ .Values.creds.aws.vault }}/items/{{ .Values.creds.aws.item }}"
