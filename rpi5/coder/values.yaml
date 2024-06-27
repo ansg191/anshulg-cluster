@@ -8,6 +8,11 @@ postgresql:
 db_url: postgres://coder:coder@coder-postgresql.coder.svc.cluster.local:5432/coder?sslmode=disable
 access_domain: coder.local
 
+creds:
+  aws:
+    vault: Dev
+    item: AWS coder Access Key
+
 coder:
   coder:
     service:
@@ -21,6 +26,16 @@ coder:
             key: url
       - name: CODER_ACCESS_URL
         value: "https://coder.local"
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: coder-aws-creds
+            key: access-key-id
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: coder-aws-creds
+            key: secret-access-key
     volumeMounts:
       - name: ca-certificates
         mountPath: /etc/ssl/certs/
