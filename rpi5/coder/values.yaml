@@ -1,0 +1,43 @@
+postgresql:
+  auth:
+    username: coder
+    password: coder
+    database: coder
+    postgresPassword: coder
+
+db_url: postgres://coder:coder@coder-postgresql.coder.svc.cluster.local:5432/coder?sslmode=disable
+access_domain: coder.local
+
+coder:
+  coder:
+    service:
+      enable: true
+      type: ClusterIP
+    env:
+      - name: CODER_PG_CONNECTION_URL
+        valueFrom:
+          secretKeyRef:
+            name: coder-db-url
+            key: url
+      - name: CODER_ACCESS_URL
+        value: "https://coder.local"
+    volumeMounts:
+      - name: ca-certificates
+        mountPath: /etc/ssl/certs/
+        readOnly: true
+    volumes:
+      - name: ca-certificates
+        configMap:
+          name: anshulg-ca
+          defaultMode: 0644
+          optional: false
+          items:
+            - key: ca-certificates.crt
+              path: ca-certificates.crt
+    resources:
+      requests:
+          cpu: 25m
+          memory: 256Mi
+      limits:
+          cpu: 500m
+          memory: 1Gi

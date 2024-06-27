@@ -4,3 +4,7 @@ anshulg-cluster-key.json
 
 .idea/
 anshulg-cluster.iml
+
+### Helm template
+# Chart dependencies
+**/charts/*.tgz

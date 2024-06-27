@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: coder
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`{{ .Values.access_domain }}`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: coder
+          port: 80
+  tls:
+    secretName: coder-cert-tls
+    domains:
+      - main: {{ .Values.access_domain }}
