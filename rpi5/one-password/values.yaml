@@ -1,0 +1,10 @@
+connect:
+  connect:
+    credentialsName: one-password-credentials
+    credentialsKey: 1password-credentials.json
+  operator:
+    create: true
+    token:
+      name: onepassword-token
+      key: onepassword-token
+    autoRestart: true

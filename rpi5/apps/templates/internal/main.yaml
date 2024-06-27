@@ -15,6 +15,7 @@ spec:
     - https://helm.datadoghq.com
     - https://kubernetes-sigs.github.io/node-feature-discovery/charts
     - https://intel.github.io/helm-charts/
+    - https://1password.github.io/connect-helm-charts/
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
