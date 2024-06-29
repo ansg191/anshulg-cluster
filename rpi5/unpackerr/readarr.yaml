@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: readarr-secret
+  namespace: unpackerr
+spec:
+  encryptedData:
+    api-key: AgB9LnfgfLrUBT/HeEMTfmLMZDI9nGefeJfZw0/akGotgRsB8GmXrMMbKfqTGJkswpDp10Pa3iTZJJEij3VrQQ7V8TbUidnOg9q2rIJ36zJ3EcW8qMh8a0ikPdVzK2AE+rdL7/NikZxaG+1j3LkjpzoNBusUriQOs8nH1FtI/qQXHrr5d+cOOuUfUT3HcycV+rHjb1hdOcuyCK+0ky9fmlQ/nm2IlVrOin9YVcfXm9KZNUqXQ2CBq1BZf6ZNG0QzG70V+YG5Lsr3fslP8mPyfpJXTD8lhAGLhZlLEQgqTjDFjNOA+Tu8fZuPVQfQ1nWZDZ6DmZ8o1CHxrr6TXQZhPZr5oMg73AbH/4o8wDQcSGRM2AhQoodXYw3jmMzULRY8dzFPjUfQtC+uO+w/HpkY6Kt+DFyoXE5I1+x0w615uiUVBpNmjn2/jryOdkEMYX8fTgjrNi3i5J2zyUb7tb2LTFU4RfBpVA7giNZW8KptwJEjz3AFafnpMfVkids5szGodWkzO5BGV/Hcizpekb+ObG3dWcD2q87b75ZZnFC99K11LIsL0AdHeZ15ZMI1zzF0tL4+krRD9bP/po/AGQB46S6iaWkHlGIN36fSPgbRPRas9Rzqh5P0ZfjX9CV2IY+w4tedL5BA/iHH2ZdYqbBrDpaMHIdg1C+JlutZXBRURFxfv1RqdNChrndE49BNUZ/8PSFLSAM+5JWRm7f+KjoVr3UnFRMQN9WE1LbFeISTUDaEGg==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: readarr-secret
+      namespace: unpackerr
