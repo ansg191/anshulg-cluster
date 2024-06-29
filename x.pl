@@ -8,6 +8,18 @@ use Getopt::Long qw(GetOptions);
 use Data::Dumper qw(Dumper);
 use Pod::Usage qw(&pod2usage);
 
+# Check if the provided cluster is valid
+sub check_cluster {
+    my ($cluster) = @_;
+
+    # Check if the cluster folder exists
+    die "Cluster folder not found: $cluster\n" if (!-d $cluster);
+    # Check if the apps folder exists
+    die "Apps folder not found: $cluster/apps\n" if (!-d "$cluster/apps");
+
+    return 0;
+}
+
 sub command_new {
     my $name;
     my $cluster;
@@ -18,7 +30,7 @@ sub command_new {
         "name=s"    => \$name,
         "cluster=s" => \$cluster,
         "port=i"    => \$port,
-        "stateful" => \$stateful,
+        "stateful"  => \$stateful,
         "help|?"    => \$help,
     ) or pod2usage(2);
     pod2usage(-verbose => 2) if $help != 0;
@@ -26,12 +38,9 @@ sub command_new {
     die "Missing required option: --name\n" if (!defined($name));
     die "Missing required option: --cluster\n" if (!defined($cluster));
 
-    print "Creating new application: `$name` in cluster: `$cluster`\n";
+    check_cluster $cluster;
 
-    # Look for the folder $cluster in the current directory
-    die "Cluster folder not found: $cluster\n" if (!-d $cluster);
-    # Look for "apps" folder in the cluster folder
-    die "Apps folder not found: $cluster/apps\n" if (!-d "$cluster/apps");
+    print "Creating new application: `$name` in cluster: `$cluster`\n";
 
     # Create the application folder
     mkdir "$cluster/$name";
@@ -278,9 +287,50 @@ END_YAML
     print "Application $name in $cluster created successfully\n";
 }
 
-my $subcommand = shift(@ARGV);
+sub command_secret {
+    my $name = shift(@ARGV) or die "Missing required argument: NAME\n";
+
+    my $cluster;
+    my $app;
+    my $namespace;
+    GetOptions(
+        "cluster=s"   => \$cluster,
+        "namespace=s" => \$namespace,
+        "app=s"       => \$app,
+    ) or pod2usage(2);
+
+    die "Missing required option: --cluster\n" if (!defined($cluster));
+    die "Missing required option: --app\n" if (!defined($app));
+    $namespace = $app if (!defined($namespace));
+
+    check_cluster $cluster;
+
+    # Check for app folder in cluster
+    die "App folder not found: $cluster/$app\n" if (!-d "$cluster/$app");
+
+    print "Creating secret for $name/$app in $cluster/$namespace\n";
+
+    # Call kubectl to create the secret yaml
+    my $yaml = `kubectl create secret generic $name -n $namespace --dry-run=client -o yaml @ARGV`;
+
+    # Create secret YAML
+    open(my $fh, '>', "$cluster/$app/$name.unencrypted.yaml") or die "Could not create file: $!";
+    print $fh $yaml;
+    close $fh;
+
+    print "Secret $name/$app in $cluster/$namespace created successfully\n";
+}
+
+my $subcommand = shift(@ARGV) or pod2usage(2);
 if ($subcommand eq 'new') {
     command_new
+}
+elsif ($subcommand eq 'secret') {
+    command_secret
+}
+# If subcommand equals help, --help or -h, print the help message
+elsif ($subcommand eq 'help' || $subcommand eq '--help' || $subcommand eq '-h') {
+    pod2usage(-verbose => 2)
 }
 else {
     print "Unknown subcommand: $subcommand\n";
@@ -302,6 +352,8 @@ __END__
 
 =head2 new
 
+./x.pl new [--name=NAME] [--cluster=CLUSTER] [--port=PORT] [--stateful]
+
 Create a new application.
 
  Options:
@@ -309,6 +361,17 @@ Create a new application.
      -c, --cluster=CLUSTER  The cluster to deploy the application to
      -p, --port=PORT        The port to expose the application on (default: 80)
      -s, --stateful         Create a stateful application (default: false)
+
+=head2 secret
+
+./x.pl secret NAME [--cluster=CLUSTER] [--app=APP] [--namespace=NAMESPACE] -- [options]
+
+Create a new secret.
+
+ Options:
+    -c, --cluster=CLUSTER       The cluster to deploy the secret to
+    -a, --app=APP               The application to deploy the secret to
+    -n, --namespace=NAMESPACE   The namespace to deploy the secret to (default: APP)
 
 =head1 DESCRIPTION
 
