@@ -266,6 +266,9 @@ spec:
         name: data
       spec:
         accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 END_YAML
         print $fh $statefulset_yaml;
         close $fh;

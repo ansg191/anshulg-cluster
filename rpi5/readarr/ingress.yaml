@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: readarr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`readarr.local`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: readarr
+          port: 80
+  tls:
+    secretName: readarr-cert-tls
+    domains:
+      - main: readarr.local
