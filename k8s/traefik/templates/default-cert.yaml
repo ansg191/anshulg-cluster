@@ -14,7 +14,7 @@ spec:
     algorithm: ECDSA
     size: 256
   issuerRef:
-    name: anshulg-cert
+    name: anshulg-ca
     kind: GoogleCASClusterIssuer
     group: cas-issuer.jetstack.io
 ---

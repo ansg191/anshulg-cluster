@@ -32,7 +32,7 @@ spec:
   dnsNames:
     - anshulg.com
   issuerRef:
-    name: anshulg-cert
+    name: anshulg-ca
     kind: GoogleCASClusterIssuer
     group: cas-issuer.jetstack.io
 ---

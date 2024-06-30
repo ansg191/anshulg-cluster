@@ -45,6 +45,6 @@ spec:
     size: 256
     rotationPolicy: Always
   issuerRef:
-    name: anshulg-cert
+    name: anshulg-ca
     kind: GoogleCASClusterIssuer
     group: cas-issuer.jetstack.io

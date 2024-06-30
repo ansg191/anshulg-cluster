@@ -25,4 +25,4 @@ spec:
   issuerRef:
     group: cas-issuer.jetstack.io
     kind: GoogleCASClusterIssuer
-    name: anshulg-cert
+    name: anshulg-ca
