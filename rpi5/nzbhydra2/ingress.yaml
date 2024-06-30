@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nzbhydra2
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`nzbhydra.local`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: nzbhydra2
+          port: 80
+  tls:
+    secretName: nzbhydra2-cert-tls
+    domains:
+      - main: nzbhydra.local

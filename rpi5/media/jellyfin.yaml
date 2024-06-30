@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jellyfin
+  labels:
+    app: jellyfin
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: jellyfin
+  serviceName: jellyfin
+  template:
+    metadata:
+      name: jellyfin
+      labels:
+        app: jellyfin
+    spec:
+      hostNetwork: true
+      containers:
+        - name: jellyfin
+          image: lscr.io/linuxserver/jellyfin:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "0"
+            - name: PGID
+              value: "0"
+            - name: TZ
+              value: "America/Los_Angeles"
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+            - mountPath: /dev/dri
+              name: dev-dri
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              memory: 4Gi
+#          livenessProbe:
+#            tcpSocket:
+#              port: 32400
+#            initialDelaySeconds: 30
+#            periodSeconds: 30
+#            timeoutSeconds: 5
+#            failureThreshold: 3
+#          readinessProbe:
+#            tcpSocket:
+#              port: 32400
+#            periodSeconds: 10
+#            timeoutSeconds: 5
+#            failureThreshold: 3
+          securityContext:
+            privileged: true
+      restartPolicy: Always
+      volumes:
+        - name: data
+          nfs:
+            path: /data
+            server: 192.168.1.41
+            readOnly: false
+        - name: dev-dri
+          hostPath:
+            path: /dev/dri
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi

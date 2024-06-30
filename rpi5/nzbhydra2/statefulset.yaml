@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nzbhydra2
+spec:
+  selector:
+    matchLabels:
+      app: nzbhydra2
+  serviceName: nzbhydra2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nzbhydra2
+    spec:
+      containers:
+        - name: nzbhydra2
+          image: ghcr.io/ansg191/docker-nzbhydra2:master
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5076
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Los_Angeles"
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: downloads
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi

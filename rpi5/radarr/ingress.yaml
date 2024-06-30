@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: radarr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`radarr.local`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: radarr
+          port: 80
+  tls:
+    secretName: radarr-cert-tls
+    domains:
+      - main: radarr.local

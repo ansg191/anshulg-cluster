@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: smokeping
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`smokeping.local`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: smokeping
+          port: 80
+  tls:
+    secretName: smokeping-cert-tls
+    domains:
+      - main: smokeping.local

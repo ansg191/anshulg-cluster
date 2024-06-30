@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: internal
+  namespace: argocd
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Internal Cluster Applications
+  sourceRepos:
+    - {{ .Values.spec.source.repoURL }}
+    - https://bitnami-labs.github.io/sealed-secrets
+    - https://charts.jetstack.io
+    - https://helm.datadoghq.com
+    - https://kubernetes-sigs.github.io/node-feature-discovery/charts
+    - https://intel.github.io/helm-charts/
+    - https://1password.github.io/connect-helm-charts/
+  destinations:
+    - namespace: '*'
+      server: {{ .Values.spec.destination.server }}
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'

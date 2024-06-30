@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unpackerr
+  labels:
+    app: unpackerr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unpackerr
+  template:
+    metadata:
+      name: unpackerr
+      labels:
+        app: unpackerr
+    spec:
+      containers:
+        - name: unpackerr
+          image: golift/unpackerr:0.13.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5656
+              protocol: TCP
+          env:
+            - name: UN_READARR_0_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: readarr-secret
+                  key: api-key
+          volumeMounts:
+            - mountPath: /config
+              name: config
+              readOnly: true
+            - mountPath: /data
+              name: data
+          # resources:
+          #   requests:
+          #     cpu: 250m
+          #     memory: 500Mi
+          #   limits:
+          #     memory: 1Gi
+          # livenessProbe:
+          #   httpGet:
+          #     port: 7878
+          #     path: /ping
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 30
+          #   timeoutSeconds: 5
+          #   failureThreshold: 3
+          # readinessProbe:
+          #   httpGet:
+          #     port: 7878
+          #     path: /ping
+          #   periodSeconds: 10
+          #   timeoutSeconds: 5
+          #   failureThreshold: 3
+      restartPolicy: Always
+      volumes:
+        - name: config
+          configMap:
+            name: unpackerr-config
+        - name: data
+          nfs:
+            path: /data
+            server: 192.168.1.41
+            readOnly: false

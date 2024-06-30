@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nzbget
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`nzbget.local`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: nzbget
+          port: 80
+  tls:
+    secretName: nzbget-cert-tls
+    domains:
+      - main: nzbget.local
