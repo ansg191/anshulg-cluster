@@ -20,6 +20,29 @@ sub check_cluster {
     return 0;
 }
 
+# Gets the top level domain of the cluster
+sub get_tld {
+    my ($cluster) = @_;
+
+    # Check if the cluster folder exists
+    check_cluster $cluster;
+
+    # Open the cluster's values.yaml file
+    open(my $fh, '<', "$cluster/apps/values.yaml") or die "Could not open file: $!";
+
+    # Read the file line by line
+    while (my $line = <$fh>) {
+        # If the line contains the tld key, return the value
+        if ($line =~ /^tld:\s*(.*)/) {
+            close($fh);
+            return $1;
+        }
+    }
+
+    close($fh);
+    die "tld key not found in $cluster/apps/values.yaml\n";
+}
+
 sub command_new {
     my $name;
     my $cluster;
@@ -41,6 +64,9 @@ sub command_new {
     check_cluster $cluster;
 
     print "Creating new application: `$name` in cluster: `$cluster`\n";
+
+    # Get the TLD of the cluster
+    my $tld = get_tld $cluster;
 
     # Create the application folder
     mkdir "$cluster/$name";
@@ -69,7 +95,7 @@ spec:
   source:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
-    path: rpi5/$name
+    path: $cluster/$name
 END_YAML
 
     print $fh $app_yaml;
@@ -108,7 +134,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`$name.local`)
+      match: Host(`$name.$tld`)
       middlewares:
         - name: security-headers
           namespace: kube-system
@@ -118,7 +144,7 @@ spec:
   tls:
     secretName: $name-cert-tls
     domains:
-      - main: $name.local
+      - main: $name.$tld
 END_YAML
     print $fh $ingress_yaml;
     close $fh;
@@ -133,9 +159,9 @@ metadata:
   name: $name-cert
 spec:
   secretName: $name-cert-tls
-  commonName: $name.local
+  commonName: $name.$tld
   dnsNames:
-    - $name.local
+    - $name.$tld
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
@@ -146,7 +172,7 @@ spec:
     organizations:
       - Anshul Gupta
     organizationalUnits:
-      - rpi5
+      - $cluster
     provinces:
       - California
     countries:
@@ -189,27 +215,27 @@ spec:
             - containerPort: $port
               protocol: TCP
           env: []
-          # resources:
-          #   requests:
-          #     cpu: 250m
-          #     memory: 500Mi
-          #   limits:
-          #     memory: 1Gi
-          # livenessProbe:
-          #   httpGet:
-          #     port: 7878
-          #     path: /ping
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 30
-          #   timeoutSeconds: 5
-          #   failureThreshold: 3
-          # readinessProbe:
-          #   httpGet:
-          #     port: 7878
-          #     path: /ping
-          #   periodSeconds: 10
-          #   timeoutSeconds: 5
-          #   failureThreshold: 3
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
       restartPolicy: Always
 END_YAML
         print $fh $deployment_yaml;
@@ -248,27 +274,27 @@ spec:
           volumeMounts:
             - mountPath: PATH
               name: data
-          # resources:
-          #   requests:
-          #     cpu: 250m
-          #     memory: 500Mi
-          #   limits:
-          #     memory: 1Gi
-          # livenessProbe:
-          #   httpGet:
-          #     port: 7878
-          #     path: /ping
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 30
-          #   timeoutSeconds: 5
-          #   failureThreshold: 3
-          # readinessProbe:
-          #   httpGet:
-          #     port: 7878
-          #     path: /ping
-          #   periodSeconds: 10
-          #   timeoutSeconds: 5
-          #   failureThreshold: 3
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
       restartPolicy: Always
   volumeClaimTemplates:
     - metadata:

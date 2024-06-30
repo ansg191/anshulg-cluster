@@ -4,3 +4,5 @@ spec:
     branch: master
   destination:
     server: https://kubernetes.default.svc
+
+tld: anshulg.com
