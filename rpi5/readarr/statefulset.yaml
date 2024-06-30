@@ -61,7 +61,7 @@ spec:
         - name: data
           nfs:
             path: /data
-            server: 192.168.1.51
+            server: 192.168.1.41
             readOnly: false
   volumeClaimTemplates:
     - metadata:
