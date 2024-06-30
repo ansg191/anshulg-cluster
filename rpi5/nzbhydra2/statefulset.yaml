@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: nzbhydra2
-          image: lscr.io/linuxserver/nzbhydra2:7.2.3
+          image: ghcr.io/ansg191/docker-nzbhydra2:master
+          imagePullPolicy: Always
           ports:
             - containerPort: 5076
           volumeMounts:
