@@ -11,6 +11,8 @@ spec:
       middlewares:
         - name: security-headers
           namespace: kube-system
+        - name: caching
+          namespace: kube-system
       services:
         - name: radarr
           port: 80
