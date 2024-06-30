@@ -30,3 +30,10 @@ spec:
   headers:
     customResponseHeaders:
       Cache-Control: "public, max-age=86400"
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: compression
+spec:
+  compress: {}

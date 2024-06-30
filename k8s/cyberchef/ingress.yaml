@@ -13,6 +13,8 @@ spec:
           namespace: traefik
         - name: cache-headers
           namespace: traefik
+        - name: compression
+          namespace: traefik
       services:
         - name: cyber
           port: 8000
