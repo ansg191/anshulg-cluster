@@ -264,7 +264,7 @@ data:
     title = TrueNAS
     host = 192.168.1.10
 
-    ++ Odroid-N2
-    menu = Odroid-N2
-    title = Odroid-N2
-    host = 192.168.1.51
+    ++ Odroid-C4
+    menu = Odroid-C4
+    title = Odroid-C4
+    host = 192.168.1.41
