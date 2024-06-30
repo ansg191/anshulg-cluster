@@ -11,6 +11,8 @@ spec:
       middlewares:
         - name: security-headers
           namespace: traefik
+        - name: cache-headers
+          namespace: traefik
       services:
         - name: it-tools
           port: 80

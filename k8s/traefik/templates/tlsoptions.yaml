@@ -21,3 +21,12 @@ spec:
     frameDeny: true
     browserXssFilter: true
     stsSeconds: 31536000
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: cache-headers
+spec:
+  headers:
+    customResponseHeaders:
+      Cache-Control: "public, max-age=86400"
