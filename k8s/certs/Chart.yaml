@@ -28,5 +28,5 @@ dependencies:
     version: 1.12.3
     repository: https://charts.jetstack.io
   - name: cert-manager-google-cas-issuer
-    version: v0.6.2
+    version: v0.8.0
     repository: https://charts.jetstack.io
