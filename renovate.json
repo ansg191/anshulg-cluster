@@ -1,3 +1,9 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "kubernetes": {
+      "fileMatch": [
+          "k8s/.+\\.yaml$",
+          "rpi5/.+\\.yaml$"
+      ]
+  }
 }
