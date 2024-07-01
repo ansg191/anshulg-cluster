@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "prHourlyLimit": 5,
+  "platformCommit": true,
   "kubernetes": {
     "fileMatch": [
       "k8s/.+\\.yaml$",
