@@ -1,9 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "prHourlyLimit": 5,
   "kubernetes": {
-      "fileMatch": [
-          "k8s/.+\\.yaml$",
-          "rpi5/.+\\.yaml$"
-      ]
+    "fileMatch": [
+      "k8s/.+\\.yaml$",
+      "rpi5/.+\\.yaml$"
+    ]
   }
 }
