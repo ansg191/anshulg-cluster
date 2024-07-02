@@ -7,6 +7,7 @@ use warnings FATAL => 'all';
 use Getopt::Long qw(GetOptions);
 use Data::Dumper qw(Dumper);
 use Pod::Usage qw(&pod2usage);
+use File::Find qw(find);
 
 # Check if the provided cluster is valid
 sub check_cluster {
@@ -347,12 +348,62 @@ sub command_secret {
     print "Secret $name/$app in $cluster/$namespace created successfully\n";
 }
 
+sub seal_file {
+    my ($file, $yes, $controller, $namespace) = @_;
+
+    # Ask for confirmation
+    if ($yes == 0) {
+        print "Seal $file? [y/N] ";
+        my $response = <STDIN>;
+        chomp $response;
+        return if ($response ne 'y');
+    }
+
+    # Remove `.unencrypted` from the file name
+    my $sealed_file = $file;
+    $sealed_file =~ s/\.unencrypted//;
+
+    print "Sealing $file into $sealed_file\n";
+
+    # Call kubeseal to seal the secret, die if the command fails
+    system("kubeseal --controller-name=\"$controller\" --controller-namespace=\"$namespace\" -f $file -w $sealed_file") == 0
+        or die "Failed to seal $file\n";
+}
+
+sub command_seal {
+    my $namespace = 'kube-system';
+    my $controller = 'sealed-secrets';
+    my $yes = 0;
+    my $help = 0;
+    GetOptions(
+        "namespace=s"  => \$namespace,
+        "controller=s" => \$controller,
+        "yes"          => \$yes,
+        "help|?"       => \$help,
+    ) or pod2usage(2);
+    pod2usage(-verbose => 2) if $help != 0;
+
+    my $dir = shift(@ARGV) or die "Missing required argument: DIR\n";
+
+    # Get all unencrypted secret files in the directory
+    my $wanted = sub {
+        if (-f $_ && $_ =~ qr/\.unencrypted\.yaml$/) {
+            seal_file($_, $yes, $controller, $namespace);
+        }
+    };
+
+    find(\&$wanted, $dir);
+}
+
 my $subcommand = shift(@ARGV) or pod2usage(2);
 if ($subcommand eq 'new') {
     command_new
 }
 elsif ($subcommand eq 'secret') {
     command_secret
+}
+elsif ($subcommand eq 'seal') {
+    command_seal
 }
 # If subcommand equals help, --help or -h, print the help message
 elsif ($subcommand eq 'help' || $subcommand eq '--help' || $subcommand eq '-h') {
@@ -398,6 +449,17 @@ Create a new secret.
     -c, --cluster=CLUSTER       The cluster to deploy the secret to
     -a, --app=APP               The application to deploy the secret to
     -n, --namespace=NAMESPACE   The namespace to deploy the secret to (default: APP)
+
+=head2 seal
+
+./x.pl seal [--namespace=NAMESPACE] [--controller=CONTROLLER] DIR
+
+Seal all unencrypted secrets in the directory.
+
+ Options:
+    -n, --namespace=NAMESPACE   The namespace of the Sealed Secrets controller (default: kube-system)
+    -c, --controller=CONTROLLER The name of the Sealed Secrets controller (default: sealed-secrets)
+    -y, --yes                   Skip confirmation
 
 =head1 DESCRIPTION
 
