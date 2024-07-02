@@ -19,3 +19,6 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
     path: k8s/it-tools
+  syncPolicy:
+    automated:
+      prune: true
