@@ -8,6 +8,8 @@ kind: Application
 metadata:
   name: cyber
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     server: {{ .Values.spec.destination.server }}
@@ -17,3 +19,6 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: HEAD
     path: k8s/cyberchef
+  syncPolicy:
+    automated:
+      prune: true
