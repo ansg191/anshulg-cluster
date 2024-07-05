@@ -1,0 +1,23 @@
+{{/*apiVersion: traefik.io/v1alpha1*/}}
+{{/*kind: IngressRoute*/}}
+{{/*metadata:*/}}
+{{/*  name: auth-authentik-server*/}}
+{{/*spec:*/}}
+{{/*  entryPoints:*/}}
+{{/*    - websecure*/}}
+{{/*  routes:*/}}
+{{/*    - kind: Rule*/}}
+{{/*      match: Host(`auth.anshulg.com`)*/}}
+{{/*      middlewares:*/}}
+{{/*        - name: security-headers*/}}
+{{/*          namespace: traefik*/}}
+{{/*        - name: compression*/}}
+{{/*          namespace: traefik*/}}
+{{/*      services:*/}}
+{{/*        - name: auth-authentik-server*/}}
+{{/*          port: 80*/}}
+{{/*          kind: Service*/}}
+{{/*  tls:*/}}
+{{/*    secretName: auth-cert*/}}
+{{/*    domains:*/}}
+{{/*      - main: auth.anshulg.com*/}}

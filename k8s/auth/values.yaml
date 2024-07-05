@@ -1,0 +1,22 @@
+
+authentik:
+  authentik:
+    secret_key: "Wub40M2l6svu8xxL4dTmcD5RcDRKvFpYaGewftPW0np2DhXjlqgtVgTaLiQPg+mserhErfJZwMor56hW"
+    postgresql:
+      password: "RQ7MifOuEHXiZT+dCyo0z7I5lhJbB9GcdQRngeUzPqfvhYyMWxKIS+pFPSfLvwq1i2lA6JN2I15ZemUs"
+
+  server:
+    ingress:
+      enabled: true
+      ingressClassName: 'traefik'
+      hosts:
+        - auth.anshulg.com
+
+  postgresql:
+    enabled: true
+    auth:
+      postgresPassword: "RQ7MifOuEHXiZT+dCyo0z7I5lhJbB9GcdQRngeUzPqfvhYyMWxKIS+pFPSfLvwq1i2lA6JN2I15ZemUs"
+      password: "RQ7MifOuEHXiZT+dCyo0z7I5lhJbB9GcdQRngeUzPqfvhYyMWxKIS+pFPSfLvwq1i2lA6JN2I15ZemUs"
+
+  redis:
+    enabled: true
