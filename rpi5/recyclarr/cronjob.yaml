@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: recyclarr
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: recyclarr
+              image: ghcr.io/recyclarr/recyclarr:7.0.0
+              imagePullPolicy: IfNotPresent
+              args:
+                - sync
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp
+                - mountPath: /config/recyclarr.yml
+                  name: config
+                  subPath: recyclarr.yml
+                  readOnly: true
+                - mountPath: /config/secrets.yml
+                  name: secrets
+                  subPath: secret.yml
+                  readOnly: true
+              securityContext:
+                runAsUser: 1000
+                runAsGroup: 1000
+                capabilities:
+                  drop:
+                    - ALL
+                allowPrivilegeEscalation: false
+                privileged: false
+                readOnlyRootFilesystem: true
+          volumes:
+            - name: tmp
+              emptyDir: {}
+            - name: config
+              configMap:
+                name: recyclarr-config
+            - name: secrets
+              secret:
+                secretName: recyclarr-secret
+          restartPolicy: OnFailure
