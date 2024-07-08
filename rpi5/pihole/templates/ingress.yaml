@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ template "pihole.fullname" . }}-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`{{ template "pihole.fullname" . }}.local`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: {{ template "pihole.fullname" . }}-web
+          port: 80
+  tls:
+    secretName: {{ template "pihole.fullname" . }}-cert-tls
+    domains:
+      - main: {{ template "pihole.fullname" . }}.local
