@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: node-problem-detector
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: node-problem-detector
+    repoURL: https://charts.deliveryhero.io/
+    targetRevision: 2.3.13
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: kube-system
