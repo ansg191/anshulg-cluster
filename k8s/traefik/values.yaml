@@ -1,13 +1,11 @@
 traefik:
-  image:
-    tag: 3.0.0-beta3
-
   deployment:
     kind: DaemonSet
 
   ports:
     web:
-      redirectTo: websecure
+      redirectTo:
+        port: websecure
 
   service:
     spec:
