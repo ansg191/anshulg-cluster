@@ -17,6 +17,7 @@ spec:
     - https://intel.github.io/helm-charts/
     - https://1password.github.io/connect-helm-charts/
     - https://charts.deliveryhero.io/
+    - https://kubernetes-sigs.github.io/descheduler/
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
