@@ -12,3 +12,7 @@ spec:
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
