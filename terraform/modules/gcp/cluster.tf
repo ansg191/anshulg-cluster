@@ -13,6 +13,13 @@ resource "google_container_cluster" "default" {
   workload_identity_config {
     workload_pool = "${data.google_project.default.project_id}.svc.id.goog"
   }
+
+  # SNYK-CC-TF-87
+  master_auth {
+    client_certificate_config {
+      issue_client_certificate = false
+    }
+  }
 }
 
 resource "google_container_node_pool" "default_spot_pool" {
@@ -32,5 +39,9 @@ resource "google_container_node_pool" "default_spot_pool" {
     workload_metadata_config {
       mode = "GKE_METADATA"
     }
+  }
+
+  management {
+    auto_upgrade = true
   }
 }
