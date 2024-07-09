@@ -40,4 +40,8 @@ resource "google_container_node_pool" "default_spot_pool" {
       mode = "GKE_METADATA"
     }
   }
+
+  management {
+    auto_upgrade = true
+  }
 }
