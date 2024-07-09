@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:16
+          image: postgres:13
           imagePullPolicy: Always
           env:
             - name: POSTGRES_PASSWORD
