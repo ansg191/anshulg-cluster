@@ -11,6 +11,8 @@ spec:
       apiSecret:
         secretName: datadog-secret
         keyName: api-key
+    tags:
+      - "location:home"
   features:
     logCollection:
       enabled: true
