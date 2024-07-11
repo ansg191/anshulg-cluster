@@ -1,0 +1,28 @@
+# Default values for teslamate.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+ingressRoute:
+  enabled: true
+  entryPoints:
+    - websecure
+  hosts:
+    - teslamate.anshulg.com
+  middlewares:
+    - name: security-headers
+      namespace: traefik
+  tls:
+    enabled: true
+    duration: 2160h0m0s
+    renewBefore: 720h0m0s
+    privateKey:
+      algorithm: ECDSA
+      size: 384
+      rotationPolicy: Always
+    issuerRef:
+      group: cas-issuer.jetstack.io
+      kind: GoogleCASClusterIssuer
+      name: anshulg-ca
