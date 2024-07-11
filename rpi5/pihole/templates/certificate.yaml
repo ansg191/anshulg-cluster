@@ -7,6 +7,7 @@ spec:
   commonName: {{ template "pihole.fullname" . }}.local
   dnsNames:
     - {{ template "pihole.fullname" . }}.local
+    - {{ template "pihole.fullname" . }}.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:

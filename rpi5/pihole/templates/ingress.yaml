@@ -2,12 +2,14 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ template "pihole.fullname" . }}-ingress
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
 spec:
   entryPoints:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`{{ template "pihole.fullname" . }}.local`)
+      match: Host(`{{ template "pihole.fullname" . }}.local`) || Host(`{{ template "pihole.fullname" . }}.internal`)
       middlewares:
         - name: security-headers
           namespace: kube-system
@@ -18,3 +20,5 @@ spec:
     secretName: {{ template "pihole.fullname" . }}-cert-tls
     domains:
       - main: {{ template "pihole.fullname" . }}.local
+        sans:
+          - {{ template "pihole.fullname" . }}.internal
