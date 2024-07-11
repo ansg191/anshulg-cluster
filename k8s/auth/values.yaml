@@ -1,22 +1,25 @@
+global:
+  ldapDomain: "anshulg.com"
+  existingSecret: "ldap-creds"
 
-authentik:
-  authentik:
-    secret_key: "Wub40M2l6svu8xxL4dTmcD5RcDRKvFpYaGewftPW0np2DhXjlqgtVgTaLiQPg+mserhErfJZwMor56hW"
-    postgresql:
-      password: "RQ7MifOuEHXiZT+dCyo0z7I5lhJbB9GcdQRngeUzPqfvhYyMWxKIS+pFPSfLvwq1i2lA6JN2I15ZemUs"
-
-  server:
+openldap-stack-ha:
+  ltb-passwd:
     ingress:
-      enabled: true
-      ingressClassName: 'traefik'
-      hosts:
-        - auth.anshulg.com
+      enabled: false
+  phpldapadmin:
+    ingress:
+      enabled: false
 
-  postgresql:
-    enabled: true
-    auth:
-      postgresPassword: "RQ7MifOuEHXiZT+dCyo0z7I5lhJbB9GcdQRngeUzPqfvhYyMWxKIS+pFPSfLvwq1i2lA6JN2I15ZemUs"
-      password: "RQ7MifOuEHXiZT+dCyo0z7I5lhJbB9GcdQRngeUzPqfvhYyMWxKIS+pFPSfLvwq1i2lA6JN2I15ZemUs"
-
-  redis:
-    enabled: true
+#authelia:
+#  domain: "anshulg.com"
+#  configMap:
+#    authentication_backend:
+#      ldap:
+#        enabled: true
+#        url: "ldap://auth.auth.svc.cluster.local"
+#        base_dn: "dc=anshulg,dc=com"
+#        user: "cn=admin,dc=anshulg,dc=com"
+#    storage:
+#      postgres:
+#        enabled: true
+#        host: postgres.

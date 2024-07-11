@@ -24,6 +24,12 @@ version: 0.1.0
 appVersion: "1.16.0"
 
 dependencies:
-  - name: authentik
-    version: 2024.6.0
-    repository: https://charts.goauthentik.io
+  - name: openldap-stack-ha
+    version: 4.2.5
+    repository: https://jp-gouin.github.io/helm-openldap/
+  - name: postgresql
+    version: 15.5.15
+    repository: https://charts.bitnami.com/bitnami
+#  - name: authelia
+#    version: 0.8.58
+#    repository: https://charts.authelia.com
