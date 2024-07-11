@@ -430,7 +430,6 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}
-
 END_YAML
     print $fh $certificate_yaml;
     close $fh;
