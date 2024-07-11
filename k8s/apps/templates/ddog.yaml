@@ -30,3 +30,7 @@ spec:
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: ddog
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
