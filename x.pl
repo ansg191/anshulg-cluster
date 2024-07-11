@@ -8,6 +8,7 @@ use Getopt::Long qw(GetOptions);
 use Data::Dumper qw(Dumper);
 use Pod::Usage qw(&pod2usage);
 use File::Find qw(find);
+use File::pushd;
 
 # Check if the provided cluster is valid
 sub check_cluster {
@@ -44,33 +45,9 @@ sub get_tld {
     die "tld key not found in $cluster/apps/values.yaml\n";
 }
 
-sub command_new {
-    my $name;
-    my $cluster;
-    my $port = 80;
-    my $stateful = 0;
-    my $help = 0;
-    GetOptions(
-        "name=s"    => \$name,
-        "cluster=s" => \$cluster,
-        "port=i"    => \$port,
-        "stateful"  => \$stateful,
-        "help|?"    => \$help,
-    ) or pod2usage(2);
-    pod2usage(-verbose => 2) if $help != 0;
+sub create_app_file {
+    my ($cluster, $name) = @_;
 
-    die "Missing required option: --name\n" if (!defined($name));
-    die "Missing required option: --cluster\n" if (!defined($cluster));
-
-    check_cluster $cluster;
-
-    print "Creating new application: `$name` in cluster: `$cluster`\n";
-
-    # Get the TLD of the cluster
-    my $tld = get_tld $cluster;
-
-    # Create the application folder
-    mkdir "$cluster/$name";
     # Create the application file
     open(my $fh, '>', "$cluster/apps/templates/$name.yaml") or die "Could not create file: $!";
 
@@ -102,9 +79,41 @@ END_YAML
     print $fh $app_yaml;
     close $fh;
     system("git add $cluster/apps/templates/$name.yaml");
+}
+
+sub command_new {
+    my $name;
+    my $cluster;
+    my $port = 80;
+    my $stateful = 0;
+    my $help = 0;
+    GetOptions(
+        "name=s"    => \$name,
+        "cluster=s" => \$cluster,
+        "port=i"    => \$port,
+        "stateful"  => \$stateful,
+        "help|?"    => \$help,
+    ) or pod2usage(2);
+    pod2usage(-verbose => 2) if $help != 0;
+
+    die "Missing required option: --name\n" if (!defined($name));
+    die "Missing required option: --cluster\n" if (!defined($cluster));
+
+    check_cluster $cluster;
+
+    print "Creating new application: `$name` in cluster: `$cluster`\n";
+
+    # Get the TLD of the cluster
+    my $tld = get_tld $cluster;
+
+    # Create the application folder
+    mkdir "$cluster/$name";
+
+    # Create the application file
+    create_app_file $cluster, $name;
 
     # Create service YAML
-    open($fh, '>', "$cluster/$name/service.yaml") or die "Could not create file: $!";
+    open(my $fh, '>', "$cluster/$name/service.yaml") or die "Could not create file: $!";
     my $service_yaml = <<"END_YAML";
 apiVersion: v1
 kind: Service
@@ -314,6 +323,153 @@ END_YAML
     print "Application $name in $cluster created successfully\n";
 }
 
+sub command_helm {
+    my $name;
+    my $cluster;
+    my $help = 0;
+    GetOptions(
+        "name=s" => \$name,
+        "cluster=s" => \$cluster,
+        "help|?" => \$help,
+    ) or pod2usage(2);
+    pod2usage(-verbose => 2) if $help != 0;
+
+    die "Missing required option: --name\n" if (!defined($name));
+    die "Missing required option: --cluster\n" if (!defined($cluster));
+
+    check_cluster $cluster;
+    my $tld = get_tld $cluster;
+
+    print "Creating Helm chart for $name in $cluster\n";
+
+    # Create the Helm chart
+    {
+        my $dir = pushd("$cluster");
+        system("helm create $name") == 0
+            or die "Failed to create Helm chart for $name in $dir\n";
+        system("git add $name");
+    }
+
+    # Create the application file
+    create_app_file $cluster, $name;
+
+    # Create ingress YAML
+    open(my $fh, '>', "$cluster/$name/templates/ingress_route.yaml") or die "Could not create file: $!";
+    my $ingress_yaml = <<"END_YAML";
+{{- if .Values.ingressRoute.enabled -}}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "$name.fullname" . }}
+spec:
+  {{- with .Values.ingressRoute.entryPoints }}
+  entryPoints:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- \$service := include "$name.fullname" . }}
+  {{- range .Values.ingressRoute.hosts }}
+  routes:
+    - kind: Rule
+      match: Host(`{{ . }}`)
+      {{- with \$.Values.ingressRoute.middlewares }}
+      middlewares:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      services:
+        - name: {{ \$service }}
+          port: {{ \$.Values.service.port }}
+  {{- end }}
+  {{- if .Values.ingressRoute.tls.enabled }}
+  tls:
+    secretName: {{ include "$name.fullname" . }}-tls
+    domains:
+      {{- range .Values.ingressRoute.hosts }}
+      - main: {{ . }}
+      {{- end }}
+  {{- end }}
+{{- end }}
+END_YAML
+    print $fh $ingress_yaml;
+    close $fh;
+    system("git add $cluster/$name/templates/ingress_route.yaml");
+
+    # Create certificate YAML
+    open($fh, '>', "$cluster/$name/templates/certificate.yaml") or die "Could not create file: $!";
+    my $certificate_yaml = <<"END_YAML";
+{{- if and .Values.ingressRoute.enabled .Values.ingressRoute.enabled -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "$name.fullname" . }}-tls
+spec:
+  secretName: {{ include "$name.fullname" . }}-tls
+  {{- with (first .Values.ingressRoute.hosts) }}
+  commonName: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.ingressRoute.hosts }}
+  dnsNames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  duration: {{ .Values.ingressRoute.tls.duration }}
+  renewBefore: {{ .Values.ingressRoute.tls.renewBefore }}
+  {{- with .Values.ingressRoute.tls.privateKey }}
+  privateKey:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - $cluster
+    provinces:
+      - California
+    countries:
+      - US
+  {{- with .Values.ingressRoute.tls.issuerRef }}
+  issuerRef:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
+
+END_YAML
+    print $fh $certificate_yaml;
+    close $fh;
+    system("git add $cluster/$name/templates/certificate.yaml");
+
+    # Append ingressRoute options to values.yaml
+    open($fh, '>>', "$cluster/$name/values.yaml") or die "Could not open file: $!";
+    my $values_yaml = <<"END_YAML";
+
+# Traefik IngressRoute options
+ingressRoute:
+  enabled: true
+  entryPoints:
+    - websecure
+  hosts:
+    - $name.$tld
+  middlewares:
+    - name: security-headers
+      namespace: traefik
+  tls:
+    enabled: true
+    duration: 2160h0m0s
+    renewBefore: 720h0m0s
+    privateKey:
+      algorithm: ECDSA
+      size: 384
+      rotationPolicy: Always
+    issuerRef:
+      group: cas-issuer.jetstack.io
+      kind: GoogleCASClusterIssuer
+      name: anshulg-ca
+END_YAML
+    print $fh $values_yaml;
+    close $fh;
+    system("git add $cluster/$name/values.yaml");
+
+    print "Helm chart for $name in $cluster created successfully\n";
+}
+
 sub command_secret {
     my $name = shift(@ARGV) or die "Missing required argument: NAME\n";
 
@@ -399,6 +555,9 @@ my $subcommand = shift(@ARGV) or pod2usage(2);
 if ($subcommand eq 'new') {
     command_new
 }
+elsif ($subcommand eq 'helm') {
+    command_helm
+}
 elsif ($subcommand eq 'secret') {
     command_secret
 }
@@ -438,6 +597,16 @@ Create a new application.
      -c, --cluster=CLUSTER  The cluster to deploy the application to
      -p, --port=PORT        The port to expose the application on (default: 80)
      -s, --stateful         Create a stateful application (default: false)
+
+=head2 helm
+
+./x.pl helm [--name=NAME] [--cluster=CLUSTER]
+
+Create a new helm chart application.
+
+ Options:
+     -n, --name=NAME        The name of the application
+     -c, --cluster=CLUSTER  The cluster to deploy the application to
 
 =head2 secret
 
