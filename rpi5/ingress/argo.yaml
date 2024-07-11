@@ -2,12 +2,14 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: argocd
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
 spec:
   entryPoints:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`argocd.local`)
+      match: Host(`argocd.local`) || Host(`argocd.internal`)
       priority: 10
       middlewares:
         - name: security-headers
@@ -16,7 +18,7 @@ spec:
           namespace: argocd
           port: 80
     - kind: Rule
-      match: Host(`argocd.local`) && Headers(`Content-Type`, `application/grpc`)
+      match: (Host(`argocd.local`) || Host(`argocd.internal`)) && Headers(`Content-Type`, `application/grpc`)
       priority: 11
       middlewares:
         - name: security-headers
@@ -29,6 +31,8 @@ spec:
     secretName: argocd-cert-tls
     domains:
       - main: argocd.local
+        sans:
+          - argocd.internal
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -39,6 +43,7 @@ spec:
   commonName: argocd.local
   dnsNames:
     - argocd.local
+    - argocd.internal
   duration: 2160h0m0s
   privateKey:
     algorithm: ECDSA
