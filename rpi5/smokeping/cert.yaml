@@ -5,10 +5,9 @@ metadata:
 spec:
   secretName: smokeping-cert-tls
   commonName: smokeping.local
-  ipAddresses:
-    - 192.168.1.39
   dnsNames:
     - smokeping.local
+    - smokeping.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
