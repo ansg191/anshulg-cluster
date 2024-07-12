@@ -1,9 +1,0 @@
-dependencies:
-- name: openldap-stack-ha
-  repository: https://jp-gouin.github.io/helm-openldap/
-  version: 4.2.5
-- name: postgresql
-  repository: https://charts.bitnami.com/bitnami
-  version: 15.5.15
-digest: sha256:60a1646992ae3867b7cab9bdd09d55c22c3975249a8222318296ce790865070f
-generated: "2024-07-10T18:42:33.016292-07:00"
