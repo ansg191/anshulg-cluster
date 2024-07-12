@@ -5,10 +5,9 @@ metadata:
 spec:
   secretName: bazarr-cert-tls
   commonName: bazarr.local
-  ipAddresses:
-    - 192.168.1.39
   dnsNames:
     - bazarr.local
+    - bazarr.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
