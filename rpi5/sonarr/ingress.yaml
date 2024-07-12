@@ -2,12 +2,14 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: sonarr
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
 spec:
   entryPoints:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`sonarr.local`)
+      match: Host(`sonarr.local`) || Host(`sonarr.internal`)
       middlewares:
         - name: security-headers
           namespace: kube-system
@@ -18,3 +20,5 @@ spec:
     secretName: sonarr-cert-tls
     domains:
       - main: sonarr.local
+        sans:
+          - sonarr.internal

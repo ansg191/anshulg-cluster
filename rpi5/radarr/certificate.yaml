@@ -5,10 +5,9 @@ metadata:
 spec:
   secretName: radarr-cert-tls
   commonName: radarr.local
-  ipAddresses:
-    - 192.168.1.39
   dnsNames:
     - radarr.local
+    - radarr.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:

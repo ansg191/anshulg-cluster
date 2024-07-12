@@ -5,10 +5,9 @@ metadata:
 spec:
   secretName: sonarr-cert-tls
   commonName: sonarr.local
-  ipAddresses:
-    - 192.168.1.39
   dnsNames:
     - sonarr.local
+    - sonarr.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:

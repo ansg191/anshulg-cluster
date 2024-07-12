@@ -2,12 +2,14 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: radarr
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
 spec:
   entryPoints:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`radarr.local`)
+      match: Host(`radarr.local`) || Host(`radarr.internal`)
       middlewares:
         - name: security-headers
           namespace: kube-system
@@ -18,3 +20,5 @@ spec:
     secretName: radarr-cert-tls
     domains:
       - main: radarr.local
+        sans:
+          - radarr.internal

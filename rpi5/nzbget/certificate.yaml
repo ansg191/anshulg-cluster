@@ -9,6 +9,7 @@ spec:
     - 192.168.1.39
   dnsNames:
     - nzbget.local
+    - nzbget.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
