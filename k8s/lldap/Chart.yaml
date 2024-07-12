@@ -1,5 +1,5 @@
 apiVersion: v2
-name: auth
+name: lldap
 description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
@@ -21,15 +21,9 @@ version: 0.1.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "1.16.0"
+appVersion: "2024-06-16"
 
 dependencies:
-  - name: openldap-stack-ha
-    version: 4.2.5
-    repository: https://jp-gouin.github.io/helm-openldap/
   - name: postgresql
-    version: 15.5.15
+    version: 15.5.16
     repository: https://charts.bitnami.com/bitnami
-#  - name: authelia
-#    version: 0.8.58
-#    repository: https://charts.authelia.com
