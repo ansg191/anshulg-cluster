@@ -33,8 +33,13 @@ pihole:
       memory: 512Mi
 
 unbound:
+  image:
+    tag: '0.1.0'
+
   controller:
+    enabled: false
     replicas: 3
+
   service:
     dns:
       enabled: true
