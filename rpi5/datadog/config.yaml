@@ -23,3 +23,11 @@ spec:
       enabled: true
     npm:
       enabled: true
+  override:
+    nodeAgent:
+      extraConfd:
+        configMap:
+          name: confd-config
+      extraChecksd:
+        configMap:
+          name: checksd-config

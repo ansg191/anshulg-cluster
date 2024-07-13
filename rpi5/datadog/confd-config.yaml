@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  temp.yaml: |
+    init_config:
+
+    instances: [{}]
+kind: ConfigMap
+metadata:
+  name: confd-config
+  namespace: datadog

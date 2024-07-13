@@ -1,0 +1,36 @@
+apiVersion: v1
+data:
+  temp.py: |
+    from datadog_checks.base import AgentCheck
+    from pathlib import Path
+    import glob
+    import os
+
+    __version__ = "1.0.0"
+
+
+    class TempCheck(AgentCheck):
+        def check(self, instance):
+            thermal_zones = glob.glob('/sys/class/thermal/thermal_zone*')
+
+            for zone in thermal_zones:
+                # Get type
+                tp = Path(os.path.join(zone, 'type')).read_text().strip()
+
+                # Check that type is cpu-thermal or x86_pkg_temp
+                if tp != 'x86_pkg_temp' and tp != 'cpu-thermal':
+                  continue
+
+                # Get temperature
+                temp = int(Path(os.path.join(zone, 'temp')).read_text().strip()) / 1000.0
+
+                # Send temperature to Datadog
+                self.gauge(
+                    "system.cpu.temp",
+                    temp,
+                    tags=[],
+                )
+kind: ConfigMap
+metadata:
+  name: checksd-config
+  namespace: datadog
