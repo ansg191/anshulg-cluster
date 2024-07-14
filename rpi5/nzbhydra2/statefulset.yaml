@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nzbhydra2
-          image: ghcr.io/ansg191/docker-nzbhydra2:master
+          image: ghcr.io/ansg191/docker-nzbhydra2:v7.3.0
           imagePullPolicy: Always
           ports:
             - containerPort: 5076
