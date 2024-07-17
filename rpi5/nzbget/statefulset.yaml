@@ -53,10 +53,11 @@ spec:
           secret:
             secretName: nzbget-config
         - name: data
-          nfs:
+          hostPath:
             path: /data
-            server: 192.168.1.52
-            readOnly: false
+            type: Directory
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
   volumeClaimTemplates:
     - metadata:
         name: config
