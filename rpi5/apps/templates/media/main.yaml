@@ -13,3 +13,6 @@ spec:
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
+  clusterResourceWhitelist:
+    - group: ''
+      kind: PersistentVolume
