@@ -43,6 +43,16 @@ spec:
         - name: jellyfin
           port: 80
   tls:
+    options:
+      name: webos
     secretName: jellyfin-public-cert-tls
     domains:
       - main: jellyfin.anshulg.direct
+---
+apiVersion: traefik.io/v1alpha1
+kind: TLSOption
+metadata:
+  name: webos
+spec:
+  minVersion: VersionTLS12
+  maxVersion: VersionTLS13
