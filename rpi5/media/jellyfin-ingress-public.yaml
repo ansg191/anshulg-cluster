@@ -36,9 +36,6 @@ spec:
   routes:
     - kind: Rule
       match: Host(`jellyfin.anshulg.direct`)
-      middlewares:
-        - name: security-headers
-          namespace: kube-system
       services:
         - name: jellyfin
           port: 80
