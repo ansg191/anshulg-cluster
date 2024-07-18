@@ -1,1 +1,4 @@
 googlesa.unencrypted.yaml
+
+# GCP Key
+dns-01-key.json
