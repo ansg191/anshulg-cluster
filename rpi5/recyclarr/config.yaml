@@ -12,7 +12,7 @@ data:
           type: movie
           preferred_ratio: 1.0
         media_naming:
-          folder: plex
+          folder: default
           movie:
             rename: true
             standard: standard
@@ -138,7 +138,7 @@ data:
           type: series
           preferred_ratio: 1.0
         media_naming:
-          series: plex
+          series: default
           season: default
           episodes:
             rename: true

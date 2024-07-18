@@ -1,0 +1,67 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jellyfin-cert
+spec:
+  secretName: jellyfin-cert-tls
+  commonName: jellyfin.local
+  dnsNames:
+    - jellyfin.local
+    - jellyfin.internal
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASClusterIssuer
+    name: anshulg-ca
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jellyfin
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`jellyfin.local`) || Host(`jellyfin.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: jellyfin
+          port: 80
+  tls:
+    secretName: jellyfin-cert-tls
+    domains:
+      - main: jellyfin.local
+        sans:
+          - jellyfin.internal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin
+spec:
+  selector:
+    app: jellyfin
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8096
+  type: ClusterIP

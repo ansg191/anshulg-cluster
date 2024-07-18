@@ -5,7 +5,7 @@ metadata:
   labels:
     app: jellyfin
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: jellyfin
@@ -16,11 +16,10 @@ spec:
       labels:
         app: jellyfin
     spec:
-      hostNetwork: true
       containers:
         - name: jellyfin
-          image: lscr.io/linuxserver/jellyfin:latest
-          imagePullPolicy: Always
+          image: lscr.io/linuxserver/jellyfin:10.9.7
+          imagePullPolicy: IfNotPresent
           env:
             - name: PUID
               value: "0"
@@ -28,34 +27,38 @@ spec:
               value: "0"
             - name: TZ
               value: "America/Los_Angeles"
+            - name: DOCKER_MODS
+              value: linuxserver/mods:jellyfin-opencl-intel
+          ports:
+            - containerPort: 8096
           volumeMounts:
             - mountPath: /config
               name: config
             - mountPath: /data
               name: data
-            - mountPath: /dev/dri
-              name: dev-dri
           resources:
             requests:
               cpu: 500m
               memory: 1Gi
             limits:
               memory: 4Gi
-#          livenessProbe:
-#            tcpSocket:
-#              port: 32400
-#            initialDelaySeconds: 30
-#            periodSeconds: 30
-#            timeoutSeconds: 5
-#            failureThreshold: 3
-#          readinessProbe:
-#            tcpSocket:
-#              port: 32400
-#            periodSeconds: 10
-#            timeoutSeconds: 5
-#            failureThreshold: 3
-          securityContext:
-            privileged: true
+              gpu.intel.com/i915: "1"
+          livenessProbe:
+            httpGet:
+              port: 8096
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: 8096
+              path: /health
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
       restartPolicy: Always
       volumes:
         - name: data
@@ -63,9 +66,6 @@ spec:
             path: /data
             server: 192.168.1.52
             readOnly: false
-        - name: dev-dri
-          hostPath:
-            path: /dev/dri
   volumeClaimTemplates:
     - metadata:
         name: config
