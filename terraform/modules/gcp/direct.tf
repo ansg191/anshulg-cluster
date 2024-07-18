@@ -11,9 +11,9 @@ resource "google_service_account" "dns01-solver" {
 }
 
 # Give the service account the ability to manage the DNS zone
-resource "google_dns_managed_zone_iam_binding" "dns01-solver-admin" {
-	managed_zone = data.google_dns_managed_zone.direct.name
-	role         = "roles/dns.admin"
+resource "google_project_iam_binding" "dns_admin" {
+	project = data.google_project.default.project_id
+	role    = "roles/dns.admin"
 	members = [
 		"serviceAccount:${google_service_account.dns01-solver.email}"
 	]
