@@ -8,8 +8,9 @@ metadata:
     {{- with .Values.unbound.controller.labels }}
     {{ toYaml . | indent 4 }}
     {{- end }}
-  {{- with .Values.unbound.controller.annotations }}
   annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/unbound/config.yaml") . | sha256sum }}
+  {{- with .Values.unbound.controller.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:

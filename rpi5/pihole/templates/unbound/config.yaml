@@ -52,5 +52,6 @@ data:
     access-control: 172.16.0.0/12 allow
     access-control: 10.0.0.0/8 allow
 
-    # Disable DNS Rebinding protection for plex
+    # Disable DNS Rebinding protection for plex & jellyfin
     private-domain: "plex.direct"
+    private-domain: "anshulg.direct"
