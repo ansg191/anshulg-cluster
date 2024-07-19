@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: eraser
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: eraser
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: eraser
+    repoURL: https://eraser-dev.github.io/eraser/charts
+    targetRevision: v1.3.1
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: eraser

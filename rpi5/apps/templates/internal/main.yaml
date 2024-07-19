@@ -20,6 +20,7 @@ spec:
     - https://kubernetes-sigs.github.io/descheduler/
     - https://kubereboot.github.io/charts
     - https://senthilrch.github.io/kubefledged-charts/
+    - https://eraser-dev.github.io/eraser/charts
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
