@@ -18,6 +18,7 @@ spec:
     - https://1password.github.io/connect-helm-charts/
     - https://charts.deliveryhero.io/
     - https://kubernetes-sigs.github.io/descheduler/
+    - https://kubereboot.github.io/charts
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
