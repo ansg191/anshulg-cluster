@@ -19,6 +19,7 @@ spec:
     - https://charts.deliveryhero.io/
     - https://kubernetes-sigs.github.io/descheduler/
     - https://kubereboot.github.io/charts
+    - https://senthilrch.github.io/kubefledged-charts/
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-fledged
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-fledged
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: kube-fledged
+    repoURL: https://senthilrch.github.io/kubefledged-charts/
+    targetRevision: v0.10.0
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: kube-fledged
