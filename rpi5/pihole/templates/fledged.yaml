@@ -8,4 +8,4 @@ metadata:
 spec:
   cacheSpec:
     - images:
-        - pihole/pihole:2024.05.0
+        - pihole/pihole:2024.07.0
