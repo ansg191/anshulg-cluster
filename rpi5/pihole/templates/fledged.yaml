@@ -9,3 +9,4 @@ spec:
   cacheSpec:
     - images:
         - pihole/pihole:2024.07.0
+        - {{ .Values.unbound.image.repository }}:{{ .Values.unbound.image.tag }}
