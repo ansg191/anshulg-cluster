@@ -10,7 +10,7 @@ data:
 
     # logging
     use-syslog: no
-    verbosity: 0
+    verbosity: 1
 
     # network
     interface: 0.0.0.0
