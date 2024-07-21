@@ -14,5 +14,12 @@
       "rpi5/.+\\.yaml$"
     ]
   },
-  "packageRules": []
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "lscr.io/linuxserver/jellyfin"
+      ],
+      "allowedVersions": "!/^\\d{4}\\.\\d+\\.\\d+$/"
+    }
+  ]
 }
