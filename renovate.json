@@ -14,24 +14,5 @@
       "rpi5/.+\\.yaml$"
     ]
   },
-  "packageRules": [
-    {
-      "description": "Label all files in rpi5 directory as rpi5",
-      "matchFileNames": [
-        "rpi5/.+"
-      ],
-      "labels": [
-        "rpi5"
-      ]
-    },
-    {
-      "description": "Label all files in k8s directory as k8s",
-      "matchFileNames": [
-        "k8s/.+"
-      ],
-      "labels": [
-        "k8s"
-      ]
-    }
-  ]
+  "packageRules": []
 }
