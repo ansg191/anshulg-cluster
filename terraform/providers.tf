@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    organization = "ansg191"
+    workspaces {
+      name = "anshulg-cluster"
+    }
+  }
+
   required_providers {
     google = {
       source  = "hashicorp/google"
