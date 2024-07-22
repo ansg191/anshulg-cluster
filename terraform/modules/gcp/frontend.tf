@@ -211,3 +211,24 @@ resource "google_dns_record_set" "ipv6-wildcard" {
 		google_compute_global_address.ipv6.address
 	]
 }
+
+# HTTPS DNS Records
+resource "google_dns_record_set" "base-https" {
+	managed_zone = data.google_dns_managed_zone.default.name
+	name         = data.google_dns_managed_zone.default.dns_name
+	type         = "HTTPS"
+	ttl          = 300
+	rrdatas      = [
+		"1 . alpn=h3,h2"
+	]
+}
+
+resource "google_dns_record_set" "wildcard-https" {
+	managed_zone = data.google_dns_managed_zone.default.name
+	name         = "*.${data.google_dns_managed_zone.default.dns_name}"
+	type         = "HTTPS"
+	ttl          = 300
+	rrdatas      = [
+		"1 . alpn=h3,h2"
+	]
+}
