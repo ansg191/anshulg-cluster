@@ -34,6 +34,17 @@ spec:
         {{- include "pihole.unbound.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: default
+      initContainers:
+        - name: init-anchor
+          image: "{{ .Values.unbound.image.repository }}:{{ .Values.unbound.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.unbound.image.pullPolicy }}
+          command:
+            - 'sh'
+            - '-c'
+            - 'unbound-anchor -a /etc/unbound/trust/root.key'
+          volumeMounts:
+            - mountPath: /etc/unbound/trust
+              name: unbound-trust
       containers:
         - name: {{ template "pihole.unbound.name" . }}
           image: "{{ .Values.unbound.image.repository }}:{{ .Values.unbound.image.tag | default .Chart.AppVersion }}"
@@ -50,11 +61,11 @@ spec:
               value: {{ .Values.unbound.service.dns.port | squote }}
           livenessProbe:
             exec:
-              command: ['dig', '@127.0.0.1', '-p', {{ .Values.unbound.service.dns.port | squote }}, 'cloudflare.com']
+              command: [ 'dig', '@127.0.0.1', '-p', {{ .Values.unbound.service.dns.port | squote }}, 'cloudflare.com' ]
           readinessProbe:
             exec:
-              command: ['dig', '@127.0.0.1', '-p', {{ .Values.unbound.service.dns.port | squote }}, 'cloudflare.com']
-          resources: {{ if not .Values.unbound.resources -}}{}{{- end }}
+              command: [ 'dig', '@127.0.0.1', '-p', {{ .Values.unbound.service.dns.port | squote }}, 'cloudflare.com' ]
+          resources: {{ if not .Values.unbound.resources -}}{ }{{- end }}
             {{- if .Values.unbound.resources }}
             {{- toYaml .Values.unbound.resources | nindent 12 }}
             {{- end }}
@@ -62,6 +73,8 @@ spec:
             - mountPath: /etc/unbound/unbound.conf.tpl
               name: unbound-config
               subPath: unbound.conf.tpl
+            - mountPath: /etc/unbound/trust
+              name: unbound-trust
       {{- with .Values.unbound.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
@@ -74,4 +87,6 @@ spec:
         - name: unbound-config
           configMap:
             name: {{ include "pihole.unbound.fullname" . }}-config
+        - name: unbound-trust
+          emptyDir: { }
 {{- end }}

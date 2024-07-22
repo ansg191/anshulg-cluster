@@ -55,3 +55,6 @@ data:
     # Disable DNS Rebinding protection for plex & jellyfin
     private-domain: "plex.direct"
     private-domain: "anshulg.direct"
+
+    # Enable DNSSEC validation
+    auto-trust-anchor-file: "/etc/unbound/trust/root.key"
