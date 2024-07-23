@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: nzbget
   labels:
@@ -9,7 +9,6 @@ spec:
   selector:
     matchLabels:
       app: nzbget
-  serviceName: nzbget
   template:
     metadata:
       name: nzbget
@@ -52,17 +51,12 @@ spec:
         - name: cfg-secret
           secret:
             secretName: nzbget-config
+        - name: config
+          emptyDir:
+            medium: Memory
         - name: data
           hostPath:
             path: /data
             type: Directory
       nodeSelector:
         kubernetes.io/hostname: odroid-h4
-  volumeClaimTemplates:
-    - metadata:
-        name: config
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 32Mi
