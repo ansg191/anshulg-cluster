@@ -22,7 +22,7 @@ jobs:
           repositories: 'anshulg-cluster'
 
       - name: Renovate
-        uses: renovatebot/github-action@v40.2.4
+        uses: renovatebot/github-action@v40.2.5
         with:
           configurationFile: .github/renovate.js
           token: '${{ steps.get_token.outputs.token }}'
