@@ -66,7 +66,7 @@ spec:
           {{- end }}
       initContainers:
         - name: check-postgres-ready
-          image: "postgres:16.3"
+          image: "postgres:16.4"
           command:
             - 'sh'
             - '-c'
