@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: nzbget
   labels:
-      app: nzbget
+    app: nzbget
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:
