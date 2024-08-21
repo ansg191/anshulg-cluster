@@ -7,6 +7,9 @@
     "fileMatch": [
       "k8s/.+\\.yaml$",
       "rpi5/.+\\.yaml$"
+    ],
+    "ignorePaths": [
+      "k8s/matrix/postgres.yaml"
     ]
   },
   "argocd": {
