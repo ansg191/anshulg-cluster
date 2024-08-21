@@ -128,7 +128,7 @@ data:
               - 957d0f44b592285f26449575e8b1167e # Special Edition
               - e9001909a4c88013a359d0b9920d7bea # Theatrical Cut
               - db9b4c4b53d312a3ca5f1378f6440fc9 # Vinegar Syndrome
-            quality_profiles:
+            assign_scores_to:
               - name: Default
     sonarr:
       sonarr:
@@ -255,5 +255,5 @@ data:
             - 3fbafa924f361e66fbc6187af82dfa85 # 5.1 Surround
             - 9fb6d778592c293467437593ef394bf1 # 6.1 Surround
             - 204c8c3e7315bb0ea81332774fa888d6 # 7.1 Surround
-            quality_profiles:
+            assign_scores_to:
               - name: Default
