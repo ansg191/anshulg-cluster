@@ -31,6 +31,12 @@ spec:
         - name: hydroxide
           image: ghcr.io/ansg191/containers/hydroxide:v0.2.29
           imagePullPolicy: IfNotPresent
+          command:
+            - hydroxide
+            - -smtp-host=0.0.0.0
+            - -imap-host=0.0.0.0
+            - -carddav-host=0.0.0.0
+            - serve
           ports:
             - name: smtp
               containerPort: 1025
