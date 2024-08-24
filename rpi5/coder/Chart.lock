@@ -1,9 +1,9 @@
 dependencies:
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 15.5.23
+  version: 15.5.24
 - name: coder
   repository: https://helm.coder.com/v2
   version: 2.14.2
-digest: sha256:3be013c6a05ee2f5c138c63e61ec4197c50ffb4820c89ccdead8fb264575be25
-generated: "2024-08-21T21:53:14.192052815Z"
+digest: sha256:9f11fba3eca27de11518ff3a97cb586aa7d5087756af410754413888ab23268d
+generated: "2024-08-24T04:09:08.317885134Z"
