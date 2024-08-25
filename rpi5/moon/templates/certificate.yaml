@@ -4,10 +4,10 @@ metadata:
   name: {{ include "moon.fullname" . }}-cert
 spec:
   secretName: {{ include "moon.fullname" . }}-cert-tls
-  commonName: {{  include "moon.name"  }}.local
+  commonName: {{  include "moon.name" . }}.local
   dnsNames:
-    - {{ include "moon.name" }}.local
-    - {{ include "moon.name" }}.internal
+    - {{ include "moon.name" . }}.local
+    - {{ include "moon.name" . }}.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
