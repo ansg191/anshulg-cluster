@@ -1,0 +1,6 @@
+nameOverride: ""
+fullnameOverride: ""
+
+moon2:
+  ingress:
+    enabled: false
