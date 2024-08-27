@@ -78,6 +78,10 @@ resource "google_compute_backend_service" "k8s-lb" {
 	#		sample_rate = 1
 	#	}
 
+	iap {
+		enabled = false
+	}
+
 	backend {
 		group = google_compute_global_network_endpoint_group.k8s.id
 	}
