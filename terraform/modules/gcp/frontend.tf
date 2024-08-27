@@ -219,7 +219,7 @@ resource "google_dns_record_set" "base-https" {
 	type         = "HTTPS"
 	ttl          = 300
 	rrdatas      = [
-		"1 . alpn=h3,h2"
+		"1 . alpn=\"h3,h2\""
 	]
 }
 
@@ -229,6 +229,6 @@ resource "google_dns_record_set" "wildcard-https" {
 	type         = "HTTPS"
 	ttl          = 300
 	rrdatas      = [
-		"1 . alpn=h3,h2"
+		"1 . alpn=\"h3,h2\""
 	]
 }
