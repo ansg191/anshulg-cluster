@@ -35,6 +35,8 @@ spec:
               name: config
             - mountPath: /data
               name: data
+            - mountPath: /run
+              name: run
           resources:
             requests:
               cpu: 100m
@@ -57,6 +59,7 @@ spec:
           securityContext:
             privileged: false
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -71,6 +74,9 @@ spec:
             path: /data
             server: 192.168.1.52
             readOnly: false
+        - name: run
+          emptyDir:
+            medium: Memory
   volumeClaimTemplates:
     - metadata:
         name: config
