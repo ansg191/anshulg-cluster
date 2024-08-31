@@ -23,7 +23,7 @@ spec:
           volumeMounts:
             - mountPath: "/root/"
               name: protonmail-data
-          image: shenxn/protonmail-bridge:3.11.1-1
+          image: shenxn/protonmail-bridge:3.12.0-1
           ports:
             - containerPort: 1025
           readinessProbe:
