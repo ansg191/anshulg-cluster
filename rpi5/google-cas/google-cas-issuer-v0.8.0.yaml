@@ -476,7 +476,7 @@ spec:
       serviceAccountName: cert-manager-google-cas-issuer
       containers:
       - name: cert-manager-google-cas-issuer
-        image: "quay.io/jetstack/cert-manager-google-cas-issuer:0.8.0"
+        image: "quay.io/jetstack/cert-manager-google-cas-issuer:v0.9.0"
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9402
