@@ -12,3 +12,7 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
     path: rpi5/ingress
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
