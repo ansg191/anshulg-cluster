@@ -25,6 +25,12 @@
         "lscr.io/linuxserver/jellyfin"
       ],
       "allowedVersions": "!/^\\d{4}\\.\\d+\\.\\d+$/"
+    },
+    {
+      "matchPackageNames": [
+        "lscr.io/linuxserver/nzbget"
+      ],
+      "allowedVersions": "!/^\\d{4}\\.\\d+\\.\\d+$/"
     }
   ]
 }
