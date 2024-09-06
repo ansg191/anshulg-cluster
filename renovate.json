@@ -3,6 +3,7 @@
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
   "platformCommit": true,
+  "rebaseWhen": "behind-base-branch",
   "kubernetes": {
     "fileMatch": [
       "k8s/.+\\.yaml$",
