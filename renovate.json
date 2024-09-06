@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
-  "platformCommit": true,
+  "platformCommit": "enabled",
   "rebaseWhen": "behind-base-branch",
   "kubernetes": {
     "fileMatch": [
