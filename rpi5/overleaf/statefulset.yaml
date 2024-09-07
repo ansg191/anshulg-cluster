@@ -37,6 +37,10 @@ spec:
               value: "true"
             - name: TEXMFVAR
               value: /var/lib/overleaf/tmp/texmf-var
+            - name: OVERLEAF_SITE_URL
+              value: https://overleaf.internal
+            - name: OVERLEAF_ADMIN_EMAIL
+              value: ansg191@anshulg.com
           ports:
             - name: http
               containerPort: 80
