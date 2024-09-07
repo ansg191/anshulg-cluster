@@ -21,3 +21,7 @@ spec:
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
