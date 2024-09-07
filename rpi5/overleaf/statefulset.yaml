@@ -41,6 +41,10 @@ spec:
               value: https://overleaf.internal
             - name: OVERLEAF_ADMIN_EMAIL
               value: ansg191@anshulg.com
+            - name: OVERLEAF_SECURE_COOKIE
+              value: "true"
+            - name: OVERLEAF_BEHIND_PROXY
+              value: "true"
           ports:
             - name: http
               containerPort: 80
