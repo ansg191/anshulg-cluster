@@ -1,0 +1,21 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`whoami.local`) || Host(`whoami.internal`)
+      services:
+        - name: whoami
+          port: 80
+  tls:
+    secretName: whoami-cert-tls
+    domains:
+      - main: whoami.local
+        sans:
+          - whoami.internal
