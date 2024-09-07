@@ -63,13 +63,13 @@ spec:
           #  periodSeconds: 30
           #  timeoutSeconds: 5
           #  failureThreshold: 3
-          #readinessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
       restartPolicy: Always
   volumeClaimTemplates:
     - metadata:
