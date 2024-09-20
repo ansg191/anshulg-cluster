@@ -8,7 +8,7 @@ spec:
   source:
     chart: mongodb
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 15.6.24
+    targetRevision: 15.6.25
     helm:
       values: |
         architecture: "replicaset"
