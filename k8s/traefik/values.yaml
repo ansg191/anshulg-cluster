@@ -6,6 +6,13 @@ traefik:
     web:
       redirectTo:
         port: websecure
+    websecure:
+      forwardedHeaders:
+        trustedIPs:
+          - 10.0.0.0/8
+      proxyProtocol:
+        trustedIPs:
+          - 10.0.0.0/8
 
   service:
     spec:
