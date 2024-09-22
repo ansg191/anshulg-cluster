@@ -73,6 +73,10 @@ resource "google_compute_backend_service" "k8s-lb" {
 		signed_url_cache_max_age_sec = 7200
 	}
 
+	custom_response_headers = [
+		"X-Cache-Hit: {cdn_cache_status}"
+	]
+
 	#	log_config {
 	#		enable      = true
 	#		sample_rate = 1
