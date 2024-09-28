@@ -11,6 +11,9 @@ spec:
     targetRevision: 15.6.26
     helm:
       values: |
+        arbiter:
+          nodeSelector:
+            kubernetes.io/arch: amd64
         architecture: "replicaset"
         auth:
           enabled: false
