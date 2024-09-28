@@ -20,6 +20,9 @@
       "rpi5/.+\\.yaml$"
     ]
   },
+  "pre-commit": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "matchPackageNames": [
