@@ -71,7 +71,7 @@ spec:
               value: "true"
       initContainers:
         - name: wait-for-postgres
-          image: "postgres:16.4"
+          image: "postgres:16.4@sha256:17b6fe3a18780358f7f44a02bc21a8ef5f349aa83d8dae96d43cd168a97cf6fa"
           command:
             - 'sh'
             - '-c'

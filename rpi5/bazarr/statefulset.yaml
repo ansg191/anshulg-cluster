@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: bazarr
-          image: lscr.io/linuxserver/bazarr:1.4.4
+          image: lscr.io/linuxserver/bazarr:1.4.4@sha256:68efaf4f9a6ea072b68e1a8a2925fdc00f931fb1c699d969cae9c16f394b1411
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
