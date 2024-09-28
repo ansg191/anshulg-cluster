@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: nzbget
-          image: lscr.io/linuxserver/nzbget:24.3.20240927
+          image: lscr.io/linuxserver/nzbget:24.3.20240927@sha256:4850dd3b2f8d89dc5606e2f95cdfdcc04930efddd29a868067b3dca508f90245
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
@@ -38,7 +38,7 @@ spec:
               name: data
       initContainers:
         - name: copy-config
-          image: busybox:1.36.1
+          image: busybox:1.36.1@sha256:c230832bd3b0be59a6c47ed64294f9ce71e91b327957920b6929a0caa8353140
           command:
             - cp
             - /cfg-secret/config.conf

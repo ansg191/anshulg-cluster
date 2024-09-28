@@ -61,7 +61,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-          image: ghcr.io/ansg191/external-mdns:master
+          image: ghcr.io/ansg191/external-mdns:master@sha256:2b71db1fa4d649a2c06daffa197c09d41f116dfc03ca298dae04ee249a3bd104
           imagePullPolicy: Always
           args:
 #            - -source=ingress

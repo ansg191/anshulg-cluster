@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
             - name: recyclarr
-              image: ghcr.io/recyclarr/recyclarr:7.2.4
+              image: ghcr.io/recyclarr/recyclarr:7.2.4@sha256:1bf2436ed4749a4309765dd21643aac858dd436a536e37c25bb463513601e962
               imagePullPolicy: IfNotPresent
               args:
                 - sync
