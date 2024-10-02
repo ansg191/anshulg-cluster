@@ -171,8 +171,6 @@ grafana:
         name: anshulg-ca
 
 postgresql:
-  diagnosticMode:
-    enabled: true
   auth:
     enablePostgresUser: true
     database: "teslamate"
