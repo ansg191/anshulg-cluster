@@ -25,7 +25,7 @@ spec:
           value: /config
         - name: SYNAPSE_CONFIG_PATH
           value: /config/homeserver.yaml
-        image: matrixdotorg/synapse:latest@sha256:171be6f6fc0302c54e1000cd925fea0edc3a4c344d2ef67bfee74b8ebfc5702f
+        image: matrixdotorg/synapse:latest@sha256:fec13c0e89014f4011b1a3fa1d88ccca724c2bfe94baf6e9bc641b0d34bead63
         imagePullPolicy: Always
         name: matrix
         securityContext:
