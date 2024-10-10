@@ -8,7 +8,7 @@ spec:
   source:
     chart: node-problem-detector
     repoURL: https://charts.deliveryhero.io/
-    targetRevision: 2.3.13
+    targetRevision: 2.3.14
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: kube-system
