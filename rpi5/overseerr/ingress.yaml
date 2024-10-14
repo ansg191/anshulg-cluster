@@ -1,0 +1,24 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: overseerr
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`overseerr.local`) || Host(`overseerr.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: overseerr
+          port: 80
+  tls:
+    secretName: overseerr-cert-tls
+    domains:
+      - main: overseerr.local
+        sans:
+          - overseerr.internal
