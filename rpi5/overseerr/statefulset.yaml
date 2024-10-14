@@ -31,24 +31,25 @@ spec:
           volumeMounts:
             - mountPath: /app/config
               name: config
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 500Mi
+            limits:
+              cpu: 250m
+              memory: 1Gi
+          livenessProbe:
+            httpGet:
+              port: 5055
+              path: /api/v1/status
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               port: 5055
-              path: /status
+              path: /api/v1/status
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
