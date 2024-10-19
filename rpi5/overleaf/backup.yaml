@@ -1,0 +1,79 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mongo-backup
+spec:
+  schedule: "0 12 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: mongo-backup
+              image: mongo:7@sha256:0032d2ca20db5fa34926f196c8a43b74e34ed239a7f2453ff1505b6f12ba8ea6
+              imagePullPolicy: IfNotPresent
+              command:
+                - sh
+                - -c
+                - mongodump --host overleaf-mongo-mongodb-headless --port 27017 --out /backup
+              volumeMounts:
+                - mountPath: /backup
+                  name: backup
+          containers:
+            - name: tarsnap
+              image: ghcr.io/ansg191/containers/tarsnapper:v0.5.0@sha256:2770db20f0ef0d9c9d4e07ab9a21f4e8fdcc28cc0c97693263505f793f25335a
+              imagePullPolicy: IfNotPresent
+              command:
+                - sh
+                - -c
+                - tarsnapper --config /config/tarsnapper.conf -v make
+              volumeMounts:
+                - mountPath: /mongo
+                  name: backup
+                - mountPath: /config/tarsnapper.conf
+                  name: tarsnapper-config
+                  subPath: tarsnapper.conf
+                - mountPath: /config/tarsnap.key
+                  name: tarsnap-key
+                  subPath: tarsnap.key
+                - mountPath: /tarsnap-cache
+                  name: tarsnap-cache
+              securityContext:
+                runAsUser: 0
+                runAsGroup: 0
+          restartPolicy: Never
+          volumes:
+            - name: backup
+              emptyDir: { }
+            - name: tarsnapper-config
+              configMap:
+                name: tarsnapper-config
+            - name: tarsnap-key
+              secret:
+                secretName: backup-key
+            - name: tarsnap-cache
+              persistentVolumeClaim:
+                claimName: tarsnap-cache
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tarsnapper-config
+data:
+  tarsnapper.conf: |
+    deltas: 1d 7d 30d 90d
+    target: /k8s-rpi5/overleaf/$name-$date
+    jobs:
+      mongo:
+        source: /mongo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tarsnap-cache
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  resources:
+    requests:
+      storage: 1Gi
