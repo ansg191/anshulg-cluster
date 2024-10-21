@@ -16,6 +16,41 @@ spec:
       labels:
         app: radarr
     spec:
+      initContainers:
+        - name: backup-sidecar
+          image: ghcr.io/ansg191/containers/arr-backup:main@sha256:d3f3acfecd0ce51fb333cdbe5b92557a782443068a1c204c6233852b4e2542c0
+          imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          volumeMounts:
+            - mountPath: /rconfig
+              name: config
+            - mountPath: /tarsnapper.conf
+              name: tarsnapper-config
+              subPath: tarsnapper.conf
+            - mountPath: /config/tarsnap.key
+              name: backup-key
+              subPath: tarsnap.key
+            - mountPath: /backup
+              name: backup-tmpdir
+            - mountPath: /tarsnap-cache
+              name: tarsnap-cache
+          env:
+            - name: ARR_CONFIG_DIR
+              value: /rconfig
+            - name: ARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backup-key
+                  key: api-key
+            - name: ARR_URL
+              value: http://localhost:7878
+            - name: TARSNAPPER_CONFIG
+              value: /tarsnapper.conf
+            - name: ARR_TMP_DIR
+              value: /backup
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
       containers:
         - name: radarr
           image: lscr.io/linuxserver/radarr:5.12.2@sha256:e0045d420eaf298a9449e12ed1cce654f171cc1043311f0f1cadaf2afeabe795
@@ -63,6 +98,17 @@ spec:
             path: /data
             server: 192.168.1.52
             readOnly: false
+        - name: tarsnapper-config
+          configMap:
+            name: tarsnapper-config
+        - name: backup-key
+          secret:
+              secretName: backup-key
+        - name: backup-tmpdir
+          emptyDir:
+            medium: Memory
+        - name: tarsnap-cache
+          emptyDir: { }
   volumeClaimTemplates:
     - metadata:
         name: config
@@ -71,3 +117,15 @@ spec:
         resources:
           requests:
             storage: 5Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tarsnapper-config
+data:
+  tarsnapper.conf: |
+    deltas: 1d 7d 30d 90d
+    target: /k8s-rpi5/radarr/$name-$date
+    jobs:
+      radarr:
+        source: /backup
