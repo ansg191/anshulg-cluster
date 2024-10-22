@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: overleaf
-          image: sharelatex/sharelatex:5.1.1@sha256:14fb13cd2a11c69f3fb968e0d075d385eee569aa9cdd3be94f8038d42574612f
+          image: sharelatex/sharelatex:5.2.0@sha256:a325560399c8baf706369ae99651774d6031dbac8607e723e95b6280fbb61e23
           imagePullPolicy: IfNotPresent
           env:
             - name: OVERLEAF_APP_NAME
