@@ -27,13 +27,16 @@ spec:
               command:
                 - sh
                 - -c
-                - tarsnapper --config /config/tarsnapper.conf -v make
+                - /backup.sh
               volumeMounts:
                 - mountPath: /mongo
                   name: backup
                 - mountPath: /config/tarsnapper.conf
                   name: tarsnapper-config
                   subPath: tarsnapper.conf
+                - mountPath: /backup.sh
+                  name: tarsnapper-config
+                  subPath: backup.sh
                 - mountPath: /config/tarsnap.key
                   name: tarsnap-key
                   subPath: tarsnap.key
@@ -49,12 +52,12 @@ spec:
             - name: tarsnapper-config
               configMap:
                 name: tarsnapper-config
+                defaultMode: 0555
             - name: tarsnap-key
               secret:
                 secretName: backup-key
             - name: tarsnap-cache
-              persistentVolumeClaim:
-                claimName: tarsnap-cache
+              emptyDir: { }
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -67,13 +70,8 @@ data:
     jobs:
       mongo:
         source: /mongo
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tarsnap-cache
-spec:
-  accessModes: [ "ReadWriteOnce" ]
-  resources:
-    requests:
-      storage: 1Gi
+  backup.sh: |
+    #!/usr/bin/env sh
+    set -ex
+    tarsnap --fsck
+    tarsnapper --config /config/tarsnapper.conf -v make
