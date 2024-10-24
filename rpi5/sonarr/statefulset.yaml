@@ -18,7 +18,7 @@ spec:
     spec:
       initContainers:
         - name: backup-sidecar
-          image: ghcr.io/ansg191/containers/arr-backup:main@sha256:daa6627a08b736cc8994e378b56013011fc750beba67bccd5f832554cb3853df
+          image: ghcr.io/ansg191/containers/arr-backup:main@sha256:f7b7e5a4be5b7e2520629d00701beba89437487c9d1e1e08632af404fb190c18
           imagePullPolicy: IfNotPresent
           restartPolicy: Always
           volumeMounts:
