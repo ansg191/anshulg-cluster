@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: readarr
-          image: lscr.io/linuxserver/readarr:develop@sha256:d5f61297510518ae1838b91cf21bb4137c05b7fba93733b2d41d4e41831f9f50
+          image: lscr.io/linuxserver/readarr:develop@sha256:1005769b1aa9e842a3759bb0bbaaf982005b88a5c1488a7cdb37b4b63d1e23ed
           imagePullPolicy: Always
           env:
             - name: PUID
