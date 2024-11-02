@@ -30,7 +30,7 @@ spec:
             - mountPath: /config/tarsnap.key
               name: backup-key
               subPath: tarsnap.key
-            - mountPath: /sonarr-backup
+            - mountPath: /backup
               name: backup-tmpdir
             - mountPath: /tarsnap-cache
               name: tarsnap-cache
@@ -47,7 +47,7 @@ spec:
             - name: TARSNAPPER_CONFIG
               value: /tarsnapper.conf
             - name: ARR_TMP_DIR
-              value: /sonarr-backup
+              value: /backup
           securityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -125,7 +125,7 @@ metadata:
 data:
   tarsnapper.conf: |
     deltas: 1d 7d 30d 90d
-    target: /k8s-rpi5/sonarr/$name-$date
+    target: /rpi5-sonarr/$name-$date
     jobs:
       sonarr:
-        source: /sonarr-backup
+        source: /backup
