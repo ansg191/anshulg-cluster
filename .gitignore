@@ -5,9 +5,6 @@ anshulg-cluster-key.json
 # 1Password
 1password-credentials.json
 
-# Tarsnap Key
-tarsnap.key
-
 # Secrets
 **/*.unencrypted.yaml
 
