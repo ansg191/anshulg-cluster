@@ -28,31 +28,27 @@ spec:
               protocol: TCP
           env:
             - name: OPTIONS
-              value: "--private-repos"
+              value: "--private-repos --prometheus"
           volumeMounts:
             - mountPath: /data
               name: data
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
-          #readinessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      securityContext:
+        fsGroup: 1000
       restartPolicy: Always
       volumes:
         - name: data
