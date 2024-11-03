@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restic
+  labels:
+    app: restic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restic
+  template:
+    metadata:
+      name: restic
+      labels:
+        app: restic
+      annotations:
+        gke-gcsfuse/volumes: "true"
+    spec:
+      terminationGracePeriodSeconds: 60
+      serviceAccountName: restic
+      containers:
+        - name: restic
+          image: restic/rest-server:0.13.0@sha256:8668c235a932745585fef5cabbab9eccb501035f90138085a6e74963dcd1a71f
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          env:
+            - name: OPTIONS
+              value: "--private-repos"
+          volumeMounts:
+            - mountPath: /data
+              name: data
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
+      volumes:
+        - name: data
+          csi:
+            driver: gcsfuse.csi.storage.gke.io
+            readOnly: false
+            volumeAttributes:
+              bucketName: "restic-backup-bucket-9r6c"
+              gcsfuseLoggingSeverity: warning

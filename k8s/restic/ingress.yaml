@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: restic
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`restic.anshulg.com`)
+      middlewares:
+        - name: security-headers
+          namespace: traefik
+      services:
+        - name: restic
+          port: 80
+  tls:
+    secretName: restic-cert-tls
+    domains:
+      - main: restic.anshulg.com
