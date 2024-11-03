@@ -6,8 +6,9 @@ resource "google_storage_bucket" "gke-test-bucket" {
 	location      = "US"
 	force_destroy = true
 
-	storage_class            = "STANDARD"
-	public_access_prevention = "enforced"
+	uniform_bucket_level_access = true
+	storage_class               = "STANDARD"
+	public_access_prevention    = "enforced"
 }
 
 # Bind GKE Bucket to default service account in the default namespace
