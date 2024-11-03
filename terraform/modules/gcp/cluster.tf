@@ -20,6 +20,12 @@ resource "google_container_cluster" "default" {
       issue_client_certificate = false
     }
   }
+
+  addons_config {
+    gcs_fuse_csi_driver_config {
+      enabled = true
+    }
+  }
 }
 
 resource "google_container_node_pool" "default_spot_pool" {
