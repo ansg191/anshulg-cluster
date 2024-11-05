@@ -1,0 +1,108 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sonarr-backup
+spec:
+  schedule: 15 14 * * *
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: sonarr-backup
+              image: ghcr.io/ansg191/arr-backup:main@sha256:7d879cade3f61fe46093a0c95be9b6df7ece1d0172c137c42ec2b6faa50da0bd
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: ARR_URL
+                  value: "http://sonarr"
+                - name: ARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: api-key
+                      name: backup-secrets
+                - name: ARR_CONFIG_DIR
+                  value: /config
+                - name: ARR_DEST_DIR
+                  value: /backup
+                - name: RUST_LOG
+                  value: "debug"
+              volumeMounts:
+                - mountPath: /config
+                  name: config
+                  readOnly: true
+                - mountPath: /backup
+                  name: backup
+          containers:
+            - name: restic
+              image: creativeprojects/resticprofile:0.29.0@sha256:03e6ea982b499e78d3c19ced193e02baea21073c7b5b784ffe6fa2d39998f5dc
+              imagePullPolicy: IfNotPresent
+              command: [ "resticprofile", "backup" ]
+              env:
+                - name: RESTIC_REST_USERNAME
+                  value: "sonarr"
+                - name: RESTIC_REST_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: restic-password
+                      name: backup-secrets
+              volumeMounts:
+                - mountPath: /resticprofile/profiles.yaml
+                  name: profile
+                  subPath: profiles.yaml
+                - mountPath: /resticprofile/sonarr.txt
+                  name: backup-secrets
+                  subPath: sonarr.txt
+                - mountPath: /backup
+                  name: backup
+          restartPolicy: OnFailure
+          volumes:
+            - name: config
+              persistentVolumeClaim:
+                claimName: config-sonarr-0
+                readOnly: true
+            - name: backup
+              emptyDir: { }
+            - name: profile
+              configMap:
+                name: restic-profile
+            - name: backup-secrets
+              secret:
+                secretName: backup-secrets
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: restic-profile
+data:
+  profiles.yaml: |
+    version: "1"
+
+    global:
+      restic-lock-retry-after: "1m"
+      restic-stale-lock-age: "4h"
+
+    default:
+      repository: "rest:https://restic.anshulg.com/sonarr/"
+      initialize: true
+      password-file: "/resticprofile/sonarr.txt"
+      compression: "max"
+      force-inactive-lock: true
+
+      env:
+        RESTIC_HOST: "sonarr"
+
+      retention:
+        before-backup: false
+        after-backup: true
+        keep-daily: 7
+        keep-weekly: 4
+        keep-monthly: 12
+        keep-yearly: 1
+        prune: true
+        host: true
+
+      backup:
+        source:
+          - "/backup"
+        tag:
+          - "sonarr"
