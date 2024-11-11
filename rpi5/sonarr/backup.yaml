@@ -10,7 +10,7 @@ spec:
         spec:
           initContainers:
             - name: sonarr-backup
-              image: ghcr.io/ansg191/arr-backup:main@sha256:267c44ea70859d73092fc50fd88bf4a90849a67f0e02a8b8f174098bcc0fa2bd
+              image: ghcr.io/ansg191/arr-backup:main@sha256:fcf505231b8fed26fe0e6cefe202f9a49eb9c1d12a47e84a9f2f347525f2a5b4
               imagePullPolicy: IfNotPresent
               env:
                 - name: ARR_URL
@@ -25,7 +25,7 @@ spec:
                 - name: ARR_DEST_DIR
                   value: /backup
                 - name: RUST_LOG
-                  value: "debug"
+                  value: "info"
                 - name: ARR_PRODUCTION
                   value: "true"
               volumeMounts:
