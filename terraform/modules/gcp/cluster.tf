@@ -31,7 +31,7 @@ resource "google_container_cluster" "default" {
 resource "google_container_node_pool" "default_spot_pool" {
   name       = "default-spot-pool"
   cluster    = google_container_cluster.default.name
-  node_count = 1
+  node_count = 2
 
   node_config {
     preemptible  = true
