@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: miniflux
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`miniflux.anshulg.com`)
+      middlewares:
+        - name: security-headers
+          namespace: traefik
+      services:
+        - name: miniflux
+          port: 80
+  tls:
+    secretName: miniflux-cert-tls
+    domains:
+      - main: miniflux.anshulg.com

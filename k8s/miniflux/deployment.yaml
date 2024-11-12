@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: miniflux
+  labels:
+    app: miniflux
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: miniflux
+  template:
+    metadata:
+      name: miniflux
+      labels:
+        app: miniflux
+    spec:
+      containers:
+        - name: miniflux
+          image: ghcr.io/miniflux/miniflux:2.2.3@sha256:e21953092096579daaad39ba69729f01b08380b03bae4544a943f549c8e11a67
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: databaseUrl
+                  name: miniflux-secret
+            - name: RUN_MIGRATIONS
+              value: "1"
+            - name: CREATE_ADMIN
+              value: "1"
+            - name: ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: adminUsername
+                  name: miniflux-secret
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: adminPassword
+                  name: miniflux-secret
+            - name: BASE_URL
+              value: "https://miniflux.anshulg.com/"
+            - name: FETCH_YOUTUBE_WATCH_TIME
+              value: "1"
+            - name: WEBAUTHN
+              value: "1"
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+          #livenessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - /usr/bin/miniflux
+                - -healthcheck
+                - auto
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
