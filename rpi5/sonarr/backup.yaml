@@ -10,7 +10,7 @@ spec:
         spec:
           initContainers:
             - name: sonarr-backup
-              image: ghcr.io/ansg191/arr-backup:main@sha256:fcf505231b8fed26fe0e6cefe202f9a49eb9c1d12a47e84a9f2f347525f2a5b4
+              image: ghcr.io/ansg191/arr-backup:main@sha256:e9477a86279ba85628278d83d852a8ee37e932b1fc9728c84cdcbdba07f33bd0
               imagePullPolicy: IfNotPresent
               env:
                 - name: ARR_URL
