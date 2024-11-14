@@ -54,15 +54,15 @@ spec:
               memory: 64Mi
             limits:
               memory: 128Mi
-          #livenessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
           readinessProbe:
+            httpGet:
+              port: 8080
+              path: /healthcheck
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
             exec:
               command:
                 - /usr/bin/miniflux
