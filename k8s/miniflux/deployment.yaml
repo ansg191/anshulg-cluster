@@ -58,8 +58,7 @@ spec:
             httpGet:
               port: 8080
               path: /healthcheck
-            initialDelaySeconds: 30
-            periodSeconds: 30
+            periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
           livenessProbe:
@@ -68,7 +67,8 @@ spec:
                 - /usr/bin/miniflux
                 - -healthcheck
                 - auto
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            periodSeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
       restartPolicy: Always
