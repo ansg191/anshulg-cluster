@@ -5,7 +5,7 @@ metadata:
   labels:
     app: miniflux
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: miniflux
@@ -28,10 +28,10 @@ spec:
                 secretKeyRef:
                   key: databaseUrl
                   name: miniflux-secret
-            - name: RUN_MIGRATIONS
-              value: "1"
-            - name: CREATE_ADMIN
-              value: "1"
+            # - name: RUN_MIGRATIONS
+            #   value: "1"
+            # - name: CREATE_ADMIN
+            #   value: "1"
             - name: ADMIN_USERNAME
               valueFrom:
                 secretKeyRef:
