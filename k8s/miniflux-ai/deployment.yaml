@@ -26,6 +26,14 @@ spec:
             - mountPath: /app/config.yml
               name: config
               subPath: config.yml
+          securityContext:
+            runAsUser: 10001
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
           #resources:
           #  requests:
           #    cpu: 250m
