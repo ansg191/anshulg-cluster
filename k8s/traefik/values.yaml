@@ -15,6 +15,8 @@ traefik:
           - 10.0.0.0/8
 
   service:
+    annotations:
+      cloud.google.com/backend-config: '{"default": "traefik-backendconfig"}'
     spec:
       loadBalancerIP: "35.199.156.70"
 

@@ -89,6 +89,9 @@ resource "google_compute_backend_service" "k8s-lb" {
 	backend {
 		group = google_compute_global_network_endpoint_group.k8s.id
 	}
+
+	timeout_sec = 1800
+	connection_draining_timeout_sec = 1800
 }
 
 resource "google_compute_url_map" "default" {

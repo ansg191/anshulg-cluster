@@ -12,3 +12,13 @@ spec:
       name: traefik
       targetPort: 9000
       protocol: TCP
+---
+# See https://medium.com/johnjjung/how-to-use-gcp-loadbalancer-with-websockets-on-kubernetes-using-services-ingresses-and-backend-16a5565e4702
+apiVersion: cloud.google.com/v1beta1
+kind: BackendConfig
+metadata:
+  name: traefik-backendconfig
+spec:
+  timeoutSec: 1800
+  connectionDraining:
+    drainingTimeoutSec: 1800
