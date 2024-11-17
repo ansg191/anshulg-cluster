@@ -72,3 +72,10 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
       restartPolicy: Always
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: miniflux
