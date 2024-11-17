@@ -6,17 +6,16 @@ metadata:
 spec:
   project: miniflux
   source:
-    chart: postgresql
+    chart: postgresql-ha
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 16.1.2
+    targetRevision: 14.3.9
     helm:
       values: |
-        architecture: standalone
-        auth:
-          enablePostgresUser: false
-          database: miniflux
-          username: miniflux
-          existingSecret: miniflux-secret
+        global:
+          postgresql:
+            database: miniflux
+            username: miniflux
+            existingSecret: miniflux-secret
   destination:
     server: https://kubernetes.default.svc
     namespace: miniflux

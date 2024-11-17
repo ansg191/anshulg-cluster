@@ -22,7 +22,7 @@ spec:
             - sh
             - -c
             - >
-              until pg_isready -h miniflux-postgres-postgresql -p 5432 -U miniflux -d miniflux -t 5; do
+              until pg_isready -h miniflux-postgres-postgresql-ha-pgpool -p 5432 -U miniflux -d miniflux -t 5; do
                 sleep 1;
               done;
       containers:

@@ -17,7 +17,7 @@ spec:
                 - sh
                 - -c
                 - |
-                  pg_dump -h miniflux-postgres-postgresql -p 5432 miniflux > /backup/backup.sql
+                  pg_dump -h miniflux-postgres-postgresql-ha-pgpool -p 5432 miniflux > /backup/backup.sql
               env:
                 - name: PGUSER
                   value: miniflux
