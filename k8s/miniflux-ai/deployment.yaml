@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: miniflux-ai
-          image: ghcr.io/ansg191/miniflux-ai:main@sha256:d91130a63f11bba679745e441fdcb1638be325061dfc7304a5102c5c55b9372d
+          image: ghcr.io/ansg191/miniflux-ai:main@sha256:bc9e423c622f71167baaa02c87e35b9be71c3e034c7eaee3200a56f93ded2f9a
           imagePullPolicy: Always
           env:
             - name: TZ
