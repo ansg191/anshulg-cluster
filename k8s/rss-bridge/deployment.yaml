@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rss-bridge
+  labels:
+    app: rss-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rss-bridge
+  template:
+    metadata:
+      name: rss-bridge
+      labels:
+        app: rss-bridge
+    spec:
+      containers:
+        - name: rss-bridge
+          image: rssbridge/rss-bridge:latest@sha256:9f4ad6df544ff568838315aa12743a465f3ac10a9a63a41b2e8c1aaaf5360820
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: config
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
+      volumes:
+        - name: config
+          secret:
+            secretName: config

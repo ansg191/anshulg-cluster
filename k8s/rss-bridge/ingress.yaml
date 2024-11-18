@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rss-bridge
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`rss-bridge.anshulg.com`)
+      middlewares:
+        - name: security-headers
+          namespace: traefik
+      services:
+        - name: rss-bridge
+          port: 80
+  tls:
+    secretName: rss-bridge-cert-tls
+    domains:
+      - main: rss-bridge.anshulg.com
