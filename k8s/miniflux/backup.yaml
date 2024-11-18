@@ -31,7 +31,7 @@ spec:
                   name: backup
           containers:
             - name: restic
-              image: creativeprojects/resticprofile:0.29.0@sha256:6c9d9ea069a95e887bdbe461f44f1e62457a910c1f40801fa14128254cb69d7e
+              image: creativeprojects/resticprofile:0.29.0@sha256:a4cfe8f8a7553cef05247d6c6b1c1898b9ef3dfada8a755cb40f22e3b514985f
               imagePullPolicy: IfNotPresent
               command: [ "resticprofile", "backup" ]
               env:
