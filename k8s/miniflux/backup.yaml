@@ -3,100 +3,41 @@ kind: CronJob
 metadata:
   name: miniflux-backup
 spec:
-  suspend: true
   schedule: "0 22 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
         spec:
-          initContainers:
-            - name: pgdump
-              image: postgres:17.1@sha256:163763c8afd28cae69035ce84b12d8180179559c747c0701b3cad17818a0dbc5
+          serviceAccountName: cockroachdb-sa
+          containers:
+            - name: backup
+              image: cockroachdb/cockroach:v24.2.5
               imagePullPolicy: IfNotPresent
               command:
                 - sh
                 - -c
-                - |
-                  pg_dump -h miniflux-postgres-postgresql-ha-pgpool -p 5432 miniflux > /backup/backup.sql
-              env:
-                - name: PGUSER
-                  value: miniflux
-                - name: PGPASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: password
-                      name: miniflux-secret
+                - >
+                  cockroach sql --certs-dir=/cockroach/cockroach-certs --host=cockroachdb-public --database=miniflux
+                  --execute "BACKUP DATABASE miniflux INTO 'gs://cockroacchdb-backup-bucket-8kmcx/miniflux?AUTH=implicit';"
               volumeMounts:
-                - mountPath: /backup
-                  name: backup
-          containers:
-            - name: restic
-              image: creativeprojects/resticprofile:0.29.0@sha256:a4cfe8f8a7553cef05247d6c6b1c1898b9ef3dfada8a755cb40f22e3b514985f
-              imagePullPolicy: IfNotPresent
-              command: [ "resticprofile", "backup" ]
-              env:
-                - name: RESTIC_REST_USERNAME
-                  value: miniflux
-                - name: RESTIC_REST_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: restic-password
-                      name: backup-secrets
-              volumeMounts:
-                - mountPath: /resticprofile/profiles.yaml
-                  name: profile
-                  subPath: profiles.yaml
-                - mountPath: /resticprofile/miniflux.txt
-                  name: backup-secrets
-                  subPath: sonarr.txt
-                - mountPath: /backup
-                  name: backup
+                - mountPath: /cockroach/cockroach-certs
+                  name: client-certs
           restartPolicy: OnFailure
           volumes:
-            - name: backup
-              emptyDir: { }
-            - name: profile
-              configMap:
-                name: restic-profile
-            - name: backup-secrets
-              secret:
-                secretName: backup-secrets
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: restic-profile
-data:
-  profiles.yaml: |
-    version: "1"
-
-    global:
-      restic-lock-retry-after: "1m"
-      restic-stale-lock-age: "4h"
-
-    default:
-      repository: "rest:https://restic.anshulg.com/miniflux/"
-      initialize: true
-      password-file: "/resticprofile/miniflux.txt"
-      compression: "max"
-      force-inactive-lock: true
-
-      env:
-        RESTIC_HOST: "miniflux"
-
-      retention:
-        before-backup: false
-        after-backup: true
-        keep-daily: 7
-        keep-weekly: 4
-        keep-monthly: 12
-        keep-yearly: 1
-        prune: true
-        host: true
-
-      backup:
-        source:
-          - "/backup"
-        tag:
-          - "miniflux"
+            - name: client-certs
+              projected:
+                sources:
+                  - secret:
+                      name: cockroachdb-node
+                      items:
+                        - key: ca.crt
+                          path: ca.crt
+                  - secret:
+                      name: cockroachdb-root
+                      items:
+                        - key: tls.crt
+                          path: client.root.crt
+                        - key: tls.key
+                          path: client.root.key
+                defaultMode: 256
