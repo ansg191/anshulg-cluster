@@ -19,6 +19,17 @@ resource "google_project_iam_binding" "dns_admin" {
 	]
 }
 
+# Add DNS record to 192.168.1.100
+resource "google_dns_record_set" "normal" {
+	managed_zone = data.google_dns_managed_zone.direct.name
+	name         = data.google_dns_managed_zone.direct.dns_name
+	type         = "A"
+	ttl          = 60
+	rrdatas = [
+		"192.168.1.100"
+	]
+}
+
 # Add wildcard DNS record to 192.168.1.100
 resource "google_dns_record_set" "wildcard" {
 	managed_zone = data.google_dns_managed_zone.direct.name
