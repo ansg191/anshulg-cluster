@@ -1,0 +1,47 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: miniflux-status
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`status.miniflux.anshulg.com`)
+      services:
+        - name: uptime-kuma
+          namespace: uptime-kuma
+          port: 80
+  tls:
+    secretName: miniflux-cert-tls
+    domains:
+      - main: status.miniflux.anshulg.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: miniflux-status-cert
+spec:
+  secretName: miniflux-status-cert-tls
+  commonName: status.miniflux.anshulg.com
+  dnsNames:
+    - status.miniflux.anshulg.com
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - k8s
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASClusterIssuer
+    name: anshulg-ca
