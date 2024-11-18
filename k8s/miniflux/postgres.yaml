@@ -16,6 +16,8 @@ spec:
             database: miniflux
             username: miniflux
             existingSecret: miniflux-secret
+        pgpool:
+          replicaCount: 2
   destination:
     server: https://kubernetes.default.svc
     namespace: miniflux
