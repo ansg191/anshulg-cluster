@@ -5,7 +5,7 @@ metadata:
   labels:
     app: miniflux-ai
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: miniflux-ai
