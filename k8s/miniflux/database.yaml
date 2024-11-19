@@ -1,25 +1,12 @@
-apiVersion: crdb.cockroachlabs.com/v1alpha1
-kind: CrdbCluster
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
 metadata:
-  name: cockroachdb
+  name: miniflux-cluster
 spec:
-  dataStore:
-    pvc:
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: "8Gi"
-        volumeMode: Filesystem
-  resources:
-    requests:
-      cpu: 100m
-      memory: 512Mi
-    limits:
-      cpu: 500m
-      memory: 1Gi
-  tlsEnabled: true
-  image:
-    name: cockroachdb/cockroach:v24.2.5
-  nodes: 3
+  instances: 3
+  bootstrap:
+    initdb:
+      database: miniflux
+      owner: miniflux
+  storage:
+    size: 8Gi
