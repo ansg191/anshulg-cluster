@@ -50,6 +50,8 @@ spec:
               value: "1"
             - name: LOG_FORMAT
               value: "json"
+            - name: MEDIA_PROXY_MODE
+              value: "all"
           resources:
             requests:
               cpu: 25m
