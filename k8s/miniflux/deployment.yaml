@@ -54,6 +54,8 @@ spec:
               value: "-1"
             - name: CLEANUP_ARCHIVE_UNREAD_DAYS
               value: "-1"
+            - name: SERVER_TIMING_HEADER
+              value: "1"
           resources:
             requests:
               cpu: 25m
