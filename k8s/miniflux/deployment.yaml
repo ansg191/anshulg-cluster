@@ -48,6 +48,8 @@ spec:
               value: "1"
             - name: WEBAUTHN
               value: "1"
+            - name: LOG_FORMAT
+              value: "json"
           resources:
             requests:
               cpu: 25m
