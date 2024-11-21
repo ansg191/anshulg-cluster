@@ -50,6 +50,10 @@ spec:
               value: "1"
             - name: LOG_FORMAT
               value: "json"
+            - name: CLEANUP_ARCHIVE_READ_DAYS
+              value: "-1"
+            - name: CLEANUP_ARCHIVE_UNREAD_DAYS
+              value: "-1"
           resources:
             requests:
               cpu: 25m
