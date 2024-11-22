@@ -3,10 +3,14 @@ kind: Cluster
 metadata:
   name: miniflux-cluster
 spec:
-  instances: 3
+  instances: 2
   bootstrap:
     initdb:
       database: miniflux
       owner: miniflux
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
   storage:
     size: 8Gi
