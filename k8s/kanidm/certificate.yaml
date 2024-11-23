@@ -1,0 +1,34 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kanidm-cert
+spec:
+  secretName: kanidm-cert-tls
+  commonName: auth.anshulg.com
+  dnsNames:
+    - auth.anshulg.com
+    - kanidm.kanidm.svc.cluster.local
+    - kanidm.kanidm.svc.cluster
+    - kanidm.kanidm.svc
+    - kanidm.kanidm
+    - kanidm
+    - "*.kanidm.svc.cluster.local"
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - k8s
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASClusterIssuer
+    name: anshulg-ca

@@ -1,0 +1,30 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kanidm
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`auth.anshulg.com`)
+      middlewares:
+        - name: security-headers
+          namespace: traefik
+      services:
+        - name: kanidm
+          port: 443
+          serversTransport: kanidm
+  tls:
+    secretName: kanidm-cert-tls
+    domains:
+      - main: kanidm.anshulg.com
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: kanidm
+spec:
+  serverName: kanidm.kanidm.svc.cluster.local
+  rootCAsSecrets:
+    - kanidm-cert-tls

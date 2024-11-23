@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kanidm
+  labels:
+    app: kanidm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kanidm
+  serviceName: kanidm
+  template:
+    metadata:
+      name: kanidm
+      labels:
+        app: kanidm
+    spec:
+      containers:
+        - name: kanidm
+          image: docker.io/kanidm/server:1.4.3@sha256:61efaac93ab8056b74f09d3e65d6512caba80b942d1d54830e42ef58f3b61842
+          imagePullPolicy: IfNotPresent
+          env: []
+          ports:
+            - containerPort: 8443
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: data
+            - mountPath: /data/server.toml
+              name: config
+              subPath: server.toml
+              readOnly: true
+            - mountPath: /certs
+              name: certs
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+      volumes:
+        - name: config
+          configMap:
+            name: kanidm-config
+            defaultMode: 0440
+        - name: certs
+          secret:
+            secretName: kanidm-cert-tls
+            defaultMode: 0440
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 4Gi
