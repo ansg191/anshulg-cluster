@@ -14,7 +14,7 @@ spec:
         - name: security-headers
           namespace: kube-system
       services:
-        - name: radarr
+        - name: radarr-auth
           port: 80
   tls:
     secretName: radarr-cert-tls
