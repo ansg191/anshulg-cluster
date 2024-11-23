@@ -57,7 +57,7 @@ spec:
             - name: FETCH_YOUTUBE_WATCH_TIME
               value: "1"
             - name: WEBAUTHN
-              value: "1"
+              value: "0"
             - name: LOG_FORMAT
               value: "json"
             - name: CLEANUP_ARCHIVE_READ_DAYS
@@ -71,6 +71,21 @@ spec:
                 secretKeyRef:
                   key: proxyUrl
                   name: miniflux-secret
+            - name: OAUTH2_PROVIDER
+              value: oidc
+            - name: OAUTH2_CLIENT_ID
+              value: "miniflux"
+            - name: OAUTH2_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: oauthClientSecret
+                  name: miniflux-secret
+            - name: OAUTH2_REDIRECT_URL
+              value: "https://miniflux.anshulg.com/oauth2/oidc/callback"
+            - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
+              value: "https://auth.anshulg.com/oauth2/openid/miniflux"
+            - name: OAUTH2_USER_CREATION
+              value: "1"
           resources:
             requests:
               cpu: 25m
