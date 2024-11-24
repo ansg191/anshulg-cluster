@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth-proxy
+  labels:
+    app: oauth-proxy
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oauth-proxy
+  template:
+    metadata:
+      name: oauth-proxy
+      labels:
+        app: oauth-proxy
+    spec:
+      containers:
+        - name: oauth-proxy
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.7.1@sha256:f6a4aa83a27e316114bf79664302b1ffb2cc8ce697fb479273af4feb3fb16fe3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4180
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: oauth-config
+          readinessProbe:
+            httpGet:
+              port: 4180
+              path: /ping
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bazarr-auth
+spec:
+  selector:
+    app: oauth-proxy
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4180
+  type: ClusterIP
