@@ -57,3 +57,21 @@ resource "google_storage_bucket_iam_member" "gke-cockroach-bucket-miniflux" {
 	member = "principal://iam.googleapis.com/projects/${data.google_project.default.number}/locations/global/workloadIdentityPools/${data.google_project.default.project_id}.svc.id.goog/subject/ns/miniflux/sa/cockroachdb-sa"
 	role   = "roles/storage.objectUser"
 }
+
+# KanIDM Backup Bucket
+resource "google_storage_bucket" "gke-kanidm-bucket" {
+	name     = "kanidm-backup-bucket-wzqjn"
+	location = "US"
+	force_destroy = false
+
+	uniform_bucket_level_access = true
+	storage_class = "NEARLINE"
+	public_access_prevention = "enforced"
+}
+
+# Bind GKE bucket to cockroachdb-sa service account in the miniflux namespace
+resource "google_storage_bucket_iam_member" "gke-kanidm-bucket-miniflux" {
+	bucket = google_storage_bucket.gke-kanidm-bucket.name
+	member = "principal://iam.googleapis.com/projects/${data.google_project.default.number}/locations/global/workloadIdentityPools/${data.google_project.default.project_id}.svc.id.goog/subject/ns/kanidm/sa/kanidm"
+	role   = "roles/storage.objectUser"
+}

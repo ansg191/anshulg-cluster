@@ -15,7 +15,10 @@ spec:
       name: kanidm
       labels:
         app: kanidm
+      annotations:
+        gke-gcsfuse/volumes: "true"
     spec:
+      serviceAccountName: kanidm
       containers:
         - name: kanidm
           image: docker.io/kanidm/server:1.4.3@sha256:61efaac93ab8056b74f09d3e65d6512caba80b942d1d54830e42ef58f3b61842
@@ -33,6 +36,8 @@ spec:
               readOnly: true
             - mountPath: /certs
               name: certs
+            - mountPath: /backups
+              name: backups
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
@@ -45,21 +50,6 @@ spec:
               memory: 64Mi
             limits:
               memory: 256Mi
-          livenessProbe:
-            httpGet:
-              port: 8443
-              path: /status
-            initialDelaySeconds: 30
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              port: 8443
-              path: /status
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
       restartPolicy: Always
       securityContext:
         runAsUser: 1000
@@ -75,6 +65,13 @@ spec:
           secret:
             secretName: kanidm-cert-tls
             defaultMode: 0440
+        - name: backups
+          csi:
+            driver: gcsfuse.csi.storage.gke.io
+            readOnly: false
+            volumeAttributes:
+              bucketName: "kanidm-backup-bucket-wzqjn"
+              gcsfuseLoggingSeverity: warning
   volumeClaimTemplates:
     - metadata:
         name: data
