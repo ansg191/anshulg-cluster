@@ -38,7 +38,7 @@ spec:
             - name: TEXMFVAR
               value: /var/lib/overleaf/tmp/texmf-var
             - name: OVERLEAF_SITE_URL
-              value: https://overleaf.internal
+              value: https://overleaf.anshulg.net
             - name: OVERLEAF_ADMIN_EMAIL
               value: ansg191@anshulg.com
             - name: OVERLEAF_SECURE_COOKIE
