@@ -89,6 +89,10 @@ data:
     #   origin = "https://idm.example.com"
     origin = "https://auth.anshulg.com"
     #
+    #   Enable OpenTelemetry Tracing
+    #   See: https://kanidm.github.io/kanidm/stable/monitoring_the_platform.html#opentelemetry-tracing
+    otel_grpc_url = "http://ddog-datadog.ddog.svc.cluster.local:4317"
+    #
     [ online_backup ]
     #   The path to the output folder for online backups
     path = "/backups/"
