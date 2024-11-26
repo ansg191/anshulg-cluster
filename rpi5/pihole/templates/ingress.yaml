@@ -14,7 +14,7 @@ spec:
         - name: security-headers
           namespace: kube-system
       services:
-        - name: {{ template "pihole.fullname" . }}-web
+        - name: {{ template "pihole.fullname" . }}-web-auth
           port: 80
   tls:
     secretName: {{ template "pihole.fullname" . }}-cert-tls
