@@ -1,0 +1,16 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: paperless-cluster
+spec:
+  instances: 3
+  bootstrap:
+    initdb:
+      database: paperless
+      owner: paperless
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: preferred
+  storage:
+    size: 8Gi

@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paperless
+  labels:
+    app: paperless
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paperless
+  serviceName: paperless
+  template:
+    metadata:
+      name: paperless
+      labels:
+        app: paperless
+    spec:
+      containers:
+        - name: paperless
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.13.5@sha256:199c67ed55bfb9d58bf90db2ee280880ae9ebc63413e54c73522f9c4ebdc7bad
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PAPERLESS_DBHOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: paperless-cluster-app
+            - name: PAPERLESS_DBPORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: paperless-cluster-app
+            - name: PAPERLESS_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: paperless-cluster-app
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: paperless-cluster-app
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: paperless-cluster-app
+          envFrom:
+            - configMapRef:
+                name: paperless-config
+            - secretRef:
+                name: paperless-secrets
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /usr/src/paperless/data
+              name: data
+            - mountPath: /usr/src/paperless/media
+              name: media
+            - mountPath: /usr/src/paperless/consume
+              name: consume
+#          securityContext:
+#            runAsUser: 1001
+#            runAsGroup: 1001
+#            readOnlyRootFilesystem: false
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
+      volumes:
+        - name: consume
+          nfs:
+            path: /mnt/GuptaZ/Home/consume
+            server: 192.168.1.10
+            readOnly: false
+#      securityContext:
+#        fsGroup: 1001
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: media
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
