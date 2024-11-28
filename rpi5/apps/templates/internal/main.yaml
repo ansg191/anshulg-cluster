@@ -22,6 +22,7 @@ spec:
     - https://senthilrch.github.io/kubefledged-charts/
     - https://eraser-dev.github.io/eraser/charts
     - https://stakater.github.io/stakater-charts
+    - https://cloudnative-pg.github.io/charts
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
