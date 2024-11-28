@@ -27,10 +27,17 @@ spec:
           envFrom:
             - secretRef:
                 name: oauth-config
-          readinessProbe:
+          livenessProbe:
             httpGet:
               port: 4180
               path: /ping
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: 4180
+              path: /ready
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
