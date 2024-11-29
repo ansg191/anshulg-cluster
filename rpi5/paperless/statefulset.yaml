@@ -64,12 +64,12 @@ spec:
             - mountPath: /usr/src/paperless/consume
               name: consume
               subPath: Scanner
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              memory: 4Gi
           #livenessProbe:
           #  httpGet:
           #    port: 7878
@@ -78,13 +78,13 @@ spec:
           #  periodSeconds: 30
           #  timeoutSeconds: 5
           #  failureThreshold: 3
-          #readinessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: 8000
+              path: /
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
       restartPolicy: Always
       volumes:
         - name: consume
