@@ -61,6 +61,7 @@ spec:
               name: data
             - mountPath: /usr/src/paperless/media
               name: media
+              subPath: Paperless
             - mountPath: /usr/src/paperless/consume
               name: consume
               subPath: Scanner
@@ -90,16 +91,12 @@ spec:
         - name: consume
           persistentVolumeClaim:
             claimName: pvc-smb
+        - name: media
+          persistentVolumeClaim:
+            claimName: pvc-smb-media
   volumeClaimTemplates:
     - metadata:
         name: data
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 1Gi
-    - metadata:
-        name: media
       spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
