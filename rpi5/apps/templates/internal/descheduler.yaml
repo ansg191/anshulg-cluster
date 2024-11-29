@@ -9,6 +9,64 @@ spec:
     chart: descheduler
     repoURL: https://kubernetes-sigs.github.io/descheduler/
     targetRevision: 0.31.0
+    helm:
+      values: |
+        deschedulerPolicy:
+          # ignorePvcPods: true
+          # evictLocalStoragePods: true
+          # evictDaemonSetPods: true
+          # tracing:
+          #   collectorEndpoint: otel-collector.observability.svc.cluster.local:4317
+          #   transportCert: ""
+          #   serviceName: ""
+          #   serviceNamespace: ""
+          #   sampleRate: 1.0
+          #   fallbackToNoOpProviderOnError: true
+          profiles:
+            - name: default
+              pluginConfig:
+                - name: DefaultEvictor
+                  args:
+                    ignorePvcPods: true
+                    evictLocalStoragePods: true
+                - name: RemoveDuplicates
+                - name: RemovePodsHavingTooManyRestarts
+                  args:
+                    podRestartThreshold: 100
+                    includingInitContainers: true
+                - name: RemovePodsViolatingNodeAffinity
+                  args:
+                    nodeAffinityType:
+                    - requiredDuringSchedulingIgnoredDuringExecution
+                - name: RemovePodsViolatingNodeTaints
+                - name: RemovePodsViolatingInterPodAntiAffinity
+                - name: RemovePodsViolatingTopologySpreadConstraint
+                - name: LowNodeUtilization
+                  args:
+                    thresholds:
+                      cpu: 20
+                      memory: 30
+                      pods: 20
+                    targetThresholds:
+                      cpu: 50
+                      memory: 50
+                      pods: 50
+                - name: "PodLifeTime"
+                  args:
+                    maxPodLifeTimeSeconds: 604800 # 7 days
+              plugins:
+                balance:
+                  enabled:
+                    - RemoveDuplicates
+                    - RemovePodsViolatingTopologySpreadConstraint
+                    - LowNodeUtilization
+                deschedule:
+                  enabled:
+                    - RemovePodsHavingTooManyRestarts
+                    - RemovePodsViolatingNodeTaints
+                    - RemovePodsViolatingNodeAffinity
+                    - RemovePodsViolatingInterPodAntiAffinity
+                    - PodLifeTime
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: kube-system
