@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: smb
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: smb
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: internal
+  source:
+    chart: csi-driver-smb
+    repoURL: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
+    targetRevision: 1.16.0
+    helm:
+      values: |
+        controller:
+          runOnMaster: false
+          runOnControlPlane: false
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: smb
