@@ -13,5 +13,6 @@ data:
   PAPERLESS_ALLOWED_HOSTS: "paperless.anshulg.direct,paperless.internal"
   PAPERLESS_CORS_ALLOWED_HOSTS: "https://paperless.anshulg.direct,https://paperless.internal"
   PAPERLESS_CONSUMER_POLLING: "15"
+  PAPERLESS_DISABLE_REGULAR_LOGIN: "1"
 #  USERMAP_UID: "1001"
 #  USERMAP_GID: "1001"
