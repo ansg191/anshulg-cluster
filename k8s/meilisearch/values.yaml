@@ -1,0 +1,35 @@
+# This is to override the chart name.
+nameOverride: ""
+fullnameOverride: ""
+
+# Traefik IngressRoute options
+ingressRoute:
+  enabled: true
+  entryPoints:
+    - websecure
+  hosts:
+    - meilisearch.anshulg.com
+  middlewares:
+    - name: security-headers
+      namespace: traefik
+  tls:
+    enabled: true
+    duration: 2160h0m0s
+    renewBefore: 720h0m0s
+    privateKey:
+      algorithm: ECDSA
+      size: 384
+      rotationPolicy: Always
+    issuerRef:
+      group: cas-issuer.jetstack.io
+      kind: GoogleCASClusterIssuer
+      name: anshulg-ca
+
+meilisearch:
+  environment:
+    MEILI_NO_ANALYTICS: true
+    MEILI_ENV: production
+  auth:
+    existingMasterKeySecret: meilisearch-secret
+  persistence:
+    enabled: true
