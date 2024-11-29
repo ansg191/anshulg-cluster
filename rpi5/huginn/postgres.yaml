@@ -1,0 +1,16 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: huginn-cluster
+spec:
+  instances: 3
+  bootstrap:
+    initdb:
+      database: huginn
+      owner: huginn
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: preferred
+  storage:
+    size: 8Gi
