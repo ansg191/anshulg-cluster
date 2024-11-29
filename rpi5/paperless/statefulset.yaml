@@ -63,10 +63,7 @@ spec:
               name: media
             - mountPath: /usr/src/paperless/consume
               name: consume
-#          securityContext:
-#            runAsUser: 1001
-#            runAsGroup: 1001
-#            readOnlyRootFilesystem: false
+              subPath: Scanner
           #resources:
           #  requests:
           #    cpu: 250m
@@ -91,12 +88,8 @@ spec:
       restartPolicy: Always
       volumes:
         - name: consume
-          nfs:
-            path: /mnt/GuptaZ/Home/consume
-            server: 192.168.1.10
-            readOnly: false
-#      securityContext:
-#        fsGroup: 1001
+          persistentVolumeClaim:
+            claimName: pvc-smb
   volumeClaimTemplates:
     - metadata:
         name: data
