@@ -11,8 +11,6 @@ spec:
   target:
     configMap:
       key: "ca-certificates.crt"
-    secret:
-      key: "ca-certificates.crt"
     namespaceSelector:
       matchLabels:
         anshulg.com/ca: "true"
