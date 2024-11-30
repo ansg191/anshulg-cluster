@@ -21,17 +21,19 @@ spec:
       serviceAccountName: restic
       containers:
         - name: restic
-          image: restic/rest-server:0.13.0@sha256:8668c235a932745585fef5cabbab9eccb501035f90138085a6e74963dcd1a71f
+          image: ghcr.io/ansg191/rest-server:master@sha256:45b187a9143dd2601cf180a03f4d4369c1eb86d7b219f83e06e83b8c15f8bc31
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
               protocol: TCP
           env:
             - name: OPTIONS
-              value: "--private-repos --prometheus"
+              value: "--private-repos --prometheus --passwd-executable /bin/kanidm-auth-plugin"
           volumeMounts:
             - mountPath: /data
               name: data
+            - mountPath: /etc/kanidm
+              name: kanidm-config
           resources:
             requests:
               cpu: 10m
@@ -58,3 +60,14 @@ spec:
             volumeAttributes:
               bucketName: "restic-backup-bucket-9r6c"
               gcsfuseLoggingSeverity: warning
+        - name: kanidm-config
+          configMap:
+            name: kanidm-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kanidm-config
+data:
+  config: |
+    uri = "https://auth.anshulg.com"
