@@ -1,0 +1,16 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: kellnr-cluster
+spec:
+  instances: 2
+  bootstrap:
+    initdb:
+      database: kellnr
+      owner: kellnr
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: preferred
+  storage:
+    size: 8Gi
