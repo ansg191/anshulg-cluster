@@ -11,33 +11,10 @@ spec:
       middlewares:
         - name: security-headers
           namespace: traefik
-        - name: passtlsclientcert
       services:
-        - name: restic-proxy
+        - name: restic
           port: 80
   tls:
     secretName: restic-cert-tls
     domains:
       - main: restic.anshulg.com
----
-apiVersion: traefik.io/v1alpha1
-kind: TLSOption
-metadata:
-  name: restic
-spec:
-  clientAuth:
-    # the CA certificate is extracted from key `tls.ca` or `ca.crt` of the given secrets.
-    secretNames:
-      - restic-cert-tls
-    clientAuthType: RequireAndVerifyClientCert
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: passtlsclientcert
-spec:
-  passTLSClientCert:
-    pem: false
-    info:
-      subject:
-        commonName: true

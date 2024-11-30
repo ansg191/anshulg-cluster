@@ -21,15 +21,14 @@ spec:
       serviceAccountName: restic
       containers:
         - name: restic
-#          image: restic/rest-server:0.13.0@sha256:8668c235a932745585fef5cabbab9eccb501035f90138085a6e74963dcd1a71f
-          image: ghcr.io/ansg191/rest-server:master@sha256:a365b4cfcec986b0a6fa233ba4b8d7c3c7006e94ea32ffa146194884810b3448
+          image: restic/rest-server:0.13.0@sha256:8668c235a932745585fef5cabbab9eccb501035f90138085a6e74963dcd1a71f
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
               protocol: TCP
           env:
             - name: OPTIONS
-              value: "--private-repos --prometheus --proxy-auth-username X-Forwarded-Tls-Client-Cert-Info"
+              value: "--private-repos --prometheus"
           volumeMounts:
             - mountPath: /data
               name: data
