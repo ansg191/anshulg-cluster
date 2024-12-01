@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restore
+spec:
+  suspend: true
+  template:
+    spec:
+      containers:
+        - name: restore
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.13.5@sha256:199c67ed55bfb9d58bf90db2ee280880ae9ebc63413e54c73522f9c4ebdc7bad
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - >-
+              python3 manage.py migrate &&
+              rm -rf /usr/src/paperless/media/* &&
+              document_importer ../export
+          env:
+            - name: PAPERLESS_DBHOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: paperless-cluster-app
+            - name: PAPERLESS_DBPORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: paperless-cluster-app
+            - name: PAPERLESS_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: paperless-cluster-app
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: paperless-cluster-app
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: paperless-cluster-app
+          envFrom:
+            - configMapRef:
+                name: paperless-config
+          securityContext:
+            runAsGroup: 568
+          volumeMounts:
+            - mountPath: /usr/src/paperless/media
+              name: media
+            - mountPath: /usr/src/paperless/export
+              name: export
+      restartPolicy: Never
+      volumes:
+        - name: media
+          nfs:
+            path: /mnt/GuptaZ/Home/Paperless
+            server: 192.168.1.10
+        - name: export
+          nfs:
+            path: /mnt/GuptaZ/Home/PaperlessExport
+            server: 192.168.1.10

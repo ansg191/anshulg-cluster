@@ -64,7 +64,7 @@ spec:
               subPath: Paperless
             - mountPath: /usr/src/paperless/consume
               name: consume
-              subPath: Scanner
+              subPath: Paperless_INBOX
           resources:
             requests:
               cpu: 500m
