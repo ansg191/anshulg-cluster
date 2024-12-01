@@ -44,7 +44,7 @@ spec:
               command: [ "resticprofile", "backup" ]
               env:
                 - name: RESTIC_REST_USERNAME
-                  value: miniflux
+                  value: miniflux-restic
                 - name: RESTIC_REST_PASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -56,7 +56,7 @@ spec:
                   subPath: profiles.yaml
                 - mountPath: /resticprofile/miniflux.txt
                   name: backup-secrets
-                  subPath: sonarr.txt
+                  subPath: miniflux.txt
                 - mountPath: /backup
                   name: backup
           restartPolicy: OnFailure
@@ -83,7 +83,7 @@ data:
       restic-stale-lock-age: "4h"
 
     default:
-      repository: "rest:https://restic.anshulg.com/miniflux/"
+      repository: "rest:https://restic.anshulg.com/miniflux-restic/"
       initialize: true
       password-file: "/resticprofile/miniflux.txt"
       compression: "max"
