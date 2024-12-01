@@ -9,4 +9,9 @@ spec:
     - protocol: TCP
       port: 443
       targetPort: 8443
+      name: https
+    - protocol: TCP
+      port: 636
+      targetPort: 3636
+      name: ldaps
   type: ClusterIP
