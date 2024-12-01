@@ -21,19 +21,28 @@ spec:
       serviceAccountName: restic
       containers:
         - name: restic
-          image: ghcr.io/ansg191/rest-server:master@sha256:45b187a9143dd2601cf180a03f4d4369c1eb86d7b219f83e06e83b8c15f8bc31
+          image: ghcr.io/ansg191/rest-server:master@sha256:7ee4abfb85feb4fdab8885746e571415d42d1c8d8e43f47811d2a6af63d82400
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
               protocol: TCP
           env:
             - name: OPTIONS
-              value: "--private-repos --prometheus --passwd-executable /bin/kanidm-auth-plugin"
+              value: >-
+                --private-repos
+                --prometheus
+                --ldap-addr
+                ldaps://kanidm.kanidm.svc.cluster.local:636
+                --ldap-base
+                dc=auth,dc=anshulg,dc=com
+                --ldap-uid
+                name
           volumeMounts:
             - mountPath: /data
               name: data
-            - mountPath: /etc/kanidm
-              name: kanidm-config
+            - mountPath: /etc/ssl/cert.pem
+              name: ca-cert
+              subPath: ca-certificates.crt
           resources:
             requests:
               cpu: 10m
@@ -60,14 +69,6 @@ spec:
             volumeAttributes:
               bucketName: "restic-backup-bucket-9r6c"
               gcsfuseLoggingSeverity: warning
-        - name: kanidm-config
+        - name: ca-cert
           configMap:
-            name: kanidm-config
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kanidm-config
-data:
-  config: |
-    uri = "https://auth.anshulg.com"
+            name: anshulg-ca
