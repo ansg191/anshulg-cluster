@@ -41,7 +41,7 @@ spec:
               command: [ "resticprofile", "backup" ]
               env:
                 - name: RESTIC_REST_USERNAME
-                  value: "sonarr"
+                  value: "sonarr-restic"
                 - name: RESTIC_REST_PASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -84,7 +84,7 @@ data:
       restic-stale-lock-age: "4h"
 
     default:
-      repository: "rest:https://restic.anshulg.com/sonarr/"
+      repository: "rest:https://restic.anshulg.com/sonarr-restic/"
       initialize: true
       password-file: "/resticprofile/sonarr.txt"
       compression: "max"
