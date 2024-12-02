@@ -20,6 +20,10 @@ traefik:
     spec:
       loadBalancerIP: "35.199.156.70"
 
+  ingressRoute:
+    dashboard:
+      enabled: true
+
   providers:
     kubernetesCRD:
       allowExternalNameServices: true
