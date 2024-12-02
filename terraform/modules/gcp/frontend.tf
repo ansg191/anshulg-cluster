@@ -244,6 +244,27 @@ resource "google_dns_record_set" "wildcard-https" {
 	]
 }
 
+# Auth DNS Record
+resource "google_dns_record_set" "auth-ipv4" {
+	managed_zone = data.google_dns_managed_zone.default.name
+	name         = "auth.${data.google_dns_managed_zone.default.dns_name}"
+	type         = "A"
+	ttl          = 86400
+	rrdatas = [
+		google_compute_global_address.ipv4.address
+	]
+}
+
+resource "google_dns_record_set" "auth-ipv6" {
+	managed_zone = data.google_dns_managed_zone.default.name
+	name         = "auth.${data.google_dns_managed_zone.default.dns_name}"
+	type         = "AAAA"
+	ttl          = 86400
+	rrdatas = [
+		google_compute_global_address.ipv6.address
+	]
+}
+
 # LDAP DNS Record
 resource "google_dns_record_set" "ldap" {
 	managed_zone = data.google_dns_managed_zone.default.name
