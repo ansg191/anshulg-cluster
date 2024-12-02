@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rpi5
+  labels:
+    app: rpi5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rpi5
+  template:
+    metadata:
+      name: rpi5
+      labels:
+        app: rpi5
+    spec:
+      containers:
+        - name: rpi5
+          image: ghcr.io/analogj/scrutiny:v0.8.1-collector
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          env:
+            - name: COLLECTOR_API_ENDPOINT
+              value: "http://scrutiny"
+            - name: COLLECTOR_HOST_ID
+              value: 'rpi5'
+          volumeMounts:
+            - mountPath: /run/udev
+              name: udev
+            - mountPath: /dev/nvme0
+              name: nvme0
+      restartPolicy: Always
+      volumes:
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: nvme0
+          hostPath:
+            path: /dev/nvme0
+      nodeSelector:
+        kubernetes.io/hostname: rpi5

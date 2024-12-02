@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny
+  labels:
+    app: scrutiny
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny
+  template:
+    metadata:
+      name: scrutiny
+      labels:
+        app: scrutiny
+    spec:
+      containers:
+        - name: scrutiny
+          image: ghcr.io/analogj/scrutiny:v0.8.1-web
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SCRUTINY_WEB_INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: admin-token
+                  name: influxdb-auth
+          volumeMounts:
+            - mountPath: /opt/scrutiny/config/scrutiny.yaml
+              name: config
+              subPath: scrutiny.yaml
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: 7878
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      volumes:
+        - name: config
+          configMap:
+            name: scrutiny-config
+      restartPolicy: Always

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odroid-h4
+  labels:
+    app: odroid-h4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odroid-h4
+  template:
+    metadata:
+      name: odroid-h4
+      labels:
+        app: odroid-h4
+    spec:
+      containers:
+        - name: odroid-h4
+          image: ghcr.io/analogj/scrutiny:v0.8.1-collector
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          env:
+            - name: COLLECTOR_API_ENDPOINT
+              value: "http://scrutiny"
+            - name: COLLECTOR_HOST_ID
+              value: 'odroid-h4'
+          volumeMounts:
+            - mountPath: /run/udev
+              name: udev
+            - mountPath: /dev/sda
+              name: sda
+            - mountPath: /dev/sdb
+              name: sdb
+            - mountPath: /dev/nvme0
+              name: nvme0
+      restartPolicy: Always
+      volumes:
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: sda
+          hostPath:
+            path: /dev/sda
+        - name: sdb
+          hostPath:
+            path: /dev/sdb
+        - name: nvme0
+          hostPath:
+            path: /dev/nvme0
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4

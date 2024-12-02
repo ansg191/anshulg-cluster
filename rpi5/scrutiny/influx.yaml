@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: scrutiny-influxdb
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: influxdb2
+    repoURL: https://helm.influxdata.com/
+    targetRevision: 2.1.2
+    helm:
+      values: |
+        persistence:
+          enabled: true
+        adminUser:
+          existingSecret: influxdb-auth
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: scrutiny
+  syncPolicy:
+    automated: {}
