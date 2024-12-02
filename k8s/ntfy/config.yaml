@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ntfy
+data:
+  server.yml: |
+    # Template: https://github.com/binwiederhier/ntfy/blob/main/server/server.yml
+    base-url: https://ntfy.anshulg.com]
+    behind-proxy: true
+
+    cache-file: "/var/cache/ntfy/cache.db"
+    attachment-cache-dir: "/var/cache/ntfy/attachments"
