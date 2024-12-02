@@ -7,6 +7,7 @@ spec:
   commonName: auth.anshulg.com
   dnsNames:
     - auth.anshulg.com
+    - ldap.auth.anshulg.com
     - kanidm.kanidm.svc.cluster.local
     - kanidm.kanidm.svc.cluster
     - kanidm.kanidm.svc

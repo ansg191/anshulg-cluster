@@ -243,3 +243,14 @@ resource "google_dns_record_set" "wildcard-https" {
 		"1 . alpn=\"h3,h2\""
 	]
 }
+
+# LDAP DNS Record
+resource "google_dns_record_set" "ldap" {
+	managed_zone = data.google_dns_managed_zone.default.name
+	name         = "ldap.auth.${data.google_dns_managed_zone.default.dns_name}"
+	type         = "A"
+	ttl          = 86400
+	rrdatas = [
+		"35.199.156.70"
+	]
+}
