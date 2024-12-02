@@ -36,6 +36,9 @@ spec:
               name: config
             - mountPath: /data
               name: data
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: certs
+              subPath: ca-certificates.crt
           resources:
             requests:
               cpu: 500m
@@ -65,6 +68,9 @@ spec:
           hostPath:
             path: /data
             type: Directory
+        - name: certs
+          configMap:
+            name: anshulg-ca
   volumeClaimTemplates:
     - metadata:
         name: config
