@@ -112,6 +112,9 @@ sub command_new {
     # Create the application file
     create_app_file $cluster, $name;
 
+    # Give the port a name
+    my $port_name = "http";
+
     # Create service YAML
     open(my $fh, '>', "$cluster/$name/service.yaml") or die "Could not create file: $!";
     my $service_yaml = <<"END_YAML";
@@ -125,7 +128,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: $port
+      targetPort: $port_name
   type: ClusterIP
 END_YAML
     print $fh $service_yaml;
@@ -134,6 +137,8 @@ END_YAML
 
     # Create ingress YAML
     open($fh, '>', "$cluster/$name/ingress.yaml") or die "Could not create file: $!";
+    my $sec_ns = ($cluster eq "k8s") ? "traefik" : "kube-system";
+    my $extra_match = ($cluster eq "rpi5") ? "|| Host(`$name.internal`)" : "";
     my $ingress_yaml = <<"END_YAML";
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -144,10 +149,10 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`$name.$tld`)
+      match: Host(`$name.$tld`) $extra_match
       middlewares:
         - name: security-headers
-          namespace: kube-system
+          namespace: $sec_ns
       services:
         - name: $name
           port: 80
@@ -224,6 +229,7 @@ spec:
           ports:
             - containerPort: $port
               protocol: TCP
+              name: $port_name
           env: []
           #resources:
           #  requests:
@@ -233,7 +239,7 @@ spec:
           #    memory: 1Gi
           #livenessProbe:
           #  httpGet:
-          #    port: 7878
+          #    port: $port_name
           #    path: /ping
           #  initialDelaySeconds: 30
           #  periodSeconds: 30
@@ -241,7 +247,7 @@ spec:
           #  failureThreshold: 3
           #readinessProbe:
           #  httpGet:
-          #    port: 7878
+          #    port: $port_name
           #    path: /ping
           #  periodSeconds: 10
           #  timeoutSeconds: 5
@@ -292,7 +298,7 @@ spec:
           #    memory: 1Gi
           #livenessProbe:
           #  httpGet:
-          #    port: 7878
+          #    port: $port_name
           #    path: /ping
           #  initialDelaySeconds: 30
           #  periodSeconds: 30
@@ -300,7 +306,7 @@ spec:
           #  failureThreshold: 3
           #readinessProbe:
           #  httpGet:
-          #    port: 7878
+          #    port: $port_name
           #    path: /ping
           #  periodSeconds: 10
           #  timeoutSeconds: 5
@@ -328,9 +334,9 @@ sub command_helm {
     my $cluster;
     my $help = 0;
     GetOptions(
-        "name=s" => \$name,
+        "name=s"    => \$name,
         "cluster=s" => \$cluster,
-        "help|?" => \$help,
+        "help|?"    => \$help,
     ) or pod2usage(2);
     pod2usage(-verbose => 2) if $help != 0;
 
