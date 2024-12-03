@@ -8,9 +8,9 @@ spec:
     "app.kubernetes.io/instance": "traefik-traefik"
     "app.kubernetes.io/name": "traefik"
   ports:
-    - port: 9000
+    - port: 8080
       name: traefik
-      targetPort: 9000
+      targetPort: 8080
       protocol: TCP
 ---
 # See https://medium.com/johnjjung/how-to-use-gcp-loadbalancer-with-websockets-on-kubernetes-using-services-ingresses-and-backend-16a5565e4702
