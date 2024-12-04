@@ -1,0 +1,34 @@
+{{- if .Values.certificate.enabled -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "harbor.fullname" . }}-tls
+spec:
+  secretName: {{ include "harbor.fullname" . }}-tls
+  {{- with (first .Values.certificate.hosts) }}
+  commonName: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.certificate.hosts }}
+  dnsNames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  duration: {{ .Values.certificate.duration }}
+  renewBefore: {{ .Values.certificate.renewBefore }}
+  {{- with .Values.certificate.privateKey }}
+  privateKey:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - California
+    countries:
+      - US
+  {{- with .Values.certificate.issuerRef }}
+  issuerRef:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
