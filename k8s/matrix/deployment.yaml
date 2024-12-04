@@ -25,7 +25,7 @@ spec:
           value: /config
         - name: SYNAPSE_CONFIG_PATH
           value: /config/homeserver.yaml
-        image: ghcr.io/element-hq/synapse:v1.120.0@sha256:cf63c20d41f0425cb4e6e6b63f6825556fd86141bd27333fb7cfefb9253efbfd
+        image: ghcr.io/element-hq/synapse:v1.120.2@sha256:4643acbfbca970c4b9ff20023c8c5d8ceeb2594f2117e823698bb610c7d0dbda
         imagePullPolicy: Always
         name: matrix
         securityContext:
