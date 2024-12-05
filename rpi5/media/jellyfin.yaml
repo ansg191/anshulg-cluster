@@ -38,7 +38,7 @@ spec:
               name: data
             - mountPath: /etc/ssl/certs/ca-certificates.crt
               name: certs
-              subPath: ca-certificates.crt
+              subPath: ca.crt
           resources:
             requests:
               cpu: 500m
