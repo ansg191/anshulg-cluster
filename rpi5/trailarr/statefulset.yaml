@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: trailarr
-          image: nandyalu/trailarr:0.2.2-beta@sha256:944148d1333a3f70f53b2572b89131b0f44ecdd19f5fb3f9dd0869267a97c32f
+          image: nandyalu/trailarr:0.2.3-beta@sha256:844a9d2e32a79c9bd199f435760f7b1166f20d47ff426b42dd61e0ceb7124cd6
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
