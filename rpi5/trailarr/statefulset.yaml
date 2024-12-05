@@ -27,6 +27,8 @@ spec:
               value: "0"
             - name: TZ
               value: "America/Los_Angeles"
+            - name: WEBUI_DISABLE_AUTH
+              value: "True"
           ports:
             - containerPort: 7889
               protocol: TCP
