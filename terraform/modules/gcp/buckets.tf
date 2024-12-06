@@ -42,13 +42,13 @@ resource "google_storage_bucket_iam_member" "gke-backup-bucket-restic" {
 
 # Cockroach Backup Bucket
 resource "google_storage_bucket" "gke-cockroach-bucket" {
-	name     = "cockroacchdb-backup-bucket-8kmcx"
-	location = "US"
+	name          = "cockroacchdb-backup-bucket-8kmcx"
+	location      = "US"
 	force_destroy = false
 
 	uniform_bucket_level_access = true
-	storage_class = "COLDLINE"
-	public_access_prevention = "enforced"
+	storage_class               = "COLDLINE"
+	public_access_prevention    = "enforced"
 }
 
 # Bind GKE bucket to cockroachdb-sa service account in the miniflux namespace
@@ -60,13 +60,23 @@ resource "google_storage_bucket_iam_member" "gke-cockroach-bucket-miniflux" {
 
 # KanIDM Backup Bucket
 resource "google_storage_bucket" "gke-kanidm-bucket" {
-	name     = "kanidm-backup-bucket-wzqjn"
-	location = "US"
+	name          = "kanidm-backup-bucket-wzqjn"
+	location      = "US"
 	force_destroy = false
 
 	uniform_bucket_level_access = true
-	storage_class = "NEARLINE"
-	public_access_prevention = "enforced"
+	storage_class               = "NEARLINE"
+	public_access_prevention    = "enforced"
+
+	lifecycle_rule {
+		condition {
+			age = 30
+		}
+		action {
+			type          = "SetStorageClass"
+			storage_class = "ARCHIVE"
+		}
+	}
 }
 
 # Bind GKE bucket to cockroachdb-sa service account in the miniflux namespace
