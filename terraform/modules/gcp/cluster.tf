@@ -51,3 +51,29 @@ resource "google_container_node_pool" "default_spot_pool" {
     auto_upgrade = true
   }
 }
+
+# A backup pool with non-spot nodes if google decides to delete both of my spot nodes for some reason.
+# Thanks google.
+resource "google_container_node_pool" "backup_pool" {
+	name       = "backup-pool"
+	cluster    = google_container_cluster.default.id
+	node_count = 1
+
+	node_config {
+		preemptible  = false
+		machine_type = "e2-standard-2"
+
+		service_account = google_service_account.default.email
+		oauth_scopes = [
+			"https://www.googleapis.com/auth/cloud-platform",
+		]
+
+		workload_metadata_config {
+			mode = "GKE_METADATA"
+		}
+	}
+
+	management {
+		auto_upgrade = true
+	}
+}
