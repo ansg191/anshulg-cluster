@@ -21,7 +21,7 @@ spec:
       serviceAccountName: restic
       containers:
         - name: restic
-          image: ghcr.io/ansg191/rest-server:master@sha256:7ee4abfb85feb4fdab8885746e571415d42d1c8d8e43f47811d2a6af63d82400
+          image: ghcr.io/ansg191/rest-server:master@sha256:82fd28a6afde11e3ae92ca544b1631eb15494daef135d9f0b35e29057533fdac
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
