@@ -35,11 +35,11 @@ resource "google_container_cluster" "default" {
 resource "google_container_node_pool" "default_spot_pool" {
   name       = "default-spot-pool"
   cluster    = google_container_cluster.default.name
-  node_count = 2
+  node_count = 1
 
   node_config {
     preemptible  = true
-    machine_type = "e2-standard-4"
+    machine_type = "e2-standard-2"
 
     service_account = google_service_account.default.email
     oauth_scopes = [
