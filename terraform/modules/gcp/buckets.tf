@@ -103,10 +103,16 @@ resource "google_service_account" "cnpg-backup-kellnr" {
 	account_id = "cnpg-backup-kellnr"
 }
 
-resource "google_storage_bucket_iam_member" "cnpg-backup-kellnr" {
+resource "google_storage_bucket_iam_member" "cnpg-backup-kellnr-bucket" {
 	bucket = google_storage_bucket.cnpg-backup-bucket.name
 	member = "serviceAccount:${google_service_account.cnpg-backup-kellnr.email}"
 	role   = "roles/storage.legacyBucketWriter"
+}
+
+resource "google_storage_bucket_iam_member" "cnpg-backup-kellnr-object" {
+	bucket = google_storage_bucket.cnpg-backup-bucket.name
+	member = "serviceAccount:${google_service_account.cnpg-backup-kellnr.email}"
+	role   = "roles/storage.legacyObjectOwner"
 }
 
 resource "google_service_account_iam_binding" "cnpg-backup-kellnr" {
@@ -125,11 +131,18 @@ resource "google_service_account" "cnpg-backup-miniflux" {
 	account_id = "cnpg-backup-miniflux"
 }
 
-resource "google_storage_bucket_iam_member" "cnpg-backup-miniflux" {
+resource "google_storage_bucket_iam_member" "cnpg-backup-miniflux-bucket" {
 	bucket = google_storage_bucket.cnpg-backup-bucket.name
 	member = "serviceAccount:${google_service_account.cnpg-backup-miniflux.email}"
 	role   = "roles/storage.legacyBucketWriter"
 }
+
+resource "google_storage_bucket_iam_member" "cnpg-backup-miniflux-object" {
+	bucket = google_storage_bucket.cnpg-backup-bucket.name
+	member = "serviceAccount:${google_service_account.cnpg-backup-miniflux.email}"
+	role   = "roles/storage.legacyObjectOwner"
+}
+
 
 resource "google_service_account_iam_binding" "cnpg-backup-miniflux" {
 	service_account_id = google_service_account.cnpg-backup-miniflux.id
