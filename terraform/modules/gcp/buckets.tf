@@ -96,3 +96,25 @@ resource "google_storage_bucket" "cnpg-backup-bucket" {
 	storage_class               = "STANDARD"
 	public_access_prevention    = "enforced"
 }
+
+# region Kellnr Cluster Backups
+
+resource "google_service_account" "cnpg-backup-kellnr" {
+	account_id = "cnpg-backup-kellnr"
+}
+
+resource "google_storage_bucket_iam_member" "cnpg-backup-kellnr" {
+	bucket = google_storage_bucket.cnpg-backup-bucket.name
+	member = "serviceAccount:${google_service_account.cnpg-backup-kellnr.email}"
+	role   = "roles/storage.legacyBucketWriter"
+}
+
+resource "google_service_account_iam_binding" "cnpg-backup-kellnr" {
+	service_account_id = google_service_account.cnpg-backup-kellnr.id
+	role               = "roles/iam.workloadIdentityUser"
+	members = [
+		"serviceAccount:${data.google_project.default.project_id}.svc.id.goog[kellnr/kellnr-cluster]"
+	]
+}
+
+# endregion Kellnr Cluster Backups

@@ -12,5 +12,29 @@ spec:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: preferred
+    nodeSelector:
+      iam.gke.io/gke-metadata-server-enabled: "true"
   storage:
     size: 8Gi
+  backup:
+    barmanObjectStore:
+      destinationPath: "gs://cnpg-backup-bucket-eixpr"
+      data:
+        compression: bzip2
+      googleCredentials:
+        gkeEnvironment: true
+    retentionPolicy: "30d"
+  serviceAccountTemplate:
+    metadata:
+      annotations:
+        iam.gke.io/gcp-service-account: "cnpg-backup-kellnr@anshulg-cluster.iam.gserviceaccount.com"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: kellnr-backup
+spec:
+  schedule: "0 0 0 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: kellnr-cluster
