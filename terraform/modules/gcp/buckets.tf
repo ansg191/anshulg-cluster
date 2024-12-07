@@ -118,3 +118,25 @@ resource "google_service_account_iam_binding" "cnpg-backup-kellnr" {
 }
 
 # endregion Kellnr Cluster Backups
+
+# region Miniflux Cluster Backups
+
+resource "google_service_account" "cnpg-backup-miniflux" {
+	account_id = "cnpg-backup-miniflux"
+}
+
+resource "google_storage_bucket_iam_member" "cnpg-backup-miniflux" {
+	bucket = google_storage_bucket.cnpg-backup-bucket.name
+	member = "serviceAccount:${google_service_account.cnpg-backup-miniflux.email}"
+	role   = "roles/storage.legacyBucketWriter"
+}
+
+resource "google_service_account_iam_binding" "cnpg-backup-miniflux" {
+	service_account_id = google_service_account.cnpg-backup-miniflux.id
+	role               = "roles/iam.workloadIdentityUser"
+	members = [
+		"serviceAccount:${data.google_project.default.project_id}.svc.id.goog[miniflux/miniflux-cluster]"
+	]
+}
+
+# endregion Miniflux Cluster Backups
