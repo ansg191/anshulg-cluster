@@ -6,10 +6,10 @@ resource "google_service_account" "default" {
 resource "google_container_cluster" "default" {
   name     = "default"
   location = "us-west1-a"
-	node_locations = [
-		"us-west1-b",
-		"us-west1-c",
-	]
+	# node_locations = [
+	# 	"us-west1-b",
+	# 	"us-west1-c",
+	# ]
 
   remove_default_node_pool = true
   initial_node_count       = 1
@@ -56,54 +56,54 @@ resource "google_container_node_pool" "default_spot_pool" {
   }
 }
 
-# Different node type so google can maybe give me a VM.
-resource "google_container_node_pool" "backup_spot_pool" {
-  name       = "backup-spot-pool"
-  cluster    = google_container_cluster.default.id
-  node_count = 1
-
-  node_config {
-    preemptible  = true
-    machine_type = "n2d-highmem-2"
-
-    service_account = google_service_account.default.email
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform",
-    ]
-
-    workload_metadata_config {
-      mode = "GKE_METADATA"
-    }
-  }
-
-  management {
-    auto_upgrade = true
-  }
-}
-
-
-# A backup pool with non-spot nodes if google decides to delete both of my spot nodes for some reason.
-# Thanks google.
-resource "google_container_node_pool" "backup_pool" {
-	name       = "backup-pool"
-	cluster    = google_container_cluster.default.id
-	node_count = 1
-
-	node_config {
-		preemptible  = false
-		machine_type = "e2-medium"
-
-		service_account = google_service_account.default.email
-		oauth_scopes = [
-			"https://www.googleapis.com/auth/cloud-platform",
-		]
-
-		workload_metadata_config {
-			mode = "GKE_METADATA"
-		}
-	}
-
-	management {
-		auto_upgrade = true
-	}
-}
+# # Different node type so google can maybe give me a VM.
+# resource "google_container_node_pool" "backup_spot_pool" {
+#   name       = "backup-spot-pool"
+#   cluster    = google_container_cluster.default.id
+#   node_count = 1
+#
+#   node_config {
+#     preemptible  = true
+#     machine_type = "n2d-highmem-2"
+#
+#     service_account = google_service_account.default.email
+#     oauth_scopes = [
+#       "https://www.googleapis.com/auth/cloud-platform",
+#     ]
+#
+#     workload_metadata_config {
+#       mode = "GKE_METADATA"
+#     }
+#   }
+#
+#   management {
+#     auto_upgrade = true
+#   }
+# }
+#
+#
+# # A backup pool with non-spot nodes if google decides to delete both of my spot nodes for some reason.
+# # Thanks google.
+# resource "google_container_node_pool" "backup_pool" {
+# 	name       = "backup-pool"
+# 	cluster    = google_container_cluster.default.id
+# 	node_count = 1
+#
+# 	node_config {
+# 		preemptible  = false
+# 		machine_type = "e2-medium"
+#
+# 		service_account = google_service_account.default.email
+# 		oauth_scopes = [
+# 			"https://www.googleapis.com/auth/cloud-platform",
+# 		]
+#
+# 		workload_metadata_config {
+# 			mode = "GKE_METADATA"
+# 		}
+# 	}
+#
+# 	management {
+# 		auto_upgrade = true
+# 	}
+# }
