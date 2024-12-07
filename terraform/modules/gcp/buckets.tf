@@ -85,3 +85,14 @@ resource "google_storage_bucket_iam_member" "gke-kanidm-bucket-miniflux" {
 	member = "principal://iam.googleapis.com/projects/${data.google_project.default.number}/locations/global/workloadIdentityPools/${data.google_project.default.project_id}.svc.id.goog/subject/ns/kanidm/sa/kanidm"
 	role   = "roles/storage.objectUser"
 }
+
+# CloudnativePG Backup Bucket
+resource "google_storage_bucket" "cnpg-backup-bucket" {
+	name          = "cnpg-backup-bucket-eixpr"
+	location      = "US"
+	force_destroy = false
+
+	uniform_bucket_level_access = true
+	storage_class               = "STANDARD"
+	public_access_prevention    = "enforced"
+}
