@@ -7,7 +7,6 @@ resource "google_container_cluster" "default" {
   name     = "default"
   location = "us-west1-a"
 	node_locations = [
-		"us-west1-a",
 		"us-west1-b",
 		"us-west1-c",
 	]
