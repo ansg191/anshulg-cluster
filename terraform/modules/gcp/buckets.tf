@@ -153,3 +153,23 @@ resource "google_service_account_iam_binding" "cnpg-backup-miniflux" {
 }
 
 # endregion Miniflux Cluster Backups
+
+# region Paperless Cluster Backups
+
+resource "google_service_account" "cnpg-backup-paperless" {
+	account_id = "cnpg-backup-paperless"
+}
+
+resource "google_storage_bucket_iam_member" "cnpg-backup-paperless-bucket" {
+	bucket = google_storage_bucket.cnpg-backup-bucket.name
+	member = "serviceAccount:${google_service_account.cnpg-backup-paperless.email}"
+	role   = "roles/storage.legacyBucketWriter"
+}
+
+resource "google_storage_bucket_iam_member" "cnpg-backup-paperless-object" {
+	bucket = google_storage_bucket.cnpg-backup-bucket.name
+	member = "serviceAccount:${google_service_account.cnpg-backup-paperless.email}"
+	role   = "roles/storage.legacyObjectOwner"
+}
+
+# endregion Paperless Cluster Backups
