@@ -100,7 +100,7 @@ data:
         keep-monthly: 12
         keep-yearly: 1
         prune: true
-        host: true
+        host: false
 
       backup:
         source:
