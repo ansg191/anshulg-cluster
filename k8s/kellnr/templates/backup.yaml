@@ -1,0 +1,85 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kellnr-backup
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: kellnr-backup
+              image: creativeprojects/resticprofile:0.29.0@sha256:3b76f02b883c0e90b88a5fb0fcf793dd41514cddc92d3c7c28282abd7196e744
+              imagePullPolicy: IfNotPresent
+              command:
+                - resticprofile
+                - backup
+              env:
+                - name: RESTIC_REST_USERNAME
+                  value: kellnr-restic
+                - name: RESTIC_REST_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: restic-password
+                      name: backup-secrets
+              volumeMounts:
+                - mountPath: /resticprofile/profiles.yaml
+                  name: profile
+                  subPath: profiles.yaml
+                - mountPath: /resticprofile/kellnr.txt
+                  name: backup-secrets
+                  subPath: kellnr.txt
+                - mountPath: /opt/kdata
+                  name: kellnr-storage
+                  readOnly: true
+          restartPolicy: OnFailure
+          volumes:
+            - name: kellnr-storage
+              persistentVolumeClaim:
+                claimName: kellnr
+            - name: profile
+              configMap:
+                name: restic-profile
+            - name: backup-secrets
+              secret:
+                secretName: backup-secrets
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: restic-profile
+data:
+  profiles.yaml: |
+    version: "1"
+
+    global:
+      restic-lock-retry-after: "1m"
+      restic-stale-lock-age: "4h"
+
+    default:
+      repository: "rest:https://restic.anshulg.com/kellnr-restic/"
+      initialize: true
+      password-file: "/resticprofile/kellnr.txt"
+      compression: "max"
+      force-inactive-lock: true
+
+      env:
+        RESTIC_HOST: "kellnr"
+
+      retention:
+        before-backup: false
+        after-backup: true
+        keep-hourly: 24
+        keep-daily: 7
+        keep-weekly: 4
+        keep-monthly: 12
+        keep-yearly: 1
+        prune: true
+        host: false
+
+      backup:
+        source:
+          - "/opt/kdata"
+        tag:
+          - "kellnr"
