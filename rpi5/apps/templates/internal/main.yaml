@@ -25,6 +25,7 @@ spec:
     - https://cloudnative-pg.github.io/charts
     - https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
     - https://charts.anshulg.com
+    - https://k8up-io.github.io/k8up
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
