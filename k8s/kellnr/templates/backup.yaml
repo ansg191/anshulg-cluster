@@ -17,7 +17,10 @@ spec:
                 - backup
               env:
                 - name: RESTIC_REST_USERNAME
-                  value: kellnr-restic
+                  valueFrom:
+                    secretKeyRef:
+                      key: restic-username
+                      name: backup-secrets
                 - name: RESTIC_REST_PASSWORD
                   valueFrom:
                     secretKeyRef:
