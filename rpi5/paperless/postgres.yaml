@@ -15,7 +15,7 @@ spec:
   storage:
     size: 8Gi
   backup:
-    retentionPolicy: "30d"
+    retentionPolicy: "7d"
     barmanObjectStore:
       destinationPath: "gs://cnpg-backup-bucket-eixpr"
       data:

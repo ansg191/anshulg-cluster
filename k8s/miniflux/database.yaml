@@ -23,7 +23,7 @@ spec:
         compression: bzip2
       googleCredentials:
         gkeEnvironment: true
-    retentionPolicy: "30d"
+    retentionPolicy: "7d"
   serviceAccountTemplate:
     metadata:
       annotations:
