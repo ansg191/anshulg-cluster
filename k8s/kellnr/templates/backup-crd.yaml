@@ -33,6 +33,8 @@ spec:
         keepYearly: 1
         prune: true
     resticProfile:
+      args:
+        - backup
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
