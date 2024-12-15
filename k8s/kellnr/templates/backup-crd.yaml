@@ -32,6 +32,15 @@ spec:
         keepMonthly: 12
         keepYearly: 1
         prune: true
+    resticProfile:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: kellnr
+                  app.kubernetes.io/name: kellnr
     volume:
       mounts:
         - mountPath: /opt/kdata
