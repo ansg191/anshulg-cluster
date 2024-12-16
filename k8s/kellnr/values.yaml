@@ -58,3 +58,5 @@ kellnr:
     enabled: false
   securityContext:
     readOnlyRootFilesystem: false
+  nodeSelector:
+    cloud.google.com/gke-provisioning: standard
