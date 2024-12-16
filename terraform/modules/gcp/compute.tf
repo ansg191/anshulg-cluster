@@ -16,7 +16,7 @@ resource "google_compute_reservation" "e2-medium" {
 
 # Create CUD for node
 resource "google_compute_region_commitment" "e2-medium" {
-  name       = "gke-cud-us-west1-e2-medium"
+  name       = "cud-us-west1-e2-medium"
   plan       = "TWELVE_MONTH"
   category   = "MACHINE"
   type       = "GENERAL_PURPOSE_E2"
@@ -28,7 +28,7 @@ resource "google_compute_region_commitment" "e2-medium" {
   }
   resources {
     type   = "MEMORY"
-    amount = "8192"
+    amount = "8"
   }
 
   existing_reservations = google_compute_reservation.e2-medium.id
