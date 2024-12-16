@@ -3,15 +3,15 @@ kind: Cluster
 metadata:
   name: kellnr-cluster
 spec:
-  instances: 2
+  instances: 3
   bootstrap:
     initdb:
       database: kellnr
       owner: kellnr
   affinity:
     enablePodAntiAffinity: true
-    topologyKey: kubernetes.io/hostname
-    podAntiAffinityType: preferred
+    topologyKey: topology.kubernetes.io/zone
+    podAntiAffinityType: required
     nodeSelector:
       iam.gke.io/gke-metadata-server-enabled: "true"
   storage:
