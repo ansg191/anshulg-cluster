@@ -14,26 +14,6 @@ resource "google_compute_reservation" "e2-medium" {
   specific_reservation_required = true
 }
 
-# Create CUD for node
-resource "google_compute_region_commitment" "e2-medium" {
-  name       = "cud-us-west1-e2-medium"
-  plan       = "TWELVE_MONTH"
-  category   = "MACHINE"
-  type       = "GENERAL_PURPOSE_E2"
-  auto_renew = true
-
-  resources {
-    type   = "VCPU"
-    amount = "2"
-  }
-  resources {
-    type   = "MEMORY"
-    amount = "8"
-  }
-
-  existing_reservations = google_compute_reservation.e2-medium.id
-}
-
 # Create node pool for the CUD reservation
 resource "google_container_node_pool" "default_pool" {
   name       = "default-cud-pool"
