@@ -173,3 +173,23 @@ resource "google_storage_bucket_iam_member" "cnpg-backup-paperless-object" {
 }
 
 # endregion Paperless Cluster Backups
+
+# region Teslamate Cluster Backups
+
+resource "google_service_account" "cnpg-backup-teslamate" {
+	account_id = "cnpg-backup-teslamate"
+}
+
+resource "google_storage_bucket_iam_member" "cnpg-backup-teslamate-bucket" {
+	bucket = google_storage_bucket.cnpg-backup-bucket.name
+	member = "serviceAccount:${google_service_account.cnpg-backup-teslamate.email}"
+	role   = "roles/storage.legacyBucketWriter"
+}
+
+resource "google_storage_bucket_iam_member" "cnpg-backup-teslamate-object" {
+	bucket = google_storage_bucket.cnpg-backup-bucket.name
+	member = "serviceAccount:${google_service_account.cnpg-backup-teslamate.email}"
+	role   = "roles/storage.legacyObjectOwner"
+}
+
+# endregion Teslamate Cluster Backups

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: teslaboard
+  labels:
+    app: teslaboard
+spec:
+  replicas: 1
+  serviceName: teslaboard
+  selector:
+    matchLabels:
+      app: teslaboard
+  template:
+    metadata:
+      name: teslaboard
+      labels:
+        app: teslaboard
+    spec:
+      containers:
+        - name: teslaboard
+          image: teslamate/grafana:1.32.0@sha256:76b8d0599b552e517df406805183b4ef578bc74cee8bcd147ab8698057d63629
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+              name: http
+          env:
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: teslamate-cluster-superuser
+            - name: DATABASE_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: teslamate-cluster-superuser
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: teslamate-cluster-app
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: teslamate-cluster-superuser
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: data
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi

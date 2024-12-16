@@ -1,0 +1,45 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: teslaboard-public-cert
+spec:
+  secretName: teslaboard-public-cert-tls
+  commonName: teslaboard.anshulg.direct
+  dnsNames:
+    - teslaboard.anshulg.direct
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: teslaboard-public
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`teslaboard.anshulg.direct`)
+      services:
+        - name: teslaboard
+          port: 80
+  tls:
+    secretName: teslaboard-public-cert-tls
+    domains:
+      - main: teslaboard.anshulg.direct

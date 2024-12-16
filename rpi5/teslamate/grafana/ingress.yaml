@@ -1,0 +1,24 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: teslaboard
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`teslaboard.local`) || Host(`teslaboard.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: teslaboard
+          port: 80
+  tls:
+    secretName: teslaboard-cert-tls
+    domains:
+      - main: teslaboard.local
+        sans:
+          - teslaboard.internal

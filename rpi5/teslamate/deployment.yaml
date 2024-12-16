@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teslamate
+  labels:
+    app: teslamate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teslamate
+  template:
+    metadata:
+      name: teslamate
+      labels:
+        app: teslamate
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:17.1
+          command:
+            - sh
+            - -c
+            - |
+              until pg_isready -h $DATABASE_HOST -U $DATABASE_USER;
+                do echo "Waiting for Postgres...";
+                sleep 5;
+              done;
+              echo "Postgres is up and running!"
+          env:
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: teslamate-cluster-app
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: teslamate-cluster-app
+      containers:
+        - name: teslamate
+          image: teslamate/teslamate:1.32.0@sha256:8c282ada5c72b7b0cbd316ec7bc010a9214d5943cf1e1b36ab9b7a98f45a5809
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4000
+              protocol: TCP
+              name: http
+          envFrom:
+            - secretRef:
+                name: secrets
+          env:
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: teslamate-cluster-superuser
+            - name: DATABASE_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: teslamate-cluster-superuser
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: teslamate-cluster-app
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: teslamate-cluster-superuser
+            - name: DISABLE_MQTT
+              value: "true"
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            runAsUser: 10001
+            runAsGroup: 10001
+            capabilities:
+              drop:
+                - ALL
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
