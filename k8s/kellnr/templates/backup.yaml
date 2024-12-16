@@ -37,6 +37,14 @@ spec:
                   name: kellnr-storage
                   readOnly: true
           restartPolicy: OnFailure
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/instance: kellnr
+                      app.kubernetes.io/name: kellnr
           volumes:
             - name: kellnr-storage
               persistentVolumeClaim:
