@@ -4,6 +4,7 @@ metadata:
   name: kellnr-backup
 spec:
   schedule: "0 * * * *"
+  concurrencyPolicy: Replace
   jobTemplate:
     spec:
       template:
