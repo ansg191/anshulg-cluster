@@ -60,6 +60,7 @@ spec:
         fsGroup: 1000
       nodeSelector:
         cloud.google.com/gke-provisioning: standard
+      priorityClassName: high-priority
       volumes:
         - name: config
           configMap:
