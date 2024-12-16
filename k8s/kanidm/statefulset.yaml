@@ -58,6 +58,8 @@ spec:
         runAsGroup: 1000
         runAsNonRoot: true
         fsGroup: 1000
+      nodeSelector:
+        cloud.google.com/gke-provisioning: standard
       volumes:
         - name: config
           configMap:
