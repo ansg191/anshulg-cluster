@@ -1,0 +1,21 @@
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+CN = auth.anshulg.com
+O = Anshul Gupta
+OU = Auth Server
+L = Irvine
+ST = California
+C = US
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = auth.anshulg.com
+DNS.2 = ldap.auth.anshulg.com

@@ -13,12 +13,6 @@ traefik:
       proxyProtocol:
         trustedIPs:
           - 10.0.0.0/8
-    ldap:
-      port: 8636
-      expose:
-        default: true
-      exposedPort: 636
-      protocol: TCP
 
   service:
     annotations:

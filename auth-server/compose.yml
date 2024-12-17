@@ -1,0 +1,20 @@
+version: "2"
+
+services:
+  kanidm:
+    image: docker.io/kanidm/server:1.4.4@sha256:423baa48c4cb0e41642d88772aa5d170daac69c827392a00f96de6a387032745
+
+    ports:
+      - "8443:8443"
+      - "3636:636"
+
+    volumes:
+      - /home/anshulgupta/data:/data
+      - /home/anshulgupta/certs:/certs:ro
+      - /home/anshulgupta/backups:/backups
+
+    restart: always
+    user: "1000:100"
+    cap_drop:
+      - ALL
+    # read_only: true

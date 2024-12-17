@@ -1,0 +1,29 @@
+name: Deploy Auth Server
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "auth-server/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.2.2
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2.1.7
+        with:
+          credentials_json: ${{ secrets.GCLOUD_CREDENTIALS }}
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2.1.2
+        with:
+          project_id: anshulg-cluster
+
+      - name: Run deployment script
+        working-directory: auth-server
+        run: ./setup.sh

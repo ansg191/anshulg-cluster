@@ -111,7 +111,7 @@ resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
   role    = "roles/privateca.certificateRequester"
   members = [
     "serviceAccount:${google_service_account.sa-google-cas-issuer.email}",
-    "serviceAccount:rpi5-cas-issuer@anshulg-cluster.iam.gserviceaccount.com"
+    "serviceAccount:rpi5-cas-issuer@anshulg-cluster.iam.gserviceaccount.com",
   ]
   location = "us-west1"
 }
