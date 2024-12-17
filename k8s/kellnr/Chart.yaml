@@ -25,5 +25,5 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: kellnr
-    version: 3.2.6
+    version: 3.2.7
     repository: https://kellnr.github.io/helm
