@@ -70,6 +70,11 @@ resource "google_compute_firewall" "kanidm" {
     ports    = ["80", "443", "636"]
   }
 
+  allow {
+    protocol = "udp"
+    ports    = ["443"]
+  }
+
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["kanidm"]
 }
