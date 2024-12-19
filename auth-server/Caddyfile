@@ -9,22 +9,14 @@
 # domain name.
 
 auth.anshulg.com {
-	# Set this path to your site's directory.
-	# root * /usr/share/caddy
+	encode zstd gzip
 
-	# Enable the static file server.
-	# file_server
-
-	# Another common task is to set up a reverse proxy:
 	reverse_proxy https://localhost:8443 {
 		transport http {
 			# tls_server_name auth.anshulg.com
 			tls_insecure_skip_verify
 		}
 	}
-
-	# Or serve a PHP site through php-fpm:
-	# php_fastcgi localhost:9000
 }
 
 # Refer to the Caddy docs for more information:
