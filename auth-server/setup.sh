@@ -32,7 +32,7 @@ sudo systemctl start docker
 
 # Install CA certificates
 sudo zypper install -y ca-certificates
-sudo wget -O /etc/pki/trust/anchors/AnshulGuptaRootCA.crt https://ca.anshulg.com/
+sudo wget -O /etc/pki/trust/anchors/AnshulGuptaRootCA.crt http://privateca-content-64cbe468-0000-233e-beaa-14223bc3fa9e.storage.googleapis.com/c745acb2f145f7f9e343/ca.crt
 sudo update-ca-certificates
 
 # Install gcloud CLI
