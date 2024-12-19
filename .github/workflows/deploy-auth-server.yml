@@ -46,4 +46,4 @@ jobs:
 
       - name: Run deployment script
         working-directory: auth-server
-        run: ./setup.sh
+        run: ./deploy.sh
