@@ -19,6 +19,14 @@ services:
       - ALL
     # read_only: true
 
+    healthcheck:
+      test: ["CMD", "/sbin/kanidmd", "healthcheck", "-c", "/data/server.toml"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+      start_interval: 5s
+
     deploy:
       resources:
         reservations:
