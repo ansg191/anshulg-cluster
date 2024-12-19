@@ -3,6 +3,8 @@ name: Deploy Auth Server
 on:
   workflow_dispatch:
   push:
+    branches:
+      - master
     paths:
       - "auth-server/**"
 
