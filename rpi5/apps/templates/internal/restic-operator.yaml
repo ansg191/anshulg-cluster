@@ -13,7 +13,7 @@ spec:
   source:
     chart: restic-operator
     repoURL: https://charts.anshulg.com
-    targetRevision: 0.1.4
+    targetRevision: 0.1.5
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: restic-system
