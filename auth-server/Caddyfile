@@ -13,8 +13,8 @@ auth.anshulg.com {
 
 	reverse_proxy https://localhost:8443 {
 		transport http {
-			# tls_server_name auth.anshulg.com
-			tls_insecure_skip_verify
+			tls_trusted_ca_certs /home/anshulgupta/ca.crt
+			tls_server_name auth.anshulg.com
 		}
 	}
 }
