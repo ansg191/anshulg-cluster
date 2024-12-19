@@ -1078,7 +1078,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['app.kubernetes.io/instance']
-        image: ghcr.io/hyperspike/valkey-operator:v0.0.41@sha256:a57e413b174dc95e6864fa40013911a5e886b06f48aafd7cd3a3a560a9e7b00c
+        image: ghcr.io/hyperspike/valkey-operator:v0.0.42@sha256:c6286f7902a95567fb5916c91b01ba524d808fa44a8dc5c114332684be1119ff
         livenessProbe:
           httpGet:
             path: /healthz
