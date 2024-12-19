@@ -18,3 +18,12 @@ services:
     cap_drop:
       - ALL
     # read_only: true
+
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.25"
+          memory: 1G
+        limits:
+          cpus: "0.85"
+          memory: 2G
