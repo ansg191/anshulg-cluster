@@ -84,7 +84,7 @@ sudo systemctl enable caddy
 sudo systemctl start caddy
 
 sudo cp Caddyfile /etc/caddy/Caddyfile
-sudo systemctl reload caddy
+sudo systemctl restart caddy
 
 # Start the server
 sudo docker compose -f /home/anshulgupta/compose.yml up -d
