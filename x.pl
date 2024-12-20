@@ -36,6 +36,7 @@ sub get_tld {
     check_cluster $cluster;
 
     # Open the cluster's values.yaml file
+    ## no critic (InputOutput::RequireBriefOpen)
     open my $fh, '<', "$cluster/apps/values.yaml"
       or croak("Could not open file: $OS_ERROR");
 
@@ -43,7 +44,18 @@ sub get_tld {
     while ( my $line = <$fh> ) {
 
         # If the line contains the tld key, return the value
-        if ( $line =~ /^tld:\s*(.*)/sxm ) {
+        if (
+            $line =~ m{
+                ^       # Match start of line
+                tld:    # Match literal 'tld:'. No indentation allowed
+                \s*     # Optional whitespace
+                (       # Capture Group #1
+                  \S+   # Match any non-whitespace (the TLD value)
+                )
+                $       # Match the end of the line
+            }xms
+          )
+        {
             close $fh or carp("Failed to close file: $OS_ERROR");
             return $1;
         }
@@ -51,6 +63,7 @@ sub get_tld {
 
     close $fh or carp("Failed to close file: $OS_ERROR");
     die "tld key not found in $cluster/apps/values.yaml\n";
+    ## use critic
 }
 
 sub create_app_file {
@@ -543,7 +556,17 @@ sub _file_contains_ns {
     my ($fh) = @_;
 
     while ( my $line = <$fh> ) {
-        if ( $line =~ /^\s*namespace:\s*\S+$/sxm ) {
+        if (
+            $line =~ m{
+                ^           # Match from the beginning of the line
+                \s*         # Allow any leading whitespace (indentation)
+                namespace:  # Match the literal string 'namespace:'
+                \s*         # Optional whitespace after 'namespace:'
+                \S+         # Match any non-whitespace (the namespace value)
+                $           # Match until the end of the line
+            }xms
+          )
+        {
             return 1;
         }
     }
@@ -589,7 +612,20 @@ sub seal_precheck {
 
     # Extract cluster and app from directory
     my ( $cluster, $app );
-    if ( $dir =~ m{^([^/]+)/([^/]+)$}sxm ) {
+    if (
+        $dir =~ m{
+            ^           # Match from the beginning of the string
+            (           # Capture Group #1
+                [^/]+   # Match any non-forward-slash characters
+            )
+            /           # Match slash delimiter
+            (           # Capture Group #2
+                [^/]+   # Match any non-forward-slash characters
+            )
+            $           # Match the end of the string
+        }sxm
+      )
+    {
         ( $cluster, $app ) = ( $1, $2 );
     }
     else {
