@@ -33,7 +33,7 @@ sub get_tld {
     my ($cluster) = @_;
 
     # Check if the cluster folder exists
-    check_cluster $cluster;
+    check_cluster($cluster);
 
     # Open the cluster's values.yaml file
     ## no critic (InputOutput::RequireBriefOpen)
@@ -124,18 +124,18 @@ sub command_new {
     die "Missing required option: --name\n"    if ( !defined $name );
     die "Missing required option: --cluster\n" if ( !defined $cluster );
 
-    check_cluster $cluster;
+    check_cluster($cluster);
 
     print "Creating new application: `$name` in cluster: `$cluster`\n";
 
     # Get the TLD of the cluster
-    my $tld = get_tld $cluster;
+    my $tld = get_tld($cluster);
 
     # Create the application folder
     mkdir "$cluster/$name";
 
     # Create the application file
-    create_app_file $cluster, $name;
+    create_app_file( $cluster, $name );
 
     # Give the port a name
     my $port_name = 'http';
@@ -377,8 +377,8 @@ sub command_helm {
     die "Missing required option: --name\n"    if ( !defined $name );
     die "Missing required option: --cluster\n" if ( !defined $cluster );
 
-    check_cluster $cluster;
-    my $tld = get_tld $cluster;
+    check_cluster($cluster);
+    my $tld = get_tld($cluster);
 
     print "Creating Helm chart for $name in $cluster\n";
 
@@ -391,7 +391,7 @@ sub command_helm {
     }
 
     # Create the application file
-    create_app_file $cluster, $name;
+    create_app_file( $cluster, $name );
 
     # Create ingress YAML
     my $ingress_yaml = <<"END_YAML";
@@ -531,7 +531,7 @@ sub command_secret {
         $namespace = $app;
     }
 
-    check_cluster $cluster;
+    check_cluster($cluster);
 
     # Check for app folder in cluster
     die "App folder not found: $cluster/$app\n" if ( !-d "$cluster/$app" );
@@ -633,7 +633,7 @@ sub seal_precheck {
     }
 
     # Check cluster exists
-    check_cluster $cluster;
+    check_cluster($cluster);
 
     # Check that we are in the correct context
     my %cluster_context_map = (
