@@ -566,14 +566,48 @@ sub seal_file {
     return;
 }
 
+sub seal_precheck {
+    my ($dir) = @_;
+
+    # Extract cluster and app from directory
+    my ( $cluster, $app );
+    if ( $dir =~ m{^([^/]+)/([^/]+)$}sxm ) {
+        ( $cluster, $app ) = ( $1, $2 );
+    }
+    else {
+        die "Invalid directory format. Expected 'cluster/app'.\n";
+    }
+
+    # Check cluster exists
+    check_cluster $cluster;
+
+    # Check that we are in the correct context
+    my %cluster_context_map = (
+        'k8s'  => 'gke',
+        'rpi5' => 'default',
+    );
+    my $current_context = `kubectl config current-context`;
+    chomp $current_context;    # Remove trailing newline from command output
+    if ( exists $cluster_context_map{$cluster}
+        && $cluster_context_map{$cluster} ne $current_context )
+    {
+        die
+"Cluster context mismatch: expected '$cluster_context_map{$cluster}', but found '$current_context'\n";
+    }
+
+    return;
+}
+
 sub command_seal {
     my $namespace  = 'kube-system';
     my $controller = 'sealed-secrets';
+    my $skip_check = 0;
     my $yes        = 0;
     my $help       = 0;
     GetOptions(
         'namespace=s'  => \$namespace,
         'controller=s' => \$controller,
+        'skip-check'   => \$skip_check,
         'yes'          => \$yes,
         'help|?'       => \$help,
     ) or pod2usage(2);
@@ -582,6 +616,11 @@ sub command_seal {
     }
 
     my $dir = shift @ARGV or die "Missing required argument: DIR\n";
+
+    # Run precheck if `skip-check` is false
+    if ( $skip_check == 0 ) {
+        seal_precheck $dir;
+    }
 
     # Get all unencrypted secret files in the directory
     my $wanted = sub {
@@ -686,6 +725,7 @@ Seal all unencrypted secrets in the directory.
  Options:
     -n, --namespace=NAMESPACE   The namespace of the Sealed Secrets controller (default: kube-system)
     -c, --controller=CONTROLLER The name of the Sealed Secrets controller (default: sealed-secrets)
+    -s, --skip-check            Skip kubectl context check
     -y, --yes                   Skip confirmation
 
 =head1 DIAGNOSTICS
@@ -726,6 +766,18 @@ directory.
 =item Failed to seal
 
 C<kubeseal> failed to seal the provided secret.
+
+=item Invalid directory format
+
+Invalid directory passed to C<seal>. Must be in the format F<cluster/app>.
+
+This check can be disabled with the C<--skip-checks> flag.
+
+=item Cluster context mismatch
+
+The C<kubectl> current context is not the same as the provided cluster.
+
+This check can be disabled with the C<--skip-checks> flag.
 
 =back
 

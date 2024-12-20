@@ -2,3 +2,4 @@ severity = 1
 
 [-InputOutput::RequireCheckedSyscalls]
 [-CodeLayout::RequireTidyCode]
+[-InputOutput::ProhibitBacktickOperators]
