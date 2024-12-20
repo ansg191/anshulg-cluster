@@ -2,8 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: teslamate
+  namespace: teslamate
   labels:
     app: teslamate
+  annotations:
+    ignore-check.kube-linter.io/no-read-only-root-fs: "app writes to log files in container"
 spec:
   replicas: 1
   selector:
@@ -38,6 +41,18 @@ spec:
                 secretKeyRef:
                   key: username
                   name: teslamate-cluster-app
+          securityContext:
+            runAsUser: 10001
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 5m
+            limits:
+              memory: 16Mi
       containers:
         - name: teslamate
           image: teslamate/teslamate:1.32.0@sha256:8c282ada5c72b7b0cbd316ec7bc010a9214d5943cf1e1b36ab9b7a98f45a5809
@@ -80,25 +95,10 @@ spec:
             capabilities:
               drop:
                 - ALL
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
-          #readinessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          resources:
+            requests:
+              cpu: 10m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
       restartPolicy: Always

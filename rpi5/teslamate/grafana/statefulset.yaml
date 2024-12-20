@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: teslaboard
+  namespace: teslamate
   labels:
     app: teslaboard
 spec:
@@ -50,7 +51,26 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/grafana
               name: data
+          securityContext:
+            runAsUser: 10001
+            runAsGroup: 10001
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /api/health
+          resources:
+            requests:
+              cpu: 10m
+            limits:
+              memory: 512Mi
       restartPolicy: Always
+      securityContext:
+        fsGroup: 10001
   volumeClaimTemplates:
     - metadata:
         name: data

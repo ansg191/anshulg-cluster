@@ -2,6 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: teslaboard-cert
+  namespace: teslamate
 spec:
   secretName: teslaboard-cert-tls
   commonName: teslaboard.local
