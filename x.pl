@@ -539,6 +539,17 @@ sub command_secret {
     return;
 }
 
+sub _file_contains_ns {
+    my ($fh) = @_;
+
+    while ( my $line = <$fh> ) {
+        if ( $line =~ /^\s*namespace:\s*\S+$/sxm ) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 sub seal_file {
     my ( $file, $yes, $controller, $namespace ) = @_;
 
@@ -549,6 +560,15 @@ sub seal_file {
         chomp $response;
         return if ( $response ne 'y' );
     }
+
+    # Check that the file has a namespace set
+    open my $fh, '<', "$file"
+      or croak("Could not open file: $OS_ERROR");
+    my $contains_namespace = _file_contains_ns($fh);
+    close $fh or carp("Failed to close file: $OS_ERROR");
+
+    die "The file does not contain a valid 'namespace:' line\n"
+      if $contains_namespace == 0;
 
     # Remove `.unencrypted` from the file name
     my $sealed_file = $file;
