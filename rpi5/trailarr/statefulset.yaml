@@ -2,8 +2,12 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: trailarr
+  namespace: trailarr
   labels:
     app: trailarr
+  annotations:
+    ignore-check.kube-linter.io/run-as-non-root: "Container must run as root to access media files"
+    ignore-check.kube-linter.io/no-read-only-root-fs: "Container hasn't been tested with read-only FS yet"
 spec:
   replicas: 1
   selector:

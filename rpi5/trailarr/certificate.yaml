@@ -2,6 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: trailarr-cert
+  namespace: trailarr
 spec:
   secretName: trailarr-cert-tls
   commonName: trailarr.local

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: trailarr
+  namespace: trailarr
 spec:
   selector:
     app: trailarr
