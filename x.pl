@@ -15,7 +15,18 @@ use Readonly;
 our $VERSION = 0.01;
 Readonly my $DEFAULT_PORT => 80;
 
-# Check if the provided cluster is valid
+################################################################################
+# Usage     : check_cluster($cluster)
+# Purpose   : Checks if the provided cluster is valid
+# Returns   : 0 if valid
+# Parameters:
+#   cluster :   string    - cluster to check
+# Throws    :
+#   "Cluster folder not found"  : cluster folder was not found
+#   "Apps folder not found"     : apps folder in cluster not found
+# Comments  : none
+# See Also  : n/a
+################################################################################
 sub check_cluster {
     my ($cluster) = @_;
 
@@ -28,12 +39,25 @@ sub check_cluster {
     return 0;
 }
 
-# Gets the top level domain of the cluster
+################################################################################
+# Usage     : get_tld($cluster)
+# Purpose   : Gets the top level domain of the provided cluster
+# Returns   : The TLD of the cluster
+# Parameters:
+#   cluster :   string    - cluster to get TLD of
+# Throws    :
+#   "Cluster folder not found"  : cluster folder was not found
+#   "Apps folder not found"     : apps folder in cluster not found
+#   "Could not open file"       : could not open cluster/apps/values.yaml
+#   "tld key not found"         : TLD not found in cluster/apps/values.yaml
+# Comments  : none
+# See Also  : check_cluster
+################################################################################
 sub get_tld {
     my ($cluster) = @_;
 
     # Check if the cluster folder exists
-    check_cluster $cluster;
+    check_cluster($cluster);
 
     # Open the cluster's values.yaml file
     ## no critic (InputOutput::RequireBriefOpen)
@@ -66,6 +90,18 @@ sub get_tld {
     ## use critic
 }
 
+################################################################################
+# Usage     : create_app_file($cluster, $name)
+# Purpose   : Creates an application file inside the cluster's app of apps
+# Returns   : none
+# Parameters:
+#   cluster :   string    - cluster to add app to
+#   name    :   string    - name of app to add
+# Throws    :
+#   "Could not create file" : failed to create application file
+# Comments  : Does not check whether cluster is valid
+# See Also  : check_cluster
+################################################################################
 sub create_app_file {
     my ( $cluster, $name ) = @_;
 
@@ -124,18 +160,18 @@ sub command_new {
     die "Missing required option: --name\n"    if ( !defined $name );
     die "Missing required option: --cluster\n" if ( !defined $cluster );
 
-    check_cluster $cluster;
+    check_cluster($cluster);
 
     print "Creating new application: `$name` in cluster: `$cluster`\n";
 
     # Get the TLD of the cluster
-    my $tld = get_tld $cluster;
+    my $tld = get_tld($cluster);
 
     # Create the application folder
     mkdir "$cluster/$name";
 
     # Create the application file
-    create_app_file $cluster, $name;
+    create_app_file( $cluster, $name );
 
     # Give the port a name
     my $port_name = 'http';
@@ -377,8 +413,8 @@ sub command_helm {
     die "Missing required option: --name\n"    if ( !defined $name );
     die "Missing required option: --cluster\n" if ( !defined $cluster );
 
-    check_cluster $cluster;
-    my $tld = get_tld $cluster;
+    check_cluster($cluster);
+    my $tld = get_tld($cluster);
 
     print "Creating Helm chart for $name in $cluster\n";
 
@@ -391,7 +427,7 @@ sub command_helm {
     }
 
     # Create the application file
-    create_app_file $cluster, $name;
+    create_app_file( $cluster, $name );
 
     # Create ingress YAML
     my $ingress_yaml = <<"END_YAML";
@@ -531,7 +567,7 @@ sub command_secret {
         $namespace = $app;
     }
 
-    check_cluster $cluster;
+    check_cluster($cluster);
 
     # Check for app folder in cluster
     die "App folder not found: $cluster/$app\n" if ( !-d "$cluster/$app" );
@@ -552,6 +588,16 @@ sub command_secret {
     return;
 }
 
+################################################################################
+# Usage     : _file_contains_ns($fh)
+# Purpose   : Checks whether file contains a namespace key
+# Returns   : 1 if true, 0 if false
+# Parameters:
+#   fh  :   file handle - file to read from
+# Throws    : none
+# Comments  : none
+# See Also  : n/a
+################################################################################
 sub _file_contains_ns {
     my ($fh) = @_;
 
@@ -573,6 +619,25 @@ sub _file_contains_ns {
     return 0;
 }
 
+################################################################################
+# Usage     : seal_file($file, $yes, $controller, $namespace)
+# Purpose   : Seals a file using `kubeseal`
+# Returns   : none
+# Parameters:
+#   file        :   string  - file name to seal
+#   yes         :   bool    - set true to skip confirmation
+#   controller  :   string  - `kubeseal` controller name
+#   namespace   :   string  - `kubeseal` controller namespace
+# Throws    :
+#   "Could not open file"       : Failed to open provided file
+#   "File is missing namespace" : File is missing namespace key
+#   "Failed to seal"            : `kubeseal` failed to seal file
+# Comments  :
+#   Will ask for confirmation if $yes == 0. If user says no, this function does
+#   nothing.
+#   Target file must contain a namespace attribute.
+# See Also  : n/a
+################################################################################
 sub seal_file {
     my ( $file, $yes, $controller, $namespace ) = @_;
 
@@ -590,7 +655,7 @@ sub seal_file {
     my $contains_namespace = _file_contains_ns($fh);
     close $fh or carp("Failed to close file: $OS_ERROR");
 
-    die "The file does not contain a valid 'namespace:' line\n"
+    die "File is missing namespace\n"
       if $contains_namespace == 0;
 
     # Remove `.unencrypted` from the file name
@@ -607,6 +672,18 @@ sub seal_file {
     return;
 }
 
+################################################################################
+# Usage     : seal_precheck($dir)
+# Purpose   : Run pre-checks on directory before sealing files in it
+# Returns   : none
+# Parameters:
+#   dir :   string  - directory to seal files in
+# Throws    :
+#   "Invalid directory format"  : Provided directory not in `cluster/app` format
+#   "Cluster context mismatch"  : `kubectl` context does not match cluster
+# Comments  : Will check `kubectl` context with directory cluster
+# See Also  : check_cluster
+################################################################################
 sub seal_precheck {
     my ($dir) = @_;
 
@@ -633,7 +710,7 @@ sub seal_precheck {
     }
 
     # Check cluster exists
-    check_cluster $cluster;
+    check_cluster($cluster);
 
     # Check that we are in the correct context
     my %cluster_context_map = (
