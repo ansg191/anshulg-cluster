@@ -30,4 +30,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: --brutal ./x.pl
+          args: ./x.pl
+
+  perltidy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: shogo82148/actions-setup-perl@v1.31.4
+        with:
+          perl-version: "5.38"
+      - run: cpanm -n Perl::Tidy
+      - run: perltidy --version
+      - run: perltidy -b -bext='/' x.pl && git diff --exit-code
