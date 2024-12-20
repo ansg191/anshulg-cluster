@@ -526,10 +526,8 @@ sub command_secret {
     print "Creating secret for $name/$app in $cluster/$namespace\n";
 
     # Call kubectl to create the secret yaml
-    ## no critic (InputOutput::ProhibitBacktickOperators)
     my $yaml =
 `kubectl create secret generic $name -n $namespace --dry-run=client -o yaml @ARGV`;
-    ## use critic
 
     # Create secret YAML
     open my $fh, '>', "$cluster/$app/$name.unencrypted.yaml"
