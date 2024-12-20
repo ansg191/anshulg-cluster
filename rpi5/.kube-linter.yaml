@@ -1,0 +1,10 @@
+checks:
+  doNotAutoAddDefaults: false
+  include:
+    - dangling-horizontalpodautoscaler
+    - dangling-ingress
+    - dangling-networkpolicy
+    - exposed-services
+    - hpa-minimum-three-replicas
+    - use-namespace
+  exclude: []
