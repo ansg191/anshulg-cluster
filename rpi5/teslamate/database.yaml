@@ -16,23 +16,3 @@ spec:
     podAntiAffinityType: required
   storage:
     size: 8Gi
-  backup:
-    barmanObjectStore:
-      destinationPath: "gs://cnpg-backup-bucket-eixpr"
-      data:
-        compression: bzip2
-      googleCredentials:
-        applicationCredentials:
-          key: secrets
-          name: gcsCredentials
-    retentionPolicy: "7d"
----
-apiVersion: postgresql.cnpg.io/v1
-kind: ScheduledBackup
-metadata:
-  name: teslamate-backup
-spec:
-  schedule: "0 0 0 * * *"
-  backupOwnerReference: self
-  cluster:
-    name: teslamate-cluster
