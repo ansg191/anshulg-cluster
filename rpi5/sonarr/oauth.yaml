@@ -41,6 +41,18 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
+          resources:
+            requests:
+              cpu: 10m
+            limits:
+              memory: 16Mi
+          securityContext:
+            runAsUser: 10001
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
       restartPolicy: Always
 ---
 apiVersion: v1
