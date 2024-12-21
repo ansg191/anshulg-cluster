@@ -18,8 +18,9 @@ resource "google_compute_instance" "kanidm" {
   network_interface {
     network = "default"
     access_config {
-      network_tier = "PREMIUM"
-      nat_ip       = google_compute_address.kanidm.address
+      network_tier           = "PREMIUM"
+      nat_ip                 = google_compute_address.kanidm.address
+      public_ptr_domain_name = "auth.${data.google_dns_managed_zone.default.dns_name}"
     }
   }
 
