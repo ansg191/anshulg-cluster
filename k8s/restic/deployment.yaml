@@ -32,7 +32,7 @@ spec:
                 --private-repos
                 --prometheus
                 --ldap-addr
-                ldaps://kanidm.kanidm.svc.cluster.local:636
+                ldaps://ldap.auth.anshulg.com:636
                 --ldap-base
                 dc=auth,dc=anshulg,dc=com
                 --ldap-uid
