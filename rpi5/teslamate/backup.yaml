@@ -1,0 +1,104 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: teslamate-backup
+spec:
+  schedule: "14 8 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: pgdump
+              image: postgres:17.2@sha256:fe4efc6901dda0d952306fd962643d8022d7bb773ffe13fe8a21551b9276e50c
+              imagePullPolicy: IfNotPresent
+              command:
+                - sh
+                - -c
+                - |
+                  pg_dump -p 5432 teslamate > /backup/backup.sql
+              env:
+                - name: PGHOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: teslamate-cluster-superuser
+                      key: host
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: teslamate-cluster-superuser
+                      key: user
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: teslamate-cluster-superuser
+                      key: password
+              volumeMounts:
+                - mountPath: /backup
+                  name: backup
+          containers:
+            - name: restic
+              image: creativeprojects/resticprofile:0.29.0@sha256:0bca2658906270b5427f7860a17aa71790977e56c4fb4b218eb06fed11c9dec6
+              imagePullPolicy: IfNotPresent
+              command: [ "resticprofile", "backup" ]
+              env:
+                - name: RESTIC_REST_USERNAME
+                  value: "teslamate"
+                - name: RESTIC_REST_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: restPassword
+                      name: secrets
+              volumeMounts:
+                - mountPath: /resticprofile/profiles.yaml
+                  name: profile
+                  subPath: profiles.yaml
+                - mountPath: /resticprofile/password
+                  name: secrets
+                  subPath: password
+                - mountPath: /backup
+                  name: backup
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup
+              emptyDir: { }
+            - name: profile
+              configMap:
+                name: resticprofile
+            - name: secrets
+              secret:
+                secretName: secrets
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: resticprofile
+data:
+  profiles.yaml: |
+    version: "1"
+
+    default:
+      repository: "rest:https://restic.anshulg.com/teslamate/"
+      initialize: true
+      password-file: "/resticprofile/password"
+      compression: "max"
+      force-inactive-lock: true
+
+      env:
+        RESTIC_HOST: "teslamate"
+
+      retention:
+        before-backup: false
+        after-backup: true
+        keep-daily: 7
+        keep-weekly: 4
+        keep-monthly: 1
+        prune: true
+        host: false
+
+      backup:
+        source:
+          - "/backup"
+        tag:
+          - "teslamate"
