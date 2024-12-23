@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: protonmail
+  labels:
+    app: protonmail
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: protonmail
+  serviceName: protonmail
+  template:
+    metadata:
+      name: protonmail
+      labels:
+        app: protonmail
+    spec:
+      containers:
+        - name: protonmail
+          image: shenxn/protonmail-bridge:3.11.1-1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 25
+              protocol: TCP
+              name: smtp
+            - containerPort: 143
+              protocol: TCP
+              name: imap
+          volumeMounts:
+            - mountPath: /root
+              name: data
+      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/arch: amd64
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi
