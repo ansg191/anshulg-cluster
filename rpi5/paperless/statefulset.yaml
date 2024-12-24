@@ -61,39 +61,29 @@ spec:
               name: data
             - mountPath: /usr/src/paperless/media
               name: media
-              subPath: Paperless
             - mountPath: /usr/src/paperless/consume
               name: consume
-              subPath: Paperless_INBOX
           resources:
             requests:
               cpu: 500m
               memory: 1Gi
             limits:
               memory: 4Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
-#          readinessProbe:
-#            httpGet:
-#              port: 8000
-#              path: /
-#            periodSeconds: 10
-#            timeoutSeconds: 5
-#            failureThreshold: 3
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
       restartPolicy: Always
+      securityContext:
+        fsGroup: 1000
       volumes:
         - name: consume
-          persistentVolumeClaim:
-            claimName: pvc-smb
+          nfs:
+            path: /mnt/GuptaZ/Public/Paperless_INBOX
+            server: 192.168.1.10
         - name: media
-          persistentVolumeClaim:
-            claimName: pvc-smb-media
+          nfs:
+            path: /mnt/GuptaZ/Home/Paperless
+            server: 192.168.1.10
   volumeClaimTemplates:
     - metadata:
         name: data
