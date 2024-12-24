@@ -4,10 +4,14 @@ metadata:
   name: miniflux-cluster
 spec:
   instances: 3
-  bootstrap:
-    initdb:
-      database: miniflux
-      owner: miniflux
+#  bootstrap:
+#    initdb:
+#      database: miniflux
+#      owner: miniflux
+#    recovery:
+#      source: clusterBackup
+#      database: miniflux
+#      owner: miniflux
   affinity:
     enablePodAntiAffinity: true
     topologyKey: topology.kubernetes.io/zone
@@ -19,6 +23,7 @@ spec:
   backup:
     barmanObjectStore:
       destinationPath: "gs://cnpg-backup-bucket-eixpr"
+      serverName: miniflux-cluster
       data:
         compression: bzip2
       googleCredentials:
@@ -28,6 +33,15 @@ spec:
     metadata:
       annotations:
         iam.gke.io/gcp-service-account: "cnpg-backup-miniflux@anshulg-cluster.iam.gserviceaccount.com"
+  externalClusters:
+    - name: clusterBackup
+      barmanObjectStore:
+        destinationPath: "gs://cnpg-backup-bucket-eixpr"
+        serverName: miniflux-cluster
+        data:
+          compression: bzip2
+        googleCredentials:
+          gkeEnvironment: true
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
