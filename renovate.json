@@ -45,6 +45,10 @@
         "intel-device-plugins-operator"
       ],
       "groupName": "intel-device-plugins"
+    },
+    {
+      "matchUpdateTypes": ["patch", "digest"],
+      "automerge": true
     }
   ]
 }
