@@ -50,5 +50,8 @@
       "matchUpdateTypes": ["patch", "digest"],
       "automerge": true
     }
+  ],
+  "ignorePaths": [
+    "rpi5/windmill/values.yaml"
   ]
 }
