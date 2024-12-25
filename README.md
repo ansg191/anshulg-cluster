@@ -34,18 +34,18 @@ and runs the `setup.sh` script to setup and run the server.
 Server Architecture:
 ```mermaid
 architecture-beta
-    group GCP(logos:google-cloud)[GCP]
+    group GCP(cloud)[GCP]
     group instance(server)[N1 Standard 1] in GCP
-    group docker(logos:docker-icon)[Docker] in instance
+    group docker[Docker] in instance
 
     service server(server)[Auth Server] in docker
 
-    service caddy(mdi:proxy)[Caddy] in instance
+    service caddy(server)[Caddy] in instance
 
-    service privateca(mdi:certificate)[Private CA] in GCP
+    service privateca(disk)[Private CA] in GCP
 
-    service internet(mdi:internet)[Internet]
-    service letsencrypt(mdi:lock)[LetsEncrypt]
+    service internet(internet)[Internet]
+    service letsencrypt(internet)[LetsEncrypt]
 
     internet:R -- L:caddy
     letsencrypt:T -- B:caddy
