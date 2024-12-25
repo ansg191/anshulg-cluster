@@ -30,7 +30,7 @@ windmill:
   windmill:
     baseDomain: windmill.anshulg.net
     baseProtocol: https
-    image: ghcr.io/windmill-labs/windmill-full
+    image: ghcr.io/windmill-labs/windmill-full@sha256:f7aa2953b45365d34416b9a519bd1e9f564cb3ae1f87e25999202c1fdcc17aa9
   postgresql:
     enabled: true
 
