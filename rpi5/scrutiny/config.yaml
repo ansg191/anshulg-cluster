@@ -1,17 +1,15 @@
-apiVersion: v1
-kind: ConfigMap
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
 metadata:
+  creationTimestamp: null
   name: scrutiny-config
-data:
-  scrutiny.yaml: |
-    version: 1
-    web:
-      listen:
-        port: 8080
-        host: 0.0.0.0
-      influxdb:
-        host: scrutiny-influxdb-influxdb2.scrutiny.svc.cluster.local
-        port: 80
-        org: influxdata
-        bucket: default
-        retention_policy: true
+  namespace: scrutiny
+spec:
+  encryptedData:
+    scrutiny.yaml: AgBMYKoIvOAOw6JG7UWd+GlgG6BxqxHtT+KYmSAyAvP8AApBjnKOsJko0R914JbCZ5irH++IbJyfkkhmAiLE9ZUm+E3zNskGc800orPjzgTkP0pC5V+X6WObUjzoxe82R6rt3cT3Zffku8iz4JA3KcsIBFE8irS3+jVQhNWkKd4yT4l4QgjZN9SfTOstCfsYC1VThBCSU9WaWbwMF0VDKcfGEcNBgkBuTMLvAhBVF2dApfGoU/vaqfl5+T9NDNReUTExsMsub4Znz/+5iHY6Xm/F94UCHzEhFxQnvv7GGv1oEc58dp8Np034o4AYo04Yxrfi9sGjDlGqUeCx0zOYgKLego9x0FmCqnz3Gg369XxfhWzXJ+6SuaQRdjqx9MJLIi5hDWjovUrUsOpJRLGD0jrA+SFoii4vKfzcjTVoKbkEL7BnGyUwBWCftQD4Rk1tGpa37lGFW2btEHqttIKat4Dv4QWmlqeAHGMYhq5JqgfhNxlcNrOJEap6xlhvv+VK1ZTzeO/nGqlrC7KCeCYywmnmU/WMJiC401VwcF8PiHmoNORIVLv7jG7bzc045fYRw/J0KiX5yDVji3idsasg8tvm0Vao+5m2C3FOHGNABX/uq0bMzxON98S31DG2L48BFeiDLGcG99Hf9TqBmz7Go6NtO7gGC95ND5GXP5BgHg/rGW1EMoIRtOPLZ0p0zFWImTr8Dsb05Tej+Z+rFJVnO0eQeUPceW2TqQq+ITd87Xy+dH0Ri1oNM5gYO0upTwPdU1w2km+yx9/RZi5wu55Dlb2tSk3qFpCBVgzMILCYWD9CrqF4V6Hx+YrC7ehmB/LK/422qlnXU7QpECZfOhM2Mqi7hDRZjp47GmEbr0kUfJxAq0NfAnNLIBabuG0KHngrfp+7ya2fuTilwHz5LffTOQn8W6UHgXjUckQJQSO3RlCj6veaaPEoIyMBpA+xnh7/2fSpwvf8pJIPrsAT3RTPwkABGdDv2/VDDuBoZDYqjDqZZkNZ7R8PXOEYU26WzT9RyU/KzhBQiNndsumWZpoetXW26GkP2MxuJuW2JH4HaE6mB31tMR9vz8nFrYCIix6nSzEw3O7nUlxGIx/u7JFUVEiiFO76fb/W9WDesf3OtCD20avp/RBaGteP2AgviAQODZSrZYDskDuTqIjMyR6ywcf9K0k4
+  template:
+    metadata:
+      creationTimestamp: null
+      name: scrutiny-config
+      namespace: scrutiny
