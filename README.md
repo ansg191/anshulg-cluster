@@ -17,7 +17,7 @@ Sets up:
 - Private Certificate Authority
 - DNS
     - anshulg.com
-    - anshulg.direect
+    - anshulg.direct
 - Load Balancers and CDN
 
 ## [`./auth-server`](./auth-server/)
