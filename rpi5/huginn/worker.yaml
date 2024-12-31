@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: huginn-worker
-          image: ghcr.io/huginn/huginn-single-process:latest@sha256:5c4a9a97dbe0d8b09bfab665cafa0eba193512342d0a56d6c13303bac47071e6
+          image: ghcr.io/huginn/huginn-single-process:latest@sha256:e6b7cf825561d2a999ad42306a57e2fa72ba4670ad20af1adc54bf6815a8ac45
           imagePullPolicy: Always
           command:
             - /scripts/init
