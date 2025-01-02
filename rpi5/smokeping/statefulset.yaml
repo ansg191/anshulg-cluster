@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: smokeping
-          image: lscr.io/linuxserver/smokeping:2.8.2@sha256:6ab8ea2fb29ea28ed546b48731177fc8f69296de0163017810e56e9428439e0e
+          image: lscr.io/linuxserver/smokeping:2.8.2@sha256:442bc752452ea550a8428a72cd96627ed3a78050e807e72c80ef5dd8b83ee6ad
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
