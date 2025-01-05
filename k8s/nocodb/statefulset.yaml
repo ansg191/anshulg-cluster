@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: nocodb
-          image: nocodb/nocodb:0.258.11@sha256:6f731efd854cefb053e12dd2894d2c51ae482216207ce0515ad9c17dc1b1f180
+          image: nocodb/nocodb:0.260.0@sha256:45e510d953153e0400ab947ce217bba4bc87687964822d3b46c38d045f54583c
           imagePullPolicy: IfNotPresent
           env: []
           ports:
