@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: huginn
-          image: ghcr.io/huginn/huginn-single-process:latest@sha256:e6b7cf825561d2a999ad42306a57e2fa72ba4670ad20af1adc54bf6815a8ac45
+          image: ghcr.io/huginn/huginn-single-process:latest@sha256:b8b104b929a767f74f12d6c605fd11e447240deb297eea9b44b3619f637aae17
           imagePullPolicy: Always
           ports:
             - containerPort: 80
