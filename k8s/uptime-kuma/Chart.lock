@@ -1,6 +1,6 @@
 dependencies:
 - name: uptime-kuma
   repository: https://k3rnelpan1c-dev.github.io/uptime-kuma-helm/
-  version: 1.3.6
-digest: sha256:fa9ea6208f04627f24d6609f9f74e2c3ac36063b789f52e840e63027c5f96053
-generated: "2024-11-17T15:14:13.355456-08:00"
+  version: 1.4.0
+digest: sha256:03f1bf561bf4d40979124faea9dbefab3d45884658ceb81a8efe8eab90d592ff
+generated: "2025-01-05T14:10:23.567624378Z"
