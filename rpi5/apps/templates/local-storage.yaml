@@ -21,7 +21,7 @@ data:
     spec:
       containers:
         - name: helper-pod
-          image: "rancher/mirrored-library-busybox:1.37.0@sha256:cda922fcb55d208ce799ed04c7818c19499a36dce824e708a484ccaffb692f1f"
+          image: "rancher/mirrored-library-busybox:1.37.0@sha256:4620553493ded335ade815b9def218347ebfb3f598025fb1bbb78889829fa2a6"
           imagePullPolicy: IfNotPresent
   setup: |-
     #!/bin/sh
