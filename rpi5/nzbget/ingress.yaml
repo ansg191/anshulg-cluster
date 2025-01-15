@@ -22,3 +22,18 @@ spec:
       - main: nzbget.local
         sans:
           - nzbget.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nzbget
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: nzbget
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - nzbget
