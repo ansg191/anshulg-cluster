@@ -26,6 +26,7 @@ spec:
     - https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
     - https://charts.anshulg.com
     - https://k8up-io.github.io/k8up
+    - https://pkgs.tailscale.com/helmcharts
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
