@@ -22,3 +22,18 @@ spec:
       - main: sonarr.local
         sans:
           - sonarr.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarr
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: sonarr
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - sonarr
