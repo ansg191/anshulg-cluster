@@ -16,6 +16,10 @@ spec:
     chart: tailscale-operator
     repoURL: https://pkgs.tailscale.com/helmcharts
     targetRevision: 1.78.3
+    helm:
+      values: |
+        apiServerProxyConfig:
+          mode: "true"
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: tailscale
