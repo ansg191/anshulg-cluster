@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: restore
-          image: ghcr.io/paperless-ngx/paperless-ngx:2.13.5@sha256:199c67ed55bfb9d58bf90db2ee280880ae9ebc63413e54c73522f9c4ebdc7bad
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.14.2@sha256:6dd31d32f1be8f3c2c0138e666ec70f2ef9f012882379f3f2ddc8ee3d06985f4
           imagePullPolicy: IfNotPresent
           command:
             - sh
