@@ -1,6 +1,6 @@
 dependencies:
 - name: kellnr
   repository: https://kellnr.github.io/helm
-  version: 3.2.7
-digest: sha256:c38bf1dbf0b5b7b29c98be06eabf83402e2989e53a7aa980fbd101692b7e2599
-generated: "2024-12-17T04:11:38.059134692Z"
+  version: 3.3.0
+digest: sha256:cbad3c13997850da60307269654091d81ad0ace23d769a6ec52a633b23914a3e
+generated: "2025-01-19T14:12:07.957636069Z"
