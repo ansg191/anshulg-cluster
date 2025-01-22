@@ -25,6 +25,12 @@ spec:
               volumeMounts:
                 - mountPath: /secret
                   name: secret
+              resources:
+                requests:
+                  cpu: 500m
+                  memory: 1Gi
+                limits:
+                  memory: 1536Mi
           volumes:
             - name: secret
               secret:
