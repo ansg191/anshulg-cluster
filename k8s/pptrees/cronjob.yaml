@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: pp-tree-importer
-              image: ghcr.io/ansg191/pp-tree-importer2:main@sha256:af80488630077cb6cce803ce8522294b8be83faecae0e15244f753936f4bb89f
+              image: ansg191/pp-tree-importer2:main@sha256:6fe7f4b173c7d12848fed2ec433a061fd92cdd53d872b16b19dec08e039e14ab
               imagePullPolicy: IfNotPresent
               env:
                 - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -36,5 +36,3 @@ spec:
               secret:
                 secretName: pptree-secrets
           restartPolicy: OnFailure
-          imagePullSecrets:
-            - name: ghcr-registry
