@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: pp-tree-importer
-              image: ansg191/pp-tree-importer2:main@sha256:6fe7f4b173c7d12848fed2ec433a061fd92cdd53d872b16b19dec08e039e14ab
+              image: ansg191/pp-tree-importer2:latest@sha256:3f59efaba712ba4cb998a33fc0ded99fab39e388502234b17d19ca85a0593c8f
               imagePullPolicy: IfNotPresent
               env:
                 - name: GOOGLE_APPLICATION_CREDENTIALS
