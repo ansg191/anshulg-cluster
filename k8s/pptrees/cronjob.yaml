@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: pp-tree-importer
-              image: ansg191/pp-tree-importer2:latest@sha256:897822dd0e7b0b9f6839cf9e67074e1539dd94b48bcf487b87b227bdcac90c1c
+              image: ansg191/pp-tree-importer2:latest@sha256:402e91eef738bedad4b054588c4e5851a3e7527fa99a50fddb12ea1a942836fa
               imagePullPolicy: IfNotPresent
               env:
                 - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -22,6 +22,8 @@ spec:
                   value: "1TDAKn_ud7ofTVnSQl-mjB92c3JqFvQWF"
                 - name: PP_BUCKET
                   value: "pp-trees-images"
+                - name: PP_LOG_FORMAT
+                  value: "json"
               volumeMounts:
                 - mountPath: /secret
                   name: secret
