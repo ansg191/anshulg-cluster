@@ -24,6 +24,8 @@ spec:
                   value: "pp-trees-images"
                 - name: PP_LOG_FORMAT
                   value: "json"
+                - name: RUST_BACKTRACE
+                  value: "1"
               volumeMounts:
                 - mountPath: /secret
                   name: secret
