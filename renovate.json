@@ -6,7 +6,7 @@
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
   "platformCommit": "enabled",
-  "rebaseWhen": "behind-base-branch",
+  "rebaseWhen": "conflicted",
   "separateMajorMinor": true,
   "kubernetes": {
     "fileMatch": [
