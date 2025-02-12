@@ -40,6 +40,9 @@ jobs:
     needs:
       - check-caddy
       - shellcheck
+    environment:
+      name: 'production'
+      url: 'https://auth.anshulg.com'
 
     steps:
       - name: Checkout Code
