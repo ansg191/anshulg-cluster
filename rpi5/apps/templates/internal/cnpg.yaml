@@ -20,5 +20,6 @@ spec:
     server: {{ .Values.spec.destination.server }}
     namespace: cnpg-system
   syncPolicy:
+    automated: {}
     syncOptions:
       - ServerSideApply=true

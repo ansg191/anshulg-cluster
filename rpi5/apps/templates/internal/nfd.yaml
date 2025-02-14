@@ -17,6 +17,8 @@ spec:
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: node-feature-discovery
+  syncPolicy:
+    automated: {}
 ---
 apiVersion: v1
 kind: Namespace

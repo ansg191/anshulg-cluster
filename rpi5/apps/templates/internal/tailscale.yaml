@@ -23,3 +23,5 @@ spec:
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: tailscale
+  syncPolicy:
+    automated: {}
