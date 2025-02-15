@@ -16,6 +16,11 @@ spec:
     chart: cloudnative-pg
     repoURL: https://cloudnative-pg.github.io/charts
     targetRevision: 0.23.0
+    helm:
+      values: |
+        config:
+          data:
+            INHERITED_ANNOTATIONS: prometheus.io/scrape
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: cnpg-system
