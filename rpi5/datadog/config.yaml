@@ -23,6 +23,9 @@ spec:
       enabled: true
     npm:
       enabled: true
+    prometheusScrape:
+      enabled: true
+      enableServiceEndpoints: true
   override:
     nodeAgent:
       extraConfd:

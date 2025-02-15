@@ -2,6 +2,8 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: huginn-cluster
+  annotations:
+    prometheus.io/scrape: "true"
 spec:
   instances: 3
   bootstrap:
