@@ -22,3 +22,18 @@ spec:
       - main: nzbhydra.local
         sans:
           - nzbhydra.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nzbhydra2
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: nzbhydra2
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - nzbhydra2
