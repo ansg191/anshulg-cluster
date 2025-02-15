@@ -22,3 +22,18 @@ spec:
       - main: bazarr.local
         sans:
           - bazarr.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bazarr
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: bazarr
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - bazarr
