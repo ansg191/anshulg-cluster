@@ -36,6 +36,9 @@ spec:
                 http:
                   endpoint: 0.0.0.0:4318
                   enabled: true
+          prometheusScrape:
+            enabled: true
+            serviceEndpoints: true
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: ddog
