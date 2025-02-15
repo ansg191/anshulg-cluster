@@ -715,7 +715,7 @@ sub seal_precheck {
     # Check that we are in the correct context
     my %cluster_context_map = (
         'k8s'  => 'gke',
-        'rpi5' => 'default',
+        'rpi5' => 'ts',
     );
     my $current_context = `kubectl config current-context`;
     chomp $current_context;    # Remove trailing newline from command output
