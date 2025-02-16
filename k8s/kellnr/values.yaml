@@ -50,6 +50,7 @@ kellnr:
   pvc:
     enabled: true
     storageClassName: standard-rwo
+    storage: 10Gi
   service:
     api:
       type: ClusterIP
