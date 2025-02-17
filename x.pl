@@ -715,12 +715,12 @@ sub seal_precheck {
     # Check that we are in the correct context
     my %cluster_context_map = (
         'k8s'  => 'gke',
-        'rpi5' => 'ts',
+        'rpi5' => 'ts|default',
     );
     my $current_context = `kubectl config current-context`;
     chomp $current_context;    # Remove trailing newline from command output
     if ( exists $cluster_context_map{$cluster}
-        && $cluster_context_map{$cluster} ne $current_context )
+        && $current_context !~ m/^$cluster_context_map{$cluster}$/sxm )
     {
         die
 "Cluster context mismatch: expected '$cluster_context_map{$cluster}', but found '$current_context'\n";
